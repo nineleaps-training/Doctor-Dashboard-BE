@@ -19,6 +19,10 @@ public class DController {
 
         return "login Successfull!";
     }
+    @GetMapping("/check")
+    public String check(){
+        return "worked!!";
+    }
 //
 //    @GetMapping("/Admin")
 //    public String admin(){
