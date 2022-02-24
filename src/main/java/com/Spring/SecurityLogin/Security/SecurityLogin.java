@@ -40,10 +40,12 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
     @Override
 
     protected void configure(HttpSecurity http) throws Exception {
+
         http.authorizeRequests()
                 .antMatchers("/login","/")
                 .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .oauth2Login()
                     .loginPage("/login")
@@ -55,7 +57,7 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         CustomOAuth2User OAuth2User= (CustomOAuth2User) authentication.getPrincipal();
-
+                        System.out.println("prin"+OAuth2User);
 
                                 response.sendRedirect("/user");
                     }
