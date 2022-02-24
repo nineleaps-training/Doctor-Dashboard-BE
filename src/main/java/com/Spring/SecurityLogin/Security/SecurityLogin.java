@@ -1,5 +1,6 @@
 package com.Spring.SecurityLogin.Security;
 
+import com.Spring.SecurityLogin.Filter.LoginFilter;
 import com.Spring.SecurityLogin.Security.OAuth.CustomOAuth2User;
 import com.Spring.SecurityLogin.Security.OAuth.CustomOAuth2UserImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,17 +43,15 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests()
-                .antMatchers("/login","/")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+        http.addFilterAfter(new LoginFilter(), UsernamePasswordAuthenticationFilter.class)
+        .authorizeRequests()
+                .antMatchers("/login","/").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
                     .loginPage("/login")
                     .userInfoEndpoint()
                         .userService(customOAuth2UserImplementation)
-
                 .and()
                 .successHandler(new AuthenticationSuccessHandler() {
                     @Override
