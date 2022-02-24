@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Table(name = "doctor_login_details",uniqueConstraints = @UniqueConstraint(columnNames = {"emailId"}))
 public class DoctorLoginDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name="firstName",nullable = false)
     private String firstName;

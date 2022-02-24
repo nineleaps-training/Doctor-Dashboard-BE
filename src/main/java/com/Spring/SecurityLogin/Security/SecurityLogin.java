@@ -3,6 +3,7 @@ package com.Spring.SecurityLogin.Security;
 import com.Spring.SecurityLogin.Filter.LoginFilter;
 import com.Spring.SecurityLogin.Security.OAuth.CustomOAuth2User;
 import com.Spring.SecurityLogin.Security.OAuth.CustomOAuth2UserImplementation;
+import com.Spring.SecurityLogin.Service.DbUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -45,7 +46,7 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
 
         http.addFilterAfter(new LoginFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeRequests()
-                .antMatchers("/login","/").permitAll()
+                .antMatchers("/login","/","/oauth2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -57,14 +58,16 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         CustomOAuth2User OAuth2User= (CustomOAuth2User) authentication.getPrincipal();
-                        System.out.println("prin"+OAuth2User);
-
-                                response.sendRedirect("/user");
+                        dbUpdate.updateDetails(OAuth2User.getAttributes());
+                        System.out.println("Current User "+OAuth2User.getAttributes());
+                        response.sendRedirect("/user");
                     }
                 });
 
 
     }
     @Autowired
-    CustomOAuth2UserImplementation customOAuth2UserImplementation;
+   private CustomOAuth2UserImplementation customOAuth2UserImplementation;
+    @Autowired
+    private DbUpdate dbUpdate;
 }

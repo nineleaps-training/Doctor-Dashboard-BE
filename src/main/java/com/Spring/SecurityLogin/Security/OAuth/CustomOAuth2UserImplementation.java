@@ -12,7 +12,7 @@ public class CustomOAuth2UserImplementation extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         OAuth2User user= super.loadUser(userRequest);
-        System.out.println("oAuth"+user.getName());
+//        System.out.println("oAuth"+user.getName());
         return new CustomOAuth2User(user);
     }
 }
