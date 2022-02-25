@@ -24,10 +24,10 @@ public class LoginFilter extends GenericFilterBean {
         HttpServletRequest servletRequest= (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 
-        if(isAuthenticated() && "/login".equals(servletRequest.getRequestURI())){
+        if(isAuthenticated() && ("/login".equals(servletRequest.getRequestURI()) || "/oauth2/**".equals(servletRequest.getRequestURI()) )){
             String encodedRedirectUrl= ((HttpServletResponse) response).encodeRedirectURL(servletRequest.getContextPath()+"/user");
             servletResponse.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-            System.out.println("url= "+encodedRedirectUrl);
+//            System.out.println("url= "+encodedRedirectUrl);
             servletResponse.setHeader("Location",encodedRedirectUrl);
         }
         chain.doFilter(servletRequest,servletResponse);
