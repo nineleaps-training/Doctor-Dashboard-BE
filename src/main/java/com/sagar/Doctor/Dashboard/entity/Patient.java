@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -24,13 +24,12 @@ public class Patient {
     private Long pID;
     private String fullName;
     private String emailId;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String gender;
     private int age;
 
     @JsonManagedReference
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Attributes attributes;
-
 
 }
