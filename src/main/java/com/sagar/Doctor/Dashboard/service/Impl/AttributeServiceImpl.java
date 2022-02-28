@@ -37,6 +37,7 @@ public class AttributeServiceImpl implements AttributeService {
         value.setGlucoseLevel(attributes.getGlucoseLevel());
         value.setNotes(attributes.getNotes());
         value.setPatient(attributes.getPatient());
+        value.setSymptoms(attributes.getSymptoms());
 
         return attributeRepository.save(value);
     }

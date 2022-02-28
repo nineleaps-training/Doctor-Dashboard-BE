@@ -23,6 +23,7 @@ public class Attributes {
     private Long glucoseLevel;
     private Double bodyTemp;
     private String Notes;
+    private String symptoms;
 
     @JsonBackReference
     @OneToOne()
