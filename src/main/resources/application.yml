@@ -4,8 +4,8 @@
 spring:
   dataSource:
     url: jdbc:mysql://localhost:3306/doctor_dashboard
-    username: root
-    password: Pranay@123
+    username: 
+    password: 
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,8 +20,8 @@ spring:
       client:
         registration:
           google:
-            client-id:  66297814659-gkj68lfu116ai19tb6e2rfacqt9bja0s.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 
+            client-secret: 
             scope:
               - profile
               - email
