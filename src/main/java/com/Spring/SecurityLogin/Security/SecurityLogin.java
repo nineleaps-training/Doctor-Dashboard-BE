@@ -59,6 +59,7 @@ public class SecurityLogin extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
                         CustomOAuth2User OAuth2User= (CustomOAuth2User) authentication.getPrincipal();
                         dbUpdate.updateDetails(OAuth2User.getAttributes());
+
                         System.out.println("Current User "+OAuth2User.getAttributes());
                         response.sendRedirect("/user");
                     }
