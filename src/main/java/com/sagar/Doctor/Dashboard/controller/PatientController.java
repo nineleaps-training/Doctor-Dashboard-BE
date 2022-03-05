@@ -5,14 +5,17 @@ import com.sagar.Doctor.Dashboard.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class PatientController {
 
+
     @Autowired
     private PatientService patientService;
+
 
     @PostMapping("api/patient")
     public Patient addPatient(@RequestBody Patient patient){
@@ -39,6 +42,21 @@ public class PatientController {
 
         patientService.deletePatientById(id);
 
+    }
+
+    @GetMapping("/totalPatient")
+    public int totalPatient(){
+        return patientService.totalNoOfPatient();
+    }
+
+    @GetMapping("/Category")
+    public ArrayList<String> patientCategory(){
+        return patientService.patientCategory();
+    }
+
+    @GetMapping("/gender")
+    public ArrayList<String> gender(){
+        return patientService.gender();
     }
 
 }

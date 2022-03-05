@@ -6,6 +6,7 @@ import com.sagar.Doctor.Dashboard.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,8 +44,6 @@ public class PatientServiceImpl implements PatientService {
         value.setLastVisitedDate(patient.getLastVisitedDate());
         value.setMobileNo(patient.getMobileNo());
 
-
-
         return patientRepository.save(value);
     }
 
@@ -52,6 +51,21 @@ public class PatientServiceImpl implements PatientService {
     public void deletePatientById(Long id) {
 
         patientRepository.deleteById(id);
+    }
+
+    @Override
+    public int totalNoOfPatient() {
+        return patientRepository.totalNoOfPatient();
+    }
+
+    @Override
+    public ArrayList<String> patientCategory() {
+        return patientRepository.patientCategory();
+    }
+
+    @Override
+    public ArrayList<String> gender() {
+        return patientRepository.gender();
     }
 
 }
