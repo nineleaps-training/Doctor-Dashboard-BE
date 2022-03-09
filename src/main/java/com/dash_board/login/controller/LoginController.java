@@ -1,7 +1,9 @@
 package com.dash_board.login.controller;
 
 import com.dash_board.login.Entity.Id_Token;
-import com.dash_board.login.login_dashboard.LoginGoogle;
+import com.dash_board.login.Service.LoginService;
+import com.dash_board.login.Service.LoginServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,8 @@ import java.security.GeneralSecurityException;
 @RestController
 public class LoginController {
 
+    @Autowired
+    LoginService login;
     @GetMapping("/")
     public String  hello(){
         return "hello";
@@ -20,8 +24,8 @@ public class LoginController {
 
     @PostMapping("api/doctor")
     public String loginIdToken(@RequestBody Id_Token idToken) throws GeneralSecurityException, IOException {
-        LoginGoogle login=new LoginGoogle(idToken.getIdtoken());
-        login.googleLogin();
+
+        login.tokenVerification(idToken.getIdtoken());
         return "done";
     }
 }
