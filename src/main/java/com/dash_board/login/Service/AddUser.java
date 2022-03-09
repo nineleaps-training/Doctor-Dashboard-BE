@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class DbUpdate {
+public class AddUser {
     @Autowired
     private LoginRepo loginRepo;
-     public void updateDetails( Map<String ,Object> loginDetails){
+     public void addDetails( Map<String ,Object> loginDetails){
          DoctorLoginDetails doctorLoginDetails=loginRepo.findByEmailId(loginDetails.get("email").toString());
          if(doctorLoginDetails==null){
              DoctorLoginDetails newDoctor = new DoctorLoginDetails();
