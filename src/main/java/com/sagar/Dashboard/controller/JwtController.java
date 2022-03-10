@@ -1,17 +1,23 @@
 package com.sagar.Dashboard.controller;
-import com.sagar.Dashboard.entity.AuthenticationRequest;
-import com.sagar.Dashboard.entity.AuthenticationResponse;
-import com.sagar.Dashboard.service.Impl.CustomUserDetailsService;
-import com.sagar.Dashboard.util.JwtUtil;
+import com.sagar.Dashboard.entity.DoctorClaims;
+import com.sagar.Dashboard.entity.User;
+import com.sagar.Dashboard.payload.Login;
+import com.sagar.Dashboard.payload.AuthenticationResponse;
+import com.sagar.Dashboard.payload.SignUp;
+import com.sagar.Dashboard.repository.UserRepository;
+import com.sagar.Dashboard.security.CustomUserDetailsService;
+import com.sagar.Dashboard.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/auth")
 public class JwtController {
 
     @Autowired
@@ -21,23 +27,62 @@ public class JwtController {
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/token")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw  new Exception("Incorrect Username and Password",e);
+    @Autowired
+    private UserRepository userRepository;
+
+
+
+    @PostMapping("/signin")
+    public ResponseEntity<String> authenticateUser(@RequestBody Login login){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                login.getUsername(),login.getEmail()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        // get token form tokenProvider
+
+        DoctorClaims doctorClaims = new DoctorClaims();
+        doctorClaims.setDoctorEmail(login.getEmail());
+        doctorClaims.setDoctorName(login.getUsername());
+        doctorClaims.setDoctorId(login.getId());
+
+
+        String token = jwtTokenProvider.generateToken(authentication,doctorClaims);
+
+        return ResponseEntity.ok(new AuthenticationResponse(token).getAccessToken());
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@RequestBody SignUp signUp){
+
+        // add check for username exists in a DB
+        if(userRepository.existsByUsername(signUp.getUsername())){
+            return new ResponseEntity<>("Username is already taken!", HttpStatus.BAD_REQUEST);
         }
 
-        final UserDetails userDetails = customUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+        // add check for email exists in DB
+        if(userRepository.existsByEmail(signUp.getEmail())){
+            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+        }
 
-        final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        // create user object
+        User user = new User();
+        user.setName(signUp.getName());
+        user.setUsername(signUp.getUsername());
+        user.setEmail(signUp.getEmail());
+        user.setPassword(signUp.getPassword());
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
 
     }
+
+
 }
+
+
+
