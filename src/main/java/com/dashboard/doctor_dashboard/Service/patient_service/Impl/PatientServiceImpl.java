@@ -1,11 +1,12 @@
 package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Patient;
-import com.dashboard.doctor_dashboard.Repository.patient_repository.PatientRepository;
+import com.dashboard.doctor_dashboard.Entity.Patient;
+import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,8 +23,8 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public List<Patient> getAllPatient() {
-        return patientRepository.findAll();
+    public List<Patient> getAllPatientByDoctorId(Long doctorId) {
+        return  patientRepository.getAllPatientByDoctorId(doctorId);
     }
 
     @Override
@@ -42,8 +43,8 @@ public class PatientServiceImpl implements PatientService {
         value.setGender(patient.getGender());
         value.setLastVisitedDate(patient.getLastVisitedDate());
         value.setMobileNo(patient.getMobileNo());
-
-
+        value.setDoctorDetails(patient.getDoctorDetails());
+        value.setStatus(patient.getStatus());
 
         return patientRepository.save(value);
     }
@@ -52,6 +53,26 @@ public class PatientServiceImpl implements PatientService {
     public void deletePatientById(Long id) {
 
         patientRepository.deleteById(id);
+    }
+
+    @Override
+    public int totalNoOfPatient(Long doctorId) {
+        return patientRepository.totalNoOfPatient(doctorId);
+    }
+
+    @Override
+    public ArrayList<String> patientCategory(Long doctorId) {
+        return patientRepository.patientCategory(doctorId);
+    }
+
+    @Override
+    public ArrayList<String> gender(Long doctorId) {
+        return patientRepository.gender(doctorId);
+    }
+
+    @Override
+    public ArrayList<String> activePatient(Long doctorId) {
+        return patientRepository.activePatient(doctorId);
     }
 
 }

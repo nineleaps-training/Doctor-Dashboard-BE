@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.Controller.doctor_controller;
+package com.dashboard.doctor_dashboard.Controller;
 
-import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
+import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/doctor")
 public class DoctorController {
 
