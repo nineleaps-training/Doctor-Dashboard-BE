@@ -33,7 +33,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    GenericMessage genericMessage = new GenericMessage();
 
 
 
@@ -45,6 +44,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
 
+        GenericMessage genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctors(id);
@@ -66,6 +66,8 @@ public class DoctorServiceImpl implements DoctorService {
 //=======
     public ResponseEntity<GenericMessage> getDoctorById(long id) {
 
+        GenericMessage genericMessage = new GenericMessage();
+
         if (doctorRepository.isIdAvailable(id) != null) {
             genericMessage.setData(doctorRepository.findDoctorById(id));
             genericMessage.setStatus(Constants.SUCCESS);
@@ -79,6 +81,8 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
 //<<<<<<< HEAD
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request) {
+
+        GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
         System.out.println(doctorLoginId);
@@ -102,6 +106,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request) {
+
+        GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
         System.out.println(loginRepo.isIdAvailable(doctorLoginId) + ", " + doctorLoginId);
@@ -131,6 +137,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseEntity<GenericMessage> deleteDoctor(long id) {
+
+        GenericMessage genericMessage = new GenericMessage();
+
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
