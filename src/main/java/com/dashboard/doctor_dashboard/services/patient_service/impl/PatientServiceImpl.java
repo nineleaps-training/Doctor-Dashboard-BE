@@ -44,9 +44,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public ResponseEntity<GenericMessage> addPatient(Patient patient) {
-        genericMessage.setData(patientRepository.save(patient));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+//        genericMessage.setData(patientRepository.save(patient));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.save(patient)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
 
     }
 
@@ -56,18 +58,22 @@ public class PatientServiceImpl implements PatientService {
         List<PatientListDto> list = patient.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
 
-        genericMessage.setData(list);
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+//        genericMessage.setData(list);
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
     }
 
     @Override
     public ResponseEntity<GenericMessage> getPatientById(Long id, Long doctorId) throws MyCustomException {
         try {
             var patient = patientRepository.getPatientByIdAndDoctorId(id, doctorId);
-            genericMessage.setData(mapToDto(patient));
-            genericMessage.setStatus(Constants.SUCCESS);
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+//            genericMessage.setData(mapToDto(patient));
+//            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapToDto(patient)),HttpStatus.OK);
+
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
 
         } catch (Exception e) {
             throw new MyCustomException(PATIENT, "id", id);
@@ -103,9 +109,11 @@ public class PatientServiceImpl implements PatientService {
             patientRepository.save(value);
             attributeRepository.save(value1);
 
-            genericMessage.setData(value);
-            genericMessage.setStatus(Constants.SUCCESS);
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//            genericMessage.setData(value);
+//            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,value),HttpStatus.OK);
+
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {
             throw new ResourceNotFoundException(PATIENT, "id", id);
@@ -115,9 +123,11 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
-        genericMessage.setData("successfully deleted");
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+//        genericMessage.setData("successfully deleted");
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
     }
 
 
@@ -128,9 +138,11 @@ public class PatientServiceImpl implements PatientService {
         List<PatientListDto> list =  patient.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
 
-        genericMessage.setData(list);
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        genericMessage.setData(list);
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
     @Override
@@ -138,9 +150,11 @@ public class PatientServiceImpl implements PatientService {
         if (patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
             patientRepository.changePatientStatus(id, status);
 
-            genericMessage.setData("Status Updated!!!");
-            genericMessage.setStatus(Constants.SUCCESS);
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//            genericMessage.setData("Status Updated!!!");
+//            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"Status Updated!!!"),HttpStatus.OK);
+
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {
             throw new ResourceNotFoundException(PATIENT, "id", id);
@@ -153,46 +167,57 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> totalNoOfPatient(Long doctorId) {
 
-        genericMessage.setData(patientRepository.totalNoOfPatient(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        genericMessage.setData(patientRepository.totalNoOfPatient(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.totalNoOfPatient(doctorId)),HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GenericMessage> totalNoOfPatientAddedThisWeek(Long doctorId) {
-        genericMessage.setData(patientRepository.totalNoOfPatientAddedThisWeek(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        genericMessage.setData(patientRepository.totalNoOfPatientAddedThisWeek(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.totalNoOfPatientAddedThisWeek(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
 
     @Override
     public ResponseEntity<GenericMessage> patientCategory(Long doctorId) {
-        genericMessage.setData(patientRepository.patientCategory(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+
+//        genericMessage.setData(patientRepository.patientCategory(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.patientCategory(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
 
     }
 
     @Override
     public ResponseEntity<GenericMessage> gender(Long doctorId) {
-        genericMessage.setData(patientRepository.gender(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        genericMessage.setData(patientRepository.gender(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.gender(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GenericMessage> bloodGroup(Long doctorId) {
-        genericMessage.setData(patientRepository.bloodGroup(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        genericMessage.setData(patientRepository.bloodGroup(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.bloodGroup(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GenericMessage> ageChart(Long doctorId) {
-        genericMessage.setData(patientRepository.ageChart(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        genericMessage.setData(patientRepository.ageChart(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.ageChart(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
 
@@ -204,28 +229,33 @@ public class PatientServiceImpl implements PatientService {
 
         String docName = patientRepository.findDoctorNameByPatientId(patientId);
         String patientName = patientRepository.findPatientNameByPatientId(patientId);
-
         patientRepository.referPatients(doctorId, patientId, docName, patientName);
-        genericMessage.setData("Patient Referred SuccessFully");
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        genericMessage.setData("Patient Referred SuccessFully");
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"Patient Referred SuccessFully"),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GenericMessage> getMessageForReferredPatient(Long doctorId) {
 
-        genericMessage.setData(patientRepository.getMessageForReferredPatient(doctorId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        genericMessage.setData(patientRepository.getMessageForReferredPatient(doctorId));
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientRepository.getMessageForReferredPatient(doctorId)),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
     }
 
     @Override
     public ResponseEntity<GenericMessage> changeStatus(Long doctorId) {
         patientRepository.changeStatus(doctorId);
-        genericMessage.setData("All Messages have been deleted!!!");
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        genericMessage.setData("All Messages have been deleted!!!");
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"All Messages have been deleted!!!"),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
 
@@ -295,8 +325,10 @@ public class PatientServiceImpl implements PatientService {
         newList.add(fourthWeek+","+fourthWeekCount);
         newList.add(lastWeek+","+lastWeekCount);
 
-        genericMessage.setData(newList);
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        genericMessage.setData(newList);
+//        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,newList),HttpStatus.OK);
+
+//        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 }

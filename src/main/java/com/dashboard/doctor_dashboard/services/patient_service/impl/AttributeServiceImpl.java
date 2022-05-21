@@ -28,9 +28,11 @@ public class AttributeServiceImpl implements AttributeService {
     public ResponseEntity<GenericMessage> changeNotes(Long id, String notes) {
         if (patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
             attributeRepository.changeNotes(id, notes);
-            genericMessage.setData("Notes updated!!!");
-            genericMessage.setStatus(Constants.SUCCESS);
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+//            genericMessage.setData("Notes updated!!!");
+//            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"Notes updated!!!"),HttpStatus.OK);
+
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }
         throw new ResourceNotFoundException("Patient", "id", id);
     }
