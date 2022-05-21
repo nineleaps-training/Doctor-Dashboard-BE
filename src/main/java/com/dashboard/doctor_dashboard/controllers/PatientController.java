@@ -95,11 +95,7 @@ public class PatientController {
     public ResponseEntity<GenericMessage> ageChart(@PathVariable("doctorId") Long doctorId) {
         return patientService.ageChart(doctorId);
     }
-    //{
-//        bloodGroup:{},
-//        ageChart:{},
 
-//    }
 
     //Add-On feature Refer Patient
 
