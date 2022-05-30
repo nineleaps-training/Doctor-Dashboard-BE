@@ -170,4 +170,24 @@ public class Patient {
     public void setDoctorDetails(DoctorDetails doctorDetails) {
         this.doctorDetails = doctorDetails;
     }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "pID=" + pID +
+                ", fullName='" + fullName + '\'' +
+                ", emailId='" + emailId + '\'' +
+                ", lastVisitedDate=" + lastVisitedDate +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", category='" + category + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", status='" + status + '\'' +
+                ", isChanged=" + isChanged +
+                ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
+                ", attributes=" + attributes +
+                ", doctorDetails=" + doctorDetails +
+                '}';
+    }
 }
