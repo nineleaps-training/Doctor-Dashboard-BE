@@ -19,12 +19,8 @@ public interface DoctorService {
 
     ResponseEntity<GenericMessage> getDoctorById(long id);
 
-//<<<<<<< HEAD
     ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request);
     ResponseEntity<GenericMessage>  addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
-//=======
-//    ResponseEntity<GenericMessage> updateDoctor(DoctorFormDto details, long id);
-//>>>>>>> 71f06e33a9ec991c695a56bd29b24f86ef4c2418
 
     ResponseEntity<GenericMessage> deleteDoctor(long id);
 }
