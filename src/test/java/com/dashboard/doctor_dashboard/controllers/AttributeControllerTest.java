@@ -1,5 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.NotesDto;
 import com.dashboard.doctor_dashboard.services.patient_service.AttributeService;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,16 +39,15 @@ class AttributeControllerTest {
 
     @Test
     void changePatientStatus() {
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Notes updated!!!");
         NotesDto notesDto = new NotesDto();
         notesDto.setNotes("Note1");
-
-        String value = "Notes updated!!!";
         Mockito.when(attributeService.changeNotes(Mockito.any(Long.class),
-                Mockito.any(String.class))).thenReturn(value);
+                Mockito.any(String.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        String newNote = attributeController.updateNotes(1L,notesDto);
+        ResponseEntity<GenericMessage> newNote = attributeController.updateNotes(1L,notesDto);
 
-        assertEquals(value,newNote);
+        assertEquals(message.getData(),newNote.getBody().getData());
 
     }
 }

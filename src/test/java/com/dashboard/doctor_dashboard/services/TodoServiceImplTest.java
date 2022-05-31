@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -10,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +51,7 @@ class TodoServiceImplTest {
 
         Mockito.doReturn(todolist).when(todoRepository).save(Mockito.any(Todolist.class));
 
-        Todolist newTodo = todoService.addTodo(todolist);
+        ResponseEntity<GenericMessage> newTodo = todoService.addTodo(todolist);
 
         assertThat(todolist).isNotNull();
         verify(todoRepository).save(Mockito.any(Todolist.class));
@@ -64,11 +66,11 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist));
 
-        Todolist newTodo = todoService.getTodoById(id);
+        ResponseEntity<GenericMessage> newTodo = todoService.getTodoById(id);
         System.out.println(newTodo);
 
         assertThat(newTodo).isNotNull();
-        assertEquals(todolist.getDescription(),newTodo.getDescription());
+        assertEquals(todolist,newTodo.getBody().getData());
     }
 
     @Test
@@ -78,7 +80,7 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
 
-        Todolist newTodo = todoService.getTodoById(id);
+        ResponseEntity<GenericMessage> newTodo = todoService.getTodoById(id);
 
         assertThat(newTodo).isNull();
     }
@@ -95,11 +97,10 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findByDoctorId(id)).thenReturn(list);
 
-        List<Todolist> newList = todoService.getAllTodoByDoctorId(id);
+        ResponseEntity<GenericMessage> newList = todoService.getAllTodoByDoctorId(id);
 
-        assertEquals(list.size(),newList.size());
-        assertEquals(todolist1.getDescription(),newList.get(0).getDescription());
-        assertEquals(todolist2.getDescription(),newList.get(1).getDescription());
+        assertThat(newList).isNotNull();
+        assertEquals(list,newList.getBody().getData());
     }
 
     @Test
@@ -123,13 +124,13 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
 
-        Todolist newTodo = todoService.updateTodo(id,todolist);
+        ResponseEntity<GenericMessage> newTodo = todoService.updateTodo(id,todolist);
 
         assertThat(newTodo).isNull();
     }
 
     @Test
-    void deletelistById() {
+    void deleteListById() {
         final Long id =1L;
 
         todoService.deleteTodoById(id);

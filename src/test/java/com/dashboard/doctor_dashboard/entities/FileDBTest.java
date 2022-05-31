@@ -10,5 +10,6 @@ class FileDBTest {
     void getterAndSetterCorrectness() throws Exception {
         new BeanTester().testBean(FileDB.class);
         new BeanTester().testBean(ResponseFile.class);
+
     }
 }

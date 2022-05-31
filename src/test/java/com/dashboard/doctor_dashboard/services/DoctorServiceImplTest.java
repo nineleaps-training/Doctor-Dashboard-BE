@@ -1,17 +1,20 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.exceptions.APIException;
+import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
+import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorServiceImpl;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,12 +30,20 @@ class DoctorServiceImplTest {
     @Mock
     private DoctorRepository doctorRepository;
 
+    @Mock
+    private LoginRepo loginRepo;
+
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
+
+
     @InjectMocks
     private DoctorServiceImpl doctorService;
 
 
+
     @BeforeEach
-    void init(){
+    void init() {
         MockitoAnnotations.openMocks(this);
         System.out.println("setting up");
     }
@@ -43,24 +54,24 @@ class DoctorServiceImplTest {
     }
 
 
-    @Test
-    void testAddDoctor() {
-        DoctorDetails newDoctor = new DoctorDetails();
-        newDoctor.setId(1L);
-        newDoctor.setFirstName("Sagar");
-        newDoctor.setLastName("Negi");
-        newDoctor.setEmail("sagarssn23@gmail.com");
-        DoctorDetails doctorDetails = new DoctorDetails(1L,"Sagar","Singh", (short) 21,
-                "sagarssn23@gmail.com","orthology",
-                null,"male",null,null);
-
-        Mockito.doReturn(doctorDetails).when(doctorRepository).save(Mockito.any(DoctorDetails.class));
-
-        DoctorDetails newDoctorDetails = doctorService.addDoctor(doctorDetails);
-
-        assertThat(newDoctorDetails).isNotNull();
-        verify(doctorRepository).save(Mockito.any(DoctorDetails.class));
-    }
+//    @Test
+//    void testAddDoctor() {
+//        DoctorDetails newDoctor = new DoctorDetails();
+//        newDoctor.setId(1L);
+//        newDoctor.setFirstName("Sagar");
+//        newDoctor.setLastName("Negi");
+//        newDoctor.setEmail("sagarssn23@gmail.com");
+//        DoctorDetails doctorDetails = new DoctorDetails(1L,"Sagar","Singh", (short) 21,
+//                "sagarssn23@gmail.com","orthology",
+//                null,"male",null,null);
+//
+//        Mockito.doReturn(doctorDetails).when(doctorRepository).save(Mockito.any(DoctorDetails.class));
+//
+//        DoctorDetails newDoctorDetails = doctorService.addDoctor(doctorDetails);
+//
+//        assertThat(newDoctorDetails).isNotNull();
+//        verify(doctorRepository).save(Mockito.any(DoctorDetails.class));
+//    }
 
     @Test
     void testGetAllDoctors() {
@@ -73,15 +84,11 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(id);
         Mockito.when(doctorRepository.getAllDoctors(id)).thenReturn(list);
 
-        List<DoctorListDto> newList = doctorService.getAllDoctors(id);
+        ResponseEntity<GenericMessage> newList = doctorService.getAllDoctors(id);
 
-        assertEquals(list.size(),newList.size());
-        assertEquals(doctorListDto1.getName(),newList.get(0).getName());
-        assertEquals(doctorListDto1.getEmail(),newList.get(0).getEmail());
-        assertEquals(doctorListDto1.getId(),newList.get(0).getId());
-        assertEquals(doctorListDto2.getName(),newList.get(1).getName());
-        assertEquals(doctorListDto2.getEmail(),newList.get(1).getEmail());
-        assertEquals(doctorListDto2.getId(),newList.get(1).getId());
+        assertThat(newList).isNotNull();
+        assertEquals(list,newList.getBody().getData());
+        assertEquals(Constants.SUCCESS,newList.getBody().getStatus());
     }
 
     @Test
@@ -109,11 +116,10 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(id);
         Mockito.when(doctorRepository.findDoctorById(id)).thenReturn(doctorDetails);
 
-        DoctorBasicDetailsDto newDetails = doctorService.getDoctorById(id);
+        ResponseEntity<GenericMessage> newDetails = doctorService.getDoctorById(id);
 
         assertThat(newDetails).isNotNull();
-        assertEquals(doctorDetails.getFirstName(),newDetails.getFirstName());
-        assertEquals(doctorDetails.getEmail(),newDetails.getEmail());
+        assertEquals(doctorDetails,newDetails.getBody().getData());
     }
 
     @Test
@@ -130,15 +136,94 @@ class DoctorServiceImplTest {
         verify(doctorRepository,never()).findDoctorById(id);
     }
 
+
     @Test
-    void updateDoctor() {
+    void addDoctor() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        Long id = 1L;
         DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
                 null);
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
+
+        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
+                .thenReturn(null);
+        doctorService.addDoctorDetails(doctorFormDto,doctorFormDto.getId(),request);
+        doctorService.addDoctorDetails(doctorFormDto,doctorFormDto.getId(),request);
+
+        verify(doctorRepository,times(2))
+                .insertARowIntoTheTable(
+                        doctorFormDto.getId(),
+                        doctorFormDto.getAge(),
+                        doctorFormDto.getSpeciality(),
+                        doctorFormDto.getPhoneNo(),
+                        doctorFormDto.getGender(),
+                        1L
+                );
+
+    }
+
+    @Test
+    void IfIdMisMatchForAddDoctor() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        Long id = 1L;
+        Long id1 = 1L;
+        Long id2 = 2L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(id1,(short) 21,"orthology","male",
+                null);
+
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
+        Mockito.when(loginRepo.isIdAvailable(id))
+                .thenReturn(id);
+
+
+        Mockito.when(doctorRepository.isIdAvailable(id2))
+                .thenReturn(id2);
+
+        assertThrows(APIException.class,()->{
+            doctorService.addDoctorDetails(doctorFormDto,id,request);
+        });
+    }
+
+    @Test
+    void ThrowErrorIfIdNotPresentForAddDoctorInDatabase() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        Long id=1L;
+
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
+                null);
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
+
+        Mockito.when(loginRepo.isIdAvailable(id))
+                .thenReturn(null);
+
+        assertThrows(ResourceNotFoundException.class,()->{
+            doctorService.addDoctorDetails(doctorFormDto,id,request);
+        });
+
+        verify(doctorRepository,never()).updateDoctorDb(
+                doctorFormDto.getAge(),
+                doctorFormDto.getSpeciality(),
+                doctorFormDto.getGender(),
+                doctorFormDto.getPhoneNo(),
+                doctorFormDto.getId()
+        );
+    }
+
+
+
+    @Test
+    void updateDoctor() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        Long id = 1L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
+                null);
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(doctorFormDto.getId());
-        doctorService.updateDoctor(doctorFormDto,doctorFormDto.getId());
-        doctorService.updateDoctor(doctorFormDto,doctorFormDto.getId());
+        doctorService.updateDoctor(doctorFormDto,doctorFormDto.getId(),request);
+        doctorService.updateDoctor(doctorFormDto,doctorFormDto.getId(),request);
 
         verify(doctorRepository,times(2))
                 .updateDoctorDb(
@@ -153,15 +238,23 @@ class DoctorServiceImplTest {
 
     @Test
     void IfIdMisMatchForUpdateDoctor() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        Long id = 1L;
         Long id1 = 1L;
         Long id2 = 2L;
         DoctorFormDto doctorFormDto = new DoctorFormDto(id1,(short) 21,"orthology","male",
                 null);
 
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
+        Mockito.when(loginRepo.isIdAvailable(id))
+                .thenReturn(id);
+
+
         Mockito.when(doctorRepository.isIdAvailable(id2))
                 .thenReturn(id2);
 
-       DoctorFormDto newDetails = doctorService.updateDoctor(doctorFormDto,id2);
+       ResponseEntity<GenericMessage> newDetails = doctorService.updateDoctor(doctorFormDto,id2,request);
 
        assertEquals(null,newDetails);
         verify(doctorRepository,never()).updateDoctorDb(
@@ -175,15 +268,18 @@ class DoctorServiceImplTest {
 
     @Test
     void ThrowErrorIfIdNotPresentForUpdateDoctorInDatabase() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        Long id=1L;
+
         DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
                 null);
+        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
+        Mockito.when(loginRepo.isIdAvailable(id))
                 .thenReturn(null);
 
-        Long id=doctorFormDto.getId();
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id);
+            doctorService.updateDoctor(doctorFormDto,id,request);
         });
 
         verify(doctorRepository,never()).updateDoctorDb(

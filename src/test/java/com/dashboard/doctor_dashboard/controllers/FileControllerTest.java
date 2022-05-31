@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
 import com.dashboard.doctor_dashboard.entities.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
@@ -60,7 +61,7 @@ class FileControllerTest {
 
         Mockito.when(fileStorageService.store(file,id)).thenReturn(fileDB);
 
-        ResponseEntity<ResponseMessage> newMessage = fileController.uploadFile(file,id);
+        ResponseEntity<GenericMessage> newMessage = fileController.uploadFile(file,id);
 
         assertThat(newMessage).isNotNull();
         assertEquals(newMessage.getStatusCode(),message.getStatusCode());
@@ -89,7 +90,7 @@ class FileControllerTest {
 
         Mockito.when(fileStorageService.store(file,id)).thenReturn(null);
 
-        ResponseEntity<ResponseMessage> newMessage = fileController.uploadFile(file,id);
+        ResponseEntity<GenericMessage> newMessage = fileController.uploadFile(file,id);
 
         assertThat(newMessage).isNotNull();
         assertEquals(newMessage.getStatusCode(),message.getStatusCode());

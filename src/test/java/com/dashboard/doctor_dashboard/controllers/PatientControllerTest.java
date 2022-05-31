@@ -182,20 +182,20 @@ class PatientControllerTest {
 
         verify(patientService,times(2)).deletePatientById(id);
     }
-//
-//
-//    @Test
-//    void changePatientStatus() {
-//        Long id = 1L;
-//        StatusDto statusDto = new StatusDto();
-//        statusDto.setStatus("Active");
-//
-//        patientController.changePatientStatus(id,statusDto);
-//        patientController.changePatientStatus(id,statusDto);
-//
-//        verify(patientService,times(2)).changePatientStatus(id,statusDto.getStatus());
-//    }
-//
+
+
+    @Test
+    void changePatientStatus() {
+        Long id = 1L;
+        StatusDto statusDto = new StatusDto();
+        statusDto.setStatus("Active");
+
+        patientController.changePatientStatus(id,statusDto);
+        patientController.changePatientStatus(id,statusDto);
+
+        verify(patientService,times(2)).changePatientStatus(id,statusDto.getStatus());
+    }
+
     @Test
     void recentlyAddedPatient() {
         final Long doctorId = 1L;
@@ -269,19 +269,19 @@ class PatientControllerTest {
         assertEquals(list.toString(),newList.getBody().getData().toString());
 
     }
-//
-//    @Test
-//    void changeStatus() {
-//        final Long doctorId = 1L;
-//
-//        patientController.changeStatus(doctorId);
-//        patientController.changeStatus(doctorId);
-//
-//        verify(patientService,times(2)).changeStatus(doctorId);
-//    }
-//
-//
-//
+
+    @Test
+    void changeStatus() {
+        final Long doctorId = 1L;
+
+        patientController.changeStatus(doctorId);
+        patientController.changeStatus(doctorId);
+
+        verify(patientService,times(2)).changeStatus(doctorId);
+    }
+
+
+
     @Test
     void totalPatient() {
         final Long doctorId =1L;

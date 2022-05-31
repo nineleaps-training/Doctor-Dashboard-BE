@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.StatusDto;
@@ -18,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -76,7 +78,7 @@ class PatientServiceImplTest {
 
         Mockito.doReturn(patient).when(patientRepository).save(Mockito.any(Patient.class));
 
-        Patient newPatient = patientService.addPatient(patient);
+        ResponseEntity<GenericMessage> newPatient = patientService.addPatient(patient);
 
         assertThat(newPatient).isNotNull();
         verify(patientRepository).save(Mockito.any(Patient.class));
@@ -87,6 +89,8 @@ class PatientServiceImplTest {
     void getAllPatientByDoctorId() {
         final Long doctorId = 1L;
         ArrayList<Patient> patientList = new ArrayList<>();
+        ArrayList<PatientListDto> patientListDtos = new ArrayList<>();
+
 
         Patient patient = new Patient();
         patient.setAge(21);
@@ -126,15 +130,19 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(1L);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(LocalDate.now());
+        patient1.setLastVisitedDate(null);
         patient1.setStatus("Active");
         patient1.getLastVisitedDate();
 
-        Mockito.when(patientRepository.getAllPatientByDoctorId(doctorId)).thenReturn(patientList);
+        patientListDtos.addAll(Arrays.asList(patient1,patient1));
 
-        List<PatientListDto> newList = patientService.getAllPatientByDoctorId(doctorId);
+        Mockito.when(patientRepository.getAllPatientByDoctorId(doctorId)).thenReturn(patientList);
+        Mockito.when(mapper.map(Mockito.any(),Mockito.any())).thenReturn(patient1);
+
+
+        ResponseEntity<GenericMessage> newList = patientService.getAllPatientByDoctorId(doctorId);
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),patientList.size());
+        assertEquals(newList.getBody().getData(),patientListDtos);
     }
 
     @Test
@@ -179,11 +187,10 @@ class PatientServiceImplTest {
         Mockito.when(patientRepository.getPatientByIdAndDoctorId(id,doctorId)).thenReturn(patient);
         Mockito.when(mapper.map(patient,PatientDto.class)).thenReturn(patient1);
 
-        PatientDto newPatient = patientService.getPatientById(id,doctorId);
+        ResponseEntity<GenericMessage> newPatient = patientService.getPatientById(id,doctorId);
 
         assertThat(newPatient).isNotNull();
-        assertEquals(newPatient.getPID(),patient.getPID());
-        assertEquals(newPatient.getFullName(),patient.getFullName());
+        assertEquals(newPatient.getBody().getData(),mapper.map(patient,PatientDto.class));
     }
 
     @Test
@@ -253,12 +260,9 @@ class PatientServiceImplTest {
         Mockito.when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
         Mockito.when(attributeRepository.findById(id)).thenReturn(Optional.of(patient.getAttributes()));
 
-        Patient newPatient = patientService.updatePatient(id,patient);
+        ResponseEntity<GenericMessage> newPatient = patientService.updatePatient(id,patient);
         assertThat(newPatient).isNotNull();
-        assertEquals(newPatient.getPID(),patient.getPID());
-        assertEquals(newPatient.getAttributes().getAID(),patient.getAttributes().getAID());
-        assertEquals(newPatient.getAttributes().getNotes(),patient.getAttributes().getNotes());
-
+        assertEquals(newPatient.getBody().getData(),patient);
     }
 
     @Test
@@ -312,6 +316,8 @@ class PatientServiceImplTest {
     void recentlyAddedPatient() {
         final Long doctorId = 1L;
         ArrayList<Patient> patientList = new ArrayList<>();
+        ArrayList<PatientListDto> patientListDtos = new ArrayList<>();
+
 
         Patient patient = new Patient();
         patient.setAge(21);
@@ -353,11 +359,16 @@ class PatientServiceImplTest {
         patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
 
-        Mockito.when(patientRepository.recentlyAddedPatient(doctorId)).thenReturn(patientList);
+        patientListDtos.addAll(Arrays.asList(patient1,patient1));
 
-        List<PatientListDto> newList = patientService.recentlyAddedPatient(doctorId);
+
+        Mockito.when(patientRepository.recentlyAddedPatient(doctorId)).thenReturn(patientList);
+        Mockito.when(mapper.map(Mockito.any(),Mockito.any())).thenReturn(patient1);
+
+
+        ResponseEntity<GenericMessage> newList = patientService.recentlyAddedPatient(doctorId);
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),patientList.size());
+        assertEquals(newList.getBody().getData(),patientListDtos);
 
     }
 
@@ -408,9 +419,9 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.totalNoOfPatient(doctorId)).thenReturn(count);
 
-        int newCount = patientService.totalNoOfPatient(doctorId);
+        ResponseEntity<GenericMessage> newCount = patientService.totalNoOfPatient(doctorId);
 
-        assertEquals(newCount,count);
+        assertEquals(newCount.getBody().getData(),count);
 
     }
 
@@ -421,10 +432,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.totalNoOfPatientAddedThisWeek(doctorId)).thenReturn(count);
 
-        int newCount = patientService.totalNoOfPatientAddedThisWeek(doctorId);
+        ResponseEntity<GenericMessage> newCount = patientService.totalNoOfPatientAddedThisWeek(doctorId);
 
 
-        assertEquals(newCount,count);
+        assertEquals(newCount.getBody().getData(),count);
 
     }
 
@@ -440,11 +451,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.patientCategory(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.patientCategory(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.patientCategory(doctorId);
 
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),list.size());
-        assertEquals(newList,list);
+        assertEquals(newList.getBody().getData(),list);
     }
 
     @Test
@@ -458,11 +468,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.gender(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.gender(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.gender(doctorId);
 
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),list.size());
-        assertEquals(newList,list);
+        assertEquals(newList.getBody().getData(),list);
     }
 
     @Test
@@ -476,7 +485,7 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.getAllDatesByDoctorId(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.weeklyPatientCountChart(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.weeklyPatientCountChart(doctorId);
         System.out.println(newList);
         assertThat(newList).isNotNull();
     }
@@ -492,11 +501,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.bloodGroup(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.bloodGroup(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.bloodGroup(doctorId);
 
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),list.size());
-        assertEquals(newList,list);
+        assertEquals(newList.getBody().getData(),list);
     }
 
     @Test
@@ -510,11 +518,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.ageChart(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.ageChart(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.ageChart(doctorId);
 
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),list.size());
-        assertEquals(newList,list);
+        assertEquals(newList.getBody().getData(),list);
     }
 
     @Test
@@ -545,11 +552,10 @@ class PatientServiceImplTest {
 
         Mockito.when(patientRepository.getMessageForReferredPatient(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.getMessageForReferredPatient(doctorId);
+        ResponseEntity<GenericMessage> newList = patientService.getMessageForReferredPatient(doctorId);
 
         assertThat(newList).isNotNull();
-        assertEquals(newList.size(),list.size());
-        assertEquals(newList,list);
+        assertEquals(newList.getBody().getData(),list);
     }
 
     @Test
