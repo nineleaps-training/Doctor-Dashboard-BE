@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -35,11 +33,6 @@ public class DoctorServiceImpl implements DoctorService {
 
 
 
-
-    @Override
-    public DoctorDetails addDoctor(DoctorDetails details) {
-        return doctorRepository.save(details);
-    }
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
@@ -114,22 +107,14 @@ public class DoctorServiceImpl implements DoctorService {
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
-//                if (details.getId() == id && details.getId()==doctorLoginId) {
-//                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
-//                    return doctorRepository.getDoctorById(details.getId());
-//                }
                 if (details.getId() == id && details.getId() == doctorLoginId) {
                     doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
-//                    return doctorRepository.getDoctorById(details.getId());
                 }
-
                 return null;
-
             }
-
         }
         throw new ResourceNotFoundException("doctor", "id", id);
     }

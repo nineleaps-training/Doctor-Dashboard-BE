@@ -48,7 +48,16 @@ public class DoctorLoginDetails {
         this.emailId = emailId;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
 }

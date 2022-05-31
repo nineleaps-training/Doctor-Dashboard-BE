@@ -1,13 +1,15 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
-
+@NoArgsConstructor
 public class ErrorDetails {
 
-    private final Date timestamp;
-    private final String message;
-    private final String details;
+    private  Date timestamp;
+    private  String message;
+    private  String details;
 
     public ErrorDetails(Date timestamp, String message, String details) {
         this.timestamp = timestamp;
@@ -28,4 +30,15 @@ public class ErrorDetails {
         return details;
     }
 
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
 }
