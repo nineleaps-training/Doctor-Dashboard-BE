@@ -100,14 +100,6 @@ public class DoctorDetails {
         this.loginId = loginId;
     }
 
-//    public DoctorDetails(Short age, String speciality, String phoneNo, String gender, Long loginId) {
-//        this.age = age;
-//        this.speciality = speciality;
-//        this.phoneNo = phoneNo;
-//        this.gender = gender;
-//        this.loginId = loginId;
-//    }
-
 
     @Override
     public String toString() {

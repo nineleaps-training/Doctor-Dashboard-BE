@@ -24,7 +24,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                         WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
         var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
@@ -38,7 +38,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(APIException.class)
     public ResponseEntity<ErrorMessage> handleAPIException(APIException exception,
                                                            WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
         var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
@@ -51,7 +51,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(GoogleLoginException.class)
     public ResponseEntity<ErrorMessage> handleLoginException(GoogleLoginException ex) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
 
         errorMessage.setErrorData(ex);
@@ -64,7 +64,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleGlobalException(Exception exception,
                                                               WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
         var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
@@ -78,7 +78,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(ValidationsException.class)
     public ResponseEntity<ErrorMessage> processException(final ValidationsException ex, WebRequest request) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
 
         var errorDetails = new ValidationsSchema(new Date(), ex.getMessages(), request.getDescription(false));
@@ -94,7 +94,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(MyCustomException.class)
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleMyCustomException(MyCustomException e) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
 
         errorMessage.setErrorData(e.getMessage());
@@ -106,7 +106,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(ReportNotFound.class)
     @ResponseBody
     public ResponseEntity<ErrorMessage> handleReportNotFoundException(ReportNotFound e) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
 
         errorMessage.setErrorData(e.getMessage());
@@ -117,7 +117,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorMessage> validation(final ConstraintViolationException ex, WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
+        var errorMessage = new ErrorMessage();
 
 
         List<String> newList = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());

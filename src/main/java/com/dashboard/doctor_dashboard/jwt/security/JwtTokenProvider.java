@@ -53,15 +53,15 @@ public class JwtTokenProvider {
             jwtToken= bearerToken.substring(7, bearerToken.length());
         }else
             jwtToken=null;
-        System.out.println(jwtToken);
+
         if(validateToken(jwtToken)) {
             var claims = Jwts.parser()
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(jwtToken)
                     .getBody();
-            ModelMapper mapper = new ModelMapper();
+            var mapper = new ModelMapper();
             DoctorClaims doctorDetails = mapper.map(claims.get("DoctorDetails"), DoctorClaims.class);
-            System.out.println(doctorDetails.getDoctorId());
+
             return doctorDetails.getDoctorId();
         }
         return null;

@@ -1,6 +1,5 @@
 package com.dashboard.doctor_dashboard.services.login_service;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
@@ -27,13 +26,13 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private DoctorService doctorService;
-    private boolean flag;
 
     Logger logger= Logger.getLogger(LoginServiceImpl.class.getName());
 
     private final String[] fields = {"given_name", "family_name", "hd", "email"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
+         boolean flag;
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
 
         var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
@@ -69,20 +68,8 @@ public class LoginServiceImpl implements LoginService {
             String email = payload.getEmail();
             logger.log(Level.INFO,"email={0}" ,email);
             var firstName = payload.get("given_name").toString();
-            var lastName = payload.get("family_name").toString();
-
             addUser(payload);
             long id = loginRepo.getId(email);
-//            if (flag) {
-//                var newDoctor = new DoctorDetails();
-//                newDoctor.setId(id);
-//                newDoctor.setFirstName(firstName);
-//                newDoctor.setLastName(lastName);
-//                newDoctor.setEmail(email);
-//                doctorService.addDoctor(newDoctor);
-//                logger.log(Level.INFO,"doctor details {0}",newDoctor);
-//
-//            }
             return loginCreator(id, email, firstName);
 
         } else {

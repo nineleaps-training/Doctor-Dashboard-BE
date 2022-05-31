@@ -31,13 +31,16 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    public static final String DOCTOR = "Doctor";
+
+
 
 
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctors(id);
@@ -47,7 +50,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(DOCTOR, "id", id);
 
     }
 
@@ -59,7 +62,7 @@ public class DoctorServiceImpl implements DoctorService {
 //=======
     public ResponseEntity<GenericMessage> getDoctorById(long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             genericMessage.setData(doctorRepository.findDoctorById(id));
@@ -75,10 +78,9 @@ public class DoctorServiceImpl implements DoctorService {
 //<<<<<<< HEAD
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
-        System.out.println(doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
@@ -93,17 +95,16 @@ public class DoctorServiceImpl implements DoctorService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
         }
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(DOCTOR, "id", id);
 
     }
 
     @Override
     public ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        System.out.println(loginRepo.isIdAvailable(doctorLoginId) + ", " + doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
@@ -116,14 +117,14 @@ public class DoctorServiceImpl implements DoctorService {
                 return null;
             }
         }
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(DOCTOR, "id", id);
     }
 
 
     @Override
     public ResponseEntity<GenericMessage> deleteDoctor(long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
