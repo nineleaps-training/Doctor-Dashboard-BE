@@ -257,7 +257,7 @@ public class PatientServiceImpl implements PatientService {
             if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
                 fourthWeekCount++;
                }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth))){
                 lastWeekCount++;
                }
         }
