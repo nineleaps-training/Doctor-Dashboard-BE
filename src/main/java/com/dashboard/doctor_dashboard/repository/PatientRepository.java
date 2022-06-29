@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -102,5 +100,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Modifying
     void insertIntoPatient(int age,String mobileNo,String alternateMobileNo,String gender,String address,String bloodGroup,Long loginId);
 
+    @Query(value = "update patients set mobile_no=:mobileNo where id=:patientId",nativeQuery = true)
+    @Modifying
+    @Transactional
+    void updateMobileNo(String mobileNo,long patientId);
 
 }

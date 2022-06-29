@@ -1,11 +1,18 @@
 package com.dashboard.doctor_dashboard.services.receptionist;
 
+import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.dashboard.doctor_dashboard.entities.dtos.VitalsDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface ReceptionistService {
-    GenericMessage getDoctorDetails();
-    GenericMessage getDoctorAppointments(Long doctorId);
-    void updateAppointmentVitals();
+    ResponseEntity<GenericMessage> getDoctorDetails();
+    ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId);
+  //  ResponseEntity<GenericMessage> updateAppointmentVitals(VitalsDto attributes, long appointmentId);
+    ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff();
+
+    ResponseEntity<GenericMessage> addAppointmentVitals(Attributes vitalsDto, Long appointmentId);
 
 }

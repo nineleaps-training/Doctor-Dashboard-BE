@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -24,68 +23,44 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointId;
-
+    @NotNull
+    @NotEmpty
+    @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
     private String category;
 
     @NotNull
     @Future(message = "Only future dates can be entered ")
     private LocalDate dateOfAppointment;
 
-    @NotEmpty
+
     @Size(max = 100)
     private String symptoms;
-
+    @NotNull
+    @NotEmpty
     private String patientName;
-
+    @NotNull
+    @NotEmpty
     private String patientEmail;
+    @NotNull
+    @NotEmpty
     private String doctorName;
-
+    @NotNull
     private LocalTime appointmentTime;
-
-    private Boolean isToBeAttended;
-
-    private Boolean isPending;
-
-    private Boolean isFollowUp;
-
-    private Boolean isCompleted;
-
-    public Boolean getToBeAttended() {
-        return isToBeAttended;
-    }
-
-    public void setToBeAttended(Boolean toBeAttended) {
-        isToBeAttended = toBeAttended;
-    }
-
-    public Boolean getPending() {
-        return isPending;
-    }
-
-    public void setPending(Boolean pending) {
-        isPending = pending;
-    }
-
-    public Boolean getFollowUp() {
-        return isFollowUp;
-    }
-
-    public void setFollowUp(Boolean followUp) {
-        isFollowUp = followUp;
-    }
-
-    public Boolean getCompleted() {
-        return isCompleted;
-    }
-
-    public void setCompleted(Boolean completed) {
-        isCompleted = completed;
-    }
+    @Column(name = "is_read",columnDefinition = "boolean default 0")
+    private Boolean isRead;
+    @NotNull
+    @NotEmpty
+    private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
 
+    @Column
+    private Boolean isBookedAgain;
+
+    @Column
+    private Long followUpAppointmentId;
 
     @PrePersist
     public void onCreate() {
@@ -94,12 +69,13 @@ public class Appointment {
 
 
     //private UUID referenceId;
-
+    @NotNull
     @ManyToOne()
     @JsonBackReference
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @NotNull
     @ManyToOne()
     @JsonBackReference("value_doctor")
     @JoinColumn(name = "doctor_id")
@@ -108,6 +84,7 @@ public class Appointment {
     @JsonManagedReference
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Attributes attributes;
+
 
     @JsonManagedReference("prescription")
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -209,6 +186,53 @@ public class Appointment {
 
     public void setPrescription(List<Prescription> prescription) {
         this.prescription = prescription;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Boolean getIsBookedAgain() {
+        return isBookedAgain;
+    }
+
+    public void setIsBookedAgain(Boolean bookedAgain) {
+        isBookedAgain = bookedAgain;
+    }
+
+    public Long getFollowUpAppointmentId() {
+        return followUpAppointmentId;
+    }
+
+    public void setFollowUpAppointmentId(Long followUpAppointmentId) {
+        this.followUpAppointmentId = followUpAppointmentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "appointId=" + appointId +
+                ", category='" + category + '\'' +
+                ", dateOfAppointment=" + dateOfAppointment +
+                ", symptoms='" + symptoms + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", patientEmail='" + patientEmail + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", appointmentTime=" + appointmentTime +
+                ", isRead=" + isRead +
+                ", status='" + status + '\'' +
+                ", timestamp=" + timestamp +
+                ", isBookedAgain=" + isBookedAgain +
+                ", followUpAppointmentId=" + followUpAppointmentId +
+                ", patient=" + patient +
+                ", doctorDetails=" + doctorDetails +
+                ", attributes=" + attributes +
+                ", prescription=" + prescription +
+                '}';
     }
 }
 

@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
 import lombok.AllArgsConstructor;
-
 import lombok.NoArgsConstructor;
 
 
@@ -11,8 +10,10 @@ public class DoctorListDto {
     private long id;
     private String name;
     private String email;
-
     private String profilePic;
+    private String speciality;
+    private short exp;
+    private String degree;
 
 
     public String getProfilePic() {
@@ -22,7 +23,6 @@ public class DoctorListDto {
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
-//    private String speciality;
 
     public long getId() {
         return id;
@@ -48,11 +48,27 @@ public class DoctorListDto {
         this.email = email;
     }
 
-//    public String getSpeciality() {
-//        return speciality;
-//    }
-//
-//    public void setSpeciality(String speciality) {
-//        this.speciality = speciality;
-//    }
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+
+    public short getExp() {
+        return exp;
+    }
+
+    public void setExp(short exp) {
+        this.exp = exp;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
 }

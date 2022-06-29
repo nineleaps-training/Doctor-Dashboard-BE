@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.services.login_service.LoginService;
@@ -35,6 +33,11 @@ public class LoginController {
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
         }
         throw new GoogleLoginException(jwt.getIdtoken());
+    }
+
+    @GetMapping(value = "api/check")
+    public ResponseEntity<String> checkServerStatus(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping(value = "api/doctor/login/delete/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){

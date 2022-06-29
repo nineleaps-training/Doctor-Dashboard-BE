@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +14,16 @@ public class DoctorAppointmentListDto {
     private LocalDate dateOfAppointment;
     private String patientName;
     private String patientEmail;
+    private String status;
+    private LocalTime appointmentTime;
+
+    public LocalTime getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(LocalTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
 
     public Long getAppointId() {
         return appointId;
@@ -46,5 +57,12 @@ public class DoctorAppointmentListDto {
         this.patientEmail = patientEmail;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 

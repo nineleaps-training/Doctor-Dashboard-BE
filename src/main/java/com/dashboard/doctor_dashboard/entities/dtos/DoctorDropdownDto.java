@@ -6,24 +6,18 @@ import lombok.AllArgsConstructor;
 public class DoctorDropdownDto {
 
     private long id;
-
-    private String specialisation;
-
     private String name;
+    private String emailId;
+    private String speciality;
 
-    private String email;
+
+
+
 
     public long getId() {
         return id;
     }
 
-    public String getSpecialisation() {
-        return specialisation;
-    }
-
-    public void setSpecialisation(String specialisation) {
-        this.specialisation = specialisation;
-    }
 
     public String getName() {
         return name;
@@ -33,11 +27,19 @@ public class DoctorDropdownDto {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getSpeciality() {
+        return speciality;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
     }
 }

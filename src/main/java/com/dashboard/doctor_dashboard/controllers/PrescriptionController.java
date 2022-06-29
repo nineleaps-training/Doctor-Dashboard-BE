@@ -1,17 +1,17 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.entities.Prescription;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import javax.mail.MessagingException;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/prescription")
@@ -22,10 +22,10 @@ public class PrescriptionController {
     private PrescriptionService prescriptionService;
 
     @PostMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> addPrescription(@PathVariable("appointId") Long appointId, @RequestBody List<Prescription> prescription) {
+    public ResponseEntity<GenericMessage> addPrescription(@PathVariable("appointId") Long appointId, @RequestBody UpdatePrescriptionDto updatePrescriptionDto) throws MessagingException, JSONException, IOException {
         GenericMessage genericMessage = new GenericMessage();
 
-        genericMessage.setData(prescriptionService.addPrescription(appointId,prescription));
+        genericMessage.setData(prescriptionService.addPrescription(appointId,updatePrescriptionDto));
         genericMessage.setStatus(Constants.SUCCESS);
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }

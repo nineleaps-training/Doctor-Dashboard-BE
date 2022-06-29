@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -14,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,13 +28,11 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("/get-all/doctor/{doctorId}")
-//    public ResponseEntity<List<DoctorListDto>> getAllDoctors(@PathVariable("doctorId") Long id) {
     public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id) {
 
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
             return details;
-//            return new ResponseEntity<>(details,HttpStatus.OK);
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
@@ -63,8 +58,6 @@ public class DoctorController {
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request)  {
-//    public ResponseEntity<GenericMessage> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request) {
-
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -87,5 +80,18 @@ public class DoctorController {
         return doctorService.getAllDoctorsBySpeciality(speciality);
     }
 
+    @GetMapping("/{doctorId}/gender")
+    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.genderChart(doctorId);
+    }
 
+    @GetMapping("/{doctorId}/bloodGroup")
+    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.bloodGroupChart(doctorId);
+    }
+
+    @GetMapping("/{doctorId}/ageGroup")
+    public ResponseEntity<GenericMessage> ageGroup(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.ageGroupChart(doctorId);
+    }
 }

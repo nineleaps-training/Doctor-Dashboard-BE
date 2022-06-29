@@ -2,12 +2,11 @@ package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
@@ -18,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -107,7 +109,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
                 if (details.getId() == id && details.getId() == doctorLoginId) {
-                    doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId(), details.getExp(), details.getDegree());
+                    doctorRepository.updateDoctorDb(details.getPhoneNo());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
@@ -145,4 +147,71 @@ public class DoctorServiceImpl implements DoctorService {
         }
         throw new ResourceNotFoundException("doctor", speciality, 0);
     }
+
+    @Override
+    public ResponseEntity<GenericMessage> genderChart(Long doctorId) {
+        Map<String,Integer> chart = new HashMap<>();
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+
+            List<String> genderChartValue = doctorRepository.genderChart(doctorId);
+
+            for (String s:genderChartValue) {
+                chart.put(s, Collections.frequency(genderChartValue,s));
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId) {
+         Map<String,Integer> chart = new HashMap<>();
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+
+            List<String> bloodGroupValue = doctorRepository.bloodGroupChart(doctorId);
+
+            for (String s:bloodGroupValue) {
+                chart.put(s, Collections.frequency(bloodGroupValue,s));
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
+        Map<String,Integer> chart = new HashMap<>();
+        chart.put("0-2",0);
+        chart.put("3-14",0);
+        chart.put("15-25",0);
+        chart.put("26-64",0);
+        chart.put("65+",0);
+
+
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+            List<Long> ageGroupValue = doctorRepository.ageGroupChart(doctorId);
+            System.out.println(ageGroupValue);
+            for (Long s:ageGroupValue) {
+
+                if(s <= 2)
+                {
+                    chart.put("0-2", chart.get("0-2")+1);
+                } else if (s>=3 && s<=14) {
+                    chart.put("3-14",chart.get("3-14")+1);
+                } else if (s>=15 && s<=25) {
+                    chart.put("15-25",chart.get("15-25")+1);
+                } else if (s>=26 && s<=64) {
+                    chart.put("26-64",chart.get("26-64")+1);
+                } else if (s>=65) {
+                    chart.put("65+",chart.get("65+")+1);
+                }
+
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
+
+    }
+
 }
