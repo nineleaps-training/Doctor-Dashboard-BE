@@ -36,11 +36,7 @@ public class AppointmentController {
         return appointmentService.addAppointment(appointment,request);
 
     }
-    @GetMapping("/getMap")
-    public Map<Long, Map<LocalDate, List<Boolean>>> getMap(){
-        return appointmentService.returnMap();
-    }
-    @GetMapping("/getAvailableSlots/{doctorId}/{date}")
+       @GetMapping("/getAvailableSlots/{doctorId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
         System.out.println(LocalDate.parse(date));
          return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
@@ -49,15 +45,6 @@ public class AppointmentController {
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
         return appointmentService.getAllAppointmentByPatientId(patientId) ;
     }
-
-//    @GetMapping("/getAllAppointments/doctor/{doctorId}")
-//    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-//        GenericMessage genericMessage = new GenericMessage();
-//
-//        genericMessage.setData(appointmentService.getAllAppointmentByDoctorId(doctorId));
-//        genericMessage.setStatus(Constants.SUCCESS);
-//        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
-//    }
 
 
     @GetMapping("/getAllAppointments/past/doctor/{doctorId}")
