@@ -28,15 +28,11 @@ public class PatientController {
         return patientService.addPatient(patient,loginId);
     }
 
-//    @GetMapping("/doctor/{doctorId}")
-//    public ResponseEntity<GenericMessage> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId) {
-//        return patientService.getAllPatientByDoctorId(doctorId);
-//    }
 
-    @GetMapping("/{id}/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getPatientDtoById(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
-        return patientService.getPatientById(id, doctorId);
-    }
+//    @GetMapping("/{id}/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> getPatientDtoById(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
+//        return patientService.getPatientById(id, doctorId);
+//    }
 
     @GetMapping("/{patientId}/appointment/{appointmentId}")
     public ResponseEntity<GenericMessage> getAppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId){
@@ -52,10 +48,6 @@ public class PatientController {
         return patientService.getPatientDetailsById(loginId);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
-        return patientService.updatePatient(id, patient);
-    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody PatientDetailsUpdateDto patientDetailsUpdateDto) {
@@ -81,64 +73,64 @@ public class PatientController {
     //Dashboard Chart
 
 
-    @GetMapping("/{doctorId}/totalPatient")
-    public ResponseEntity<GenericMessage> totalPatient(@PathVariable("doctorId") Long doctorId) {
-        return patientService.totalNoOfPatient(doctorId);
-    }
-
-    @GetMapping("/{doctorId}/totalActivePatient")
-    public ResponseEntity<GenericMessage> totalNoOfPatientAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
-        return patientService.totalNoOfPatientAddedThisWeek(doctorId);
-    }
-
-
-    @GetMapping("/{doctorId}/category")
-    public ResponseEntity<GenericMessage> patientCategory(@PathVariable("doctorId") Long doctorId) {
-        return patientService.patientCategory(doctorId);
-    }
-
-    @GetMapping("/{doctorId}/gender")
-    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
-        return patientService.gender(doctorId);
-    }
-
-    @GetMapping("/{doctorId}/activePatient")
-    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
-        return patientService.weeklyPatientCountChart(doctorId);
-    }
-
-    @GetMapping("/{doctorId}/bloodGroup")
-    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
-        return patientService.bloodGroup(doctorId);
-    }
-
-    @GetMapping("/{doctorId}/ageChart")
-    public ResponseEntity<GenericMessage> ageChart(@PathVariable("doctorId") Long doctorId) {
-        return patientService.ageChart(doctorId);
-    }
-    //{
-//        bloodGroup:{},
-//        ageChart:{},
-
+//    @GetMapping("/{doctorId}/totalPatient")
+//    public ResponseEntity<GenericMessage> totalPatient(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.totalNoOfPatient(doctorId);
+//    }
+//
+//    @GetMapping("/{doctorId}/totalActivePatient")
+//    public ResponseEntity<GenericMessage> totalNoOfPatientAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.totalNoOfPatientAddedThisWeek(doctorId);
 //    }
 
-    //Add-On feature Refer Patient
 
-    @PutMapping("/{id}/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> referPatients(@PathVariable("doctorId") Long doctorId, @PathVariable("id") Long patientId) {
+//    @GetMapping("/{doctorId}/category")
+//    public ResponseEntity<GenericMessage> patientCategory(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.patientCategory(doctorId);
+//    }
 
-        return patientService.referPatients(doctorId, patientId);
-    }
+//    @GetMapping("/{doctorId}/gender")
+//    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.gender(doctorId);
+//    }
 
-    @GetMapping("/message/{doctorId}")
-    public ResponseEntity<GenericMessage> getMessageForReferredPatient(@PathVariable("doctorId") Long doctorId) {
-        return patientService.getMessageForReferredPatient(doctorId);
-    }
-
-    @PutMapping("/changeMessage/{doctorId}")
-    public ResponseEntity<GenericMessage> changeStatus(@PathVariable("doctorId") Long doctorId) {
-        return patientService.changeStatus(doctorId);
-    }
+//    @GetMapping("/{doctorId}/activePatient")
+//    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.weeklyPatientCountChart(doctorId);
+//    }
+//
+//    @GetMapping("/{doctorId}/bloodGroup")
+//    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.bloodGroup(doctorId);
+//    }
+//
+//    @GetMapping("/{doctorId}/ageChart")
+//    public ResponseEntity<GenericMessage> ageChart(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.ageChart(doctorId);
+//    }
+//    //{
+////        bloodGroup:{},
+////        ageChart:{},
+//
+////    }
+//
+//    //Add-On feature Refer Patient
+//
+//    @PutMapping("/{id}/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> referPatients(@PathVariable("doctorId") Long doctorId, @PathVariable("id") Long patientId) {
+//
+//        return patientService.referPatients(doctorId, patientId);
+//    }
+//
+//    @GetMapping("/message/{doctorId}")
+//    public ResponseEntity<GenericMessage> getMessageForReferredPatient(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.getMessageForReferredPatient(doctorId);
+//    }
+//
+//    @PutMapping("/changeMessage/{doctorId}")
+//    public ResponseEntity<GenericMessage> changeStatus(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.changeStatus(doctorId);
+//    }
 
     @GetMapping("/{patientId}/getNotifications")
     public ResponseEntity<GenericMessage> getNotifications(@PathVariable("patientId") Long patientId){

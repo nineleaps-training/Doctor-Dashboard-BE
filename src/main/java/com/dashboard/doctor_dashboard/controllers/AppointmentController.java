@@ -3,7 +3,6 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.services.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    @Autowired
-    private PdFGeneratorServiceImpl pdFGeneratorService;
 
     @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
@@ -46,21 +43,9 @@ public class AppointmentController {
         return appointmentService.getAllAppointmentByPatientId(patientId) ;
     }
 
-
-    @GetMapping("/getAllAppointments/past/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getPastAppointmentByDoctorId(doctorId);
-    }
-
-    @GetMapping("/getAllAppointments/today/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getTodayAppointmentByDoctorId(doctorId);
-    }
-
-
-    @GetMapping("/getAllAppointments/upcoming/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getUpcomingAppointmentByDoctorId(doctorId);
+    @GetMapping("/getAllAppointments/doctor/{doctorId}")
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.getAllAppointmentByDoctorId(doctorId) ;
     }
 
 
