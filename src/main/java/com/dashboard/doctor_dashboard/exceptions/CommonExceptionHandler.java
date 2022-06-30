@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

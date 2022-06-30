@@ -6,6 +6,7 @@ import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -33,14 +34,14 @@ public class DoctorController {
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
             return details;
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("id") long id) {
         if (doctorService.getDoctorById(id) != null)
             return doctorService.getDoctorById(id);
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
     @PostMapping("/add-doctor-details/{id}")

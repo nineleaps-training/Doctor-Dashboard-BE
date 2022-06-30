@@ -12,6 +12,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
+import com.dashboard.doctor_dashboard.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -28,8 +29,6 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -69,8 +68,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     private ModelMapper mapper;
 
 
-    public AppointmentServiceImpl() {
-    }
 
     @Override
     public ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
@@ -88,13 +85,13 @@ public class AppointmentServiceImpl implements AppointmentService {
                         if(appointment.getFollowUpAppointmentId()!=null && appointmentRepository.existsById(appointment.getFollowUpAppointmentId())) {
                             Appointment getAppointmentById = appointmentRepository.getAppointmentById(appointment.getFollowUpAppointmentId());
                             if (!Objects.equals(appointment.getPatient().getPID(), getAppointmentById.getPatient().getPID())) {
-                                throw new ResourceNotFoundException("patient", "id", appointment.getFollowUpAppointmentId());
+                                throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", appointment.getFollowUpAppointmentId());
                             }
                             appointmentRepository.changeFollowUpStatus(appointment.getFollowUpAppointmentId());
                             appointment.setIsBookedAgain(null);
                         }
                         else {
-                            throw new ResourceNotFoundException("appointment", "id", appointment.getFollowUpAppointmentId());
+                            throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", appointment.getFollowUpAppointmentId());
                         }
                     }
                     List<Boolean> c = new ArrayList<>(checkSlots(appointment.getDateOfAppointment(), appointment.getDoctorDetails().getId()));
@@ -105,7 +102,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     if(c.get(index)) {
                             c.set(index, false);
                     }else {
-                        throw new InvalidDate(appointment.getAppointmentTime().toString(),"appointment is already booked for this time, please refresh.");
+                        throw new InvalidDate(appointment.getAppointmentTime().toString(),Constants.APPOINTMENT_ALREADY_BOOKED);
                     }
                     slots.get(appointment.getDoctorDetails().getId()).put(appointment.getDateOfAppointment(), c);
                     appointment.setStatus("To be attended");
@@ -117,15 +114,15 @@ public class AppointmentServiceImpl implements AppointmentService {
                     sendEmailToUser(appointment);
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m),HttpStatus.OK);
                 }
-                throw new InvalidDate(appDate.toString(),"appointment cannot be booked on this date");
+                throw new InvalidDate(appDate.toString(),Constants.APPOINTMENT_CANNOT_BE_BOOKED);
             }else if(patientId!=null){
-                throw new ResourceNotFoundException("Patient", "id", loginId);
+                throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", loginId);
             } else if (doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) == null) {
-                throw new ResourceNotFoundException("Doctor", "id", loginId);
+                throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", loginId);
             }
 
         }
-        throw new ResourceNotFoundException("Patient", "id", loginId);
+        throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", loginId);
     }
 
     private void checkSanityOfAppointment(Appointment appointment){
@@ -136,11 +133,13 @@ public class AppointmentServiceImpl implements AppointmentService {
         LoginDetails patientLoginDetails= loginRepo.findById(patientId).get();
         LoginDetails doctorLoginDetails= loginRepo.findById(doctorId).get();
         if(!patientLoginDetails.getEmailId().equals(appointment.getPatientEmail())){
-            throw new ValidationsException(new ArrayList<>(List.of("invalid patient email")));
-        }if(!patientLoginDetails.getName().equals(appointment.getPatientName())){
-            throw new ValidationsException(new ArrayList<>(List.of("invalid patient name")));
-        }if(!doctorLoginDetails.getName().equals(appointment.getDoctorName())){
-            throw new ValidationsException(new ArrayList<>(List.of("invalid doctor name")));
+            throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_PATIENT_EMAIL)));
+        }
+        if(!patientLoginDetails.getName().equals(appointment.getPatientName())){
+            throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_PATIENT_NAME)));
+        }
+        if(!doctorLoginDetails.getName().equals(appointment.getDoctorName())){
+            throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_DOCTOR_NAME)));
         }
     }
     public Map<Long,Map<LocalDate,List<Boolean>>> returnMap(){
@@ -172,7 +171,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
       return new ResponseEntity<>(genericMessage,HttpStatus.OK);
      }
-      throw new ResourceNotFoundException("Patient", "id", loginId);
+      throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", loginId);
 
 }
 
@@ -202,7 +201,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
 
     }
 
@@ -213,7 +212,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(appointmentRepository.getId(appointId) != null && appointId == appointmentRepository.getId(appointId)){
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class)),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("Appointment", "id", appointId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", appointId);
     }
 
 
@@ -368,7 +367,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(patientId != null) {
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.patientCategoryGraph(patientId)), HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("Patient", "id", loginId);
+        throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", loginId);
 
     }
 
@@ -417,13 +416,12 @@ public class AppointmentServiceImpl implements AppointmentService {
                 if (date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8))) {
 
                     if (slots.get(doctorId).get(date) != null) {
-                        List<Boolean> returnList=new ArrayList<>(slots.get(doctorId).get(date));
                         return slots.get(doctorId).get(date);
                     } else {
                         return checkSlotsAvail(date, doctorId).get(doctorId).get(date);
                     }
                 }else {
-                    throw new InvalidDate(date.toString(),"select dates from specified range");
+                    throw new InvalidDate(date.toString(),Constants.SELECT_SPECIFIED_DATES);
                 }
             }
             else{
@@ -431,11 +429,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                     return checkSlotsAvail(date, doctorId).get(doctorId).get(date);
                 }
                 else {
-                    throw new InvalidDate(date.toString(),"select dates from specified range");
+                    throw new InvalidDate(date.toString(),Constants.SELECT_SPECIFIED_DATES);
                 }
             }
         }
-        throw new ResourceNotFoundException("Doctor","id",doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND,"id",doctorId);
 
     }
 
@@ -464,24 +462,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         String senderName = "meCare Team";
         String subject = "Appointment Confirmed";
 
-        String content = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
-                + "</style></head>"
-                + "<div style=\"background-color: white; color:black  \">\n"
-                + " <p style=\"text-align: left; font-size:15px ;\">Hi [[name]],</p>\n"
-                + " <p style =\"text-align:left; font-size:15px ;line-height: 0.8\n"
-                + " font-family: 'Arial' \n" + " ;\n"
-                + " \"\n" + " >\n"
-                + "Your appointment has been booked. Check the details given below.</p>"
-
-                + "<table><tr><th>Doctor Name</th><th>Doctor Email</th><th>Speciality</th><th>Date of Appointment</th><th>Appointment Time</th></tr><tr><td>Dr.[[doctorName]]</td><td>[[doctorEmail]]</td><td>[[speciality]]</td><td>[[dateOfAppointment]]</td><td>[[appointmentTime]]</td></tr></table>"
-
-                + " <p style=\" text-align: left ;font-size:13px \">\n"
-                + " For further queries, please mail to:\n" + " <span style=\"color: #FFFFF; \"\n"
-                + " >mecareapplication@gmail.com</span\n" + " >\n" + " </p>\n"
-                + " <p style=\" text-align: left;font-size:13px;line-height: 0.8\">\n"
-                + " Thanks & Regards, </p>\n"
-                + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare team</span\n"
-                + " </div>";
+        String content = Constants.MAIL_APPOINTMENT;
 
         content = content.replace("[[name]]", appointment.getPatientName());
         content = content.replace("[[doctorName]]", appointment.getDoctorName());

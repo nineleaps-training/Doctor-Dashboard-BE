@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.prescription_service;
 
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
@@ -70,12 +70,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                       sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
                       return "Prescription Added";
                     }
-               throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
+               throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
               }
                else
                    throw new APIException(HttpStatus.BAD_REQUEST,"Prescription cannot be added for other status like completed,follow Up, and to be attended");
             }
-             throw new ResourceNotFoundException("Appointment", "id", appointId);
+             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", appointId);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         if(appointmentRepository.getId(appointId) != null){
             return prescriptionRepository.getAllPrescriptionByAppointment(appointId);
         }
-        throw new ResourceNotFoundException("Appointment","id",appointId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND,"id",appointId);
 
     }
 
@@ -105,21 +105,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         String senderName = "meCare Application";
         String subject = "Prescription Updated";
 
-        String content = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
-                + "</style></head>"
-                + "<div style=\"background-color: white; color:black  \">\n"
-                + " <p style=\"text-align: left; font-size:15px ;\">Hi [[name]],</p>\n"
-                + " <p style =\"text-align:left; font-size:15px ;line-height: 0.8\n"
-                + " font-family: 'Arial' \n" + " ;\n"
-                + " \"\n" + " >\n"
-                + "Dr. [[doctorName]] Completed Your Appointment. Check the prescription given below in the attachment.</p>"
-                + " <p style=\" text-align: left ;font-size:13px \">\n"
-                + " For further queries, please mail to:\n" + " <span style=\"color: #FFFFF; \"\n"
-                + " >mecareapplication@gmail.com</span\n" + " >\n" + " </p>\n"
-                + " <p style=\" text-align: left;font-size:13px;line-height: 0.8\">\n"
-                + " Thanks & Regards, </p>\n"
-                + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare Application team</span\n"
-                + " </div>";
+        String content = Constants.MAIL_PRESCRIPTION;
 
         content = content.replace("[[name]]", patientDto.getPatientName());
         content = content.replace("[[doctorName]]", patientDto.getDoctorName());
@@ -147,11 +133,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
             FileSystemResource fileSystemResource=new FileSystemResource("/home/nineleaps/Downloads/prescription/prescription.pdf");
             helper.addAttachment(fileSystemResource.getFilename(),fileSystemResource);
             mailSender.send(message);
-            log.debug("Prescription:"+"email sent");
+            log.debug("Prescription: email sent");
             log.info("Prescription: Email service ended..");
         }catch (Exception e)
         {
             log.info("Prescription: Email service ended..");
+            log.error("mail error!!! cant connect with the host server");
             throw new ReportNotFound(e.getMessage());
         }
 

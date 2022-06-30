@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
@@ -53,7 +52,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
 
     }
 
@@ -92,7 +91,7 @@ public class DoctorServiceImpl implements DoctorService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
         }
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
 
     }
 
@@ -119,7 +118,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
 
         }
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
 
@@ -145,7 +144,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", speciality, 0);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY, speciality, 0);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
     }
 
     @Override
@@ -175,17 +174,17 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
     }
 
     @Override
     public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
         Map<String,Integer> chart = new HashMap<>();
-        chart.put("0-2",0);
-        chart.put("3-14",0);
-        chart.put("15-25",0);
-        chart.put("26-64",0);
-        chart.put("65+",0);
+        chart.put(Constants.ages[0],0);
+        chart.put(Constants.ages[1],0);
+        chart.put(Constants.ages[2],0);
+        chart.put(Constants.ages[3],0);
+        chart.put(Constants.ages[4],0);
 
 
         if(doctorRepository.isIdAvailable(doctorId) != null){
@@ -194,22 +193,22 @@ public class DoctorServiceImpl implements DoctorService {
 
                 if(s <= 2)
                 {
-                    chart.put("0-2", chart.get("0-2")+1);
+                    chart.put(Constants.ages[0], chart.get(Constants.ages[0])+1);
                 } else if (s>=3 && s<=14) {
-                    chart.put("3-14",chart.get("3-14")+1);
+                    chart.put(Constants.ages[1],chart.get(Constants.ages[1])+1);
                 } else if (s>=15 && s<=25) {
-                    chart.put("15-25",chart.get("15-25")+1);
+                    chart.put(Constants.ages[2],chart.get(Constants.ages[2])+1);
                 } else if (s>=26 && s<=64) {
-                    chart.put("26-64",chart.get("26-64")+1);
+                    chart.put(Constants.ages[3],chart.get(Constants.ages[3])+1);
                 } else if (s>=65) {
-                    chart.put("65+",chart.get("65+")+1);
+                    chart.put(Constants.ages[4],chart.get(Constants.ages[4])+1);
                 }
 
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
 
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
 
     }
 

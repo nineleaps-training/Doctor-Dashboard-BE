@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;

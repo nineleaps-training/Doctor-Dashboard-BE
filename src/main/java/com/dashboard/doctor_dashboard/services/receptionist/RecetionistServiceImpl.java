@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.services.receptionist;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 
@@ -17,9 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.Attribute;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,7 +86,7 @@ public class RecetionistServiceImpl implements ReceptionistService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
 
         }
-        throw new ResourceNotFoundException("appointments","id",appointmentId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND,"id",appointmentId);
 
     }
 
