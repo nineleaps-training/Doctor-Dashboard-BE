@@ -11,6 +11,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
@@ -37,10 +39,6 @@ public class DoctorServiceImpl implements DoctorService {
     JwtTokenProvider jwtTokenProvider;
 
 
-    @Override
-    public DoctorDetails addDoctor(DoctorDetails details) {
-        return doctorRepository.save(details);
-    }
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
@@ -79,7 +77,6 @@ public class DoctorServiceImpl implements DoctorService {
         GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
-        System.out.println(doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
@@ -87,6 +84,7 @@ public class DoctorServiceImpl implements DoctorService {
                     doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
+                    log.debug("Doctor: Doctor on boarding completed.");
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
                 }
             }
@@ -104,7 +102,6 @@ public class DoctorServiceImpl implements DoctorService {
         GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        System.out.println(loginRepo.isIdAvailable(doctorLoginId) + ", " + doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
@@ -112,6 +109,8 @@ public class DoctorServiceImpl implements DoctorService {
                     doctorRepository.updateDoctorDb(details.getPhoneNo());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
+                    log.debug("Doctor: Doctor details updated.");
+
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
                 }
 
@@ -132,6 +131,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
+        log.debug("Doctor: Doctor deleted.");
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
@@ -190,7 +190,6 @@ public class DoctorServiceImpl implements DoctorService {
 
         if(doctorRepository.isIdAvailable(doctorId) != null){
             List<Long> ageGroupValue = doctorRepository.ageGroupChart(doctorId);
-            System.out.println(ageGroupValue);
             for (Long s:ageGroupValue) {
 
                 if(s <= 2)

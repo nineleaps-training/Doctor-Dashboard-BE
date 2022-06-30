@@ -48,7 +48,6 @@ public class JwtTokenProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        System.out.println("username:"+claims);
         return claims.getSubject();
     }
     public Long getIdFromToken(HttpServletRequest request){
@@ -58,7 +57,6 @@ public class JwtTokenProvider {
             jwtToken= bearerToken.substring(7, bearerToken.length());
         }else
             jwtToken=null;
-        System.out.println(jwtToken);
         if(validateToken(jwtToken)) {
             var claims = Jwts.parser()
                     .setSigningKey(jwtSecret)
@@ -66,7 +64,6 @@ public class JwtTokenProvider {
                     .getBody();
             ModelMapper mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
-            System.out.println(details.getDoctorId());
             return details.getDoctorId();
         }
         return null;

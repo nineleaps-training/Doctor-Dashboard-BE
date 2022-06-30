@@ -8,6 +8,7 @@ import com.itextpdf.text.pdf.FontSelector;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
@@ -17,14 +18,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PdFGeneratorServiceImpl {
     public void generatePdf(List<Prescription> prescriptions, PatientDto patientDto,String notes1) throws  IOException
     {
         OutputStream file=new FileOutputStream("/home/nineleaps/Downloads/prescription/prescription.pdf");
         try
         {
-            System.out.println("in");
-
+            log.info("PDF:Service Started..");
             Document document = new Document(PageSize.A4, 20, 20, 20, 20);
             FontSelector fs = new FontSelector();
             FontSelector fs1 = new FontSelector();
@@ -76,16 +77,13 @@ public class PdFGeneratorServiceImpl {
             PdfPTable notes = new PdfPTable(1);
            notes.setWidthPercentage(100);
            notes.addCell(new Paragraph(notes1+"                      \n"+"\n"+"\n"+"\n"+"\n"+"\n"));
-            System.out.println("nothing:1");
-
-            System.out.println(patientDto.toString());
             details.addCell(getBillRowCell(patientDto.getPatientName()));
             details.addCell(getBillRowCell(String.valueOf(patientDto.getAge())));
             details.addCell(getBillRowCell(patientDto.getGender()));
             details.addCell(getBillRowCell(patientDto.getDoctorName()));
             details.addCell(getBillRowCell(patientDto.getCategory()));
 
-            System.out.println("nothing:2");
+
 
 
 
@@ -105,7 +103,6 @@ public class PdFGeneratorServiceImpl {
                 billTable.addCell(getBillRowCell(prescriptions.get(i).getDays().toString()));
                 billTable.addCell(getBillRowCell(prescriptions.get(i).getTime()));
             }
-            System.out.println("nothing3");
 
 
             document.open();
@@ -144,14 +141,13 @@ public class PdFGeneratorServiceImpl {
 
 
             document.setMarginMirroringTopBottom(true);
-
             document.close();
             file.close();
-
+            log.info("PDF:Service Completed");
         }
         catch (Exception e) {
-            System.out.println(e);
             file.close();
+            log.info("PDF:Service Completed");
             throw new ReportNotFound(e.getMessage());
         }
     }

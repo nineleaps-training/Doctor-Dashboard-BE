@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public interface DoctorService {
-    DoctorDetails addDoctor(DoctorDetails details);
 
     ResponseEntity<GenericMessage> getAllDoctors(Long id);
 

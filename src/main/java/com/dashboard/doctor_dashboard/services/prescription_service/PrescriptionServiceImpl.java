@@ -12,6 +12,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PrescriptionServiceImpl implements PrescriptionService   {
 
     @Autowired
@@ -66,7 +68,6 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                       prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
                       pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(), updatePrescriptionDto.getPatientDto(), updatePrescriptionDto.getNotes());
                       sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
-
                       return "Prescription Added";
                     }
                throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
@@ -97,6 +98,8 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
 
 
     public void sendEmailToUserAfterPrescription(PatientDto patientDto) throws JSONException, MessagingException, UnsupportedEncodingException {
+        log.info("Prescription: Email service started..");
+
         String toEmail = patientDto.getPatientEmail();
         String fromEmail = "mecareapplication@gmail.com";
         String senderName = "meCare Application";
@@ -140,15 +143,15 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
             helper.setTo(obj.get("toEmail").toString());
             helper.setText(obj.get("content").toString(), true);
             helper.setSubject(obj.get("subject").toString());
-            System.out.println("I am printing"+message.getSubject());
+
             FileSystemResource fileSystemResource=new FileSystemResource("/home/nineleaps/Downloads/prescription/prescription.pdf");
             helper.addAttachment(fileSystemResource.getFilename(),fileSystemResource);
-
-
-            System.out.println("hii");
             mailSender.send(message);
+            log.debug("Prescription:"+"email sent");
+            log.info("Prescription: Email service ended..");
         }catch (Exception e)
         {
+            log.info("Prescription: Email service ended..");
             throw new ReportNotFound(e.getMessage());
         }
 

@@ -7,6 +7,7 @@ import com.dashboard.doctor_dashboard.exceptions.MyCustomException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
@@ -59,6 +61,7 @@ public class PatientServiceImpl implements PatientService {
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
+            log.debug("Patient: On boarding completed..");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }else {
             throw new ResourceNotFoundException("Login Details", "id", loginId);
@@ -74,6 +77,7 @@ public class PatientServiceImpl implements PatientService {
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
+
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }else {
             throw new ResourceNotFoundException("Login Details", "id", loginId);
@@ -86,6 +90,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
+        log.debug("Patient: patient deleted.");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
     }
 
@@ -97,13 +102,6 @@ public class PatientServiceImpl implements PatientService {
         return mapper.map(patient, PatientEntityDto.class);
     }
 
-//    private PatientListDto mapToDto2(Patient patient) {
-//        return mapper.map(patient, PatientListDto.class);
-//
-//    }
-
-
-
 
     @Override
     public ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientDetailsUpdateDto patient) {
@@ -111,10 +109,10 @@ public class PatientServiceImpl implements PatientService {
         GenericMessage genericMessage = new GenericMessage();
 
         if (loginRepo.existsById(patient.getPatientId()) && patientRepository.getId(patient.getPatientId())!=null) {
-            Long patientId=patientRepository.getId(patient.getPatientId());
 
             patientRepository.updateMobileNo(patient.getMobileNo(),patient.getPatientId());
             genericMessage.setStatus(Constants.SUCCESS);
+            log.debug("Patient: Updated completed..");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {
@@ -134,7 +132,7 @@ public class PatientServiceImpl implements PatientService {
     public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
 
         if(loginRepo.isIdAvailable(patientId)!=null&&patientRepository.getId(patientId)!=null){
-            if(attributeRepository.findById(appointmentId)!=null){
+            if(attributeRepository.findById(appointmentId).isPresent()){
 
                 AppointmentViewDto viewDto =appointmentRepository.getBasicAppointmentDetails(appointmentId,patientRepository.getId(patientId));
 

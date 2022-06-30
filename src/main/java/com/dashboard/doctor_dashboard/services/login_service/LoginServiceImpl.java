@@ -9,6 +9,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,26 +21,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
+@Slf4j
 public class LoginServiceImpl implements LoginService {
     @Autowired
     private LoginRepo loginRepo;
 
     @Autowired
     private DoctorService doctorService;
-    private boolean flag;
-
-    Logger logger= Logger.getLogger(LoginServiceImpl.class.getName());
-
     private final String[] fields = {"given_name","hd", "email","picture"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
-        logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
 
         var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[2]).toString());
+        boolean flag;
         if (doctorLoginDetails == null) {
             var newDoctor = new LoginDetails();
-//            newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
-//            newDoctor.setLastName(loginDetails.get(fields[1]).toString());
             newDoctor.setName(loginDetails.get(fields[0]).toString());
             if(loginDetails.get(fields[1])!=null && loginDetails.get(fields[1]).equals("nineleaps.com")) {
                 newDoctor.setDomain(loginDetails.get(fields[1]).toString());
@@ -51,16 +47,11 @@ public class LoginServiceImpl implements LoginService {
             }
             newDoctor.setEmailId(loginDetails.get(fields[2]).toString());
             newDoctor.setProfilePic(loginDetails.get(fields[3]).toString());
-//            if(newDoctor.getDomain().equals("nineleaps.com")){
-//                newDoctor.setRole("DOCTOR");
-//            }else if(newDoctor.getDomain().equals("google")){
-//                newDoctor.setRole("PATIENT");
-//            }
             loginRepo.save(newDoctor);
-            logger.log(Level.INFO,"User added");
+            log.debug("Login:"+"User added");
             flag = true;
         } else {
-            logger.log(Level.INFO,"Existing user");
+            log.debug("Login:"+"Existing user");
             flag = false;
         }
         return flag;
@@ -78,32 +69,18 @@ public class LoginServiceImpl implements LoginService {
     public String takingInfoFromToken(GoogleIdToken idToken) {
 
         if (idToken != null) {
+            log.debug("Login:"+"token verified");
             var payload = idToken.getPayload();
-            System.out.println("payload="+payload);
             String email = payload.getEmail();
-            logger.log(Level.INFO,"email={0}" ,email);
             var name = payload.get("given_name").toString();
-//                    payload.get("given_name").toString().concat(" "+payload.get("family_name").toString());
-//            var lastName = payload.get("family_name").toString();
 
             addUser(payload);
             long id = loginRepo.getId(email);
-//            if (flag) {
-//                var newDoctor = new DoctorDetails();
-//                newDoctor.setId(id);
-//                newDoctor.setFirstName(firstName);
-//                newDoctor.setLastName(lastName);
-//                newDoctor.setEmail(email);
-//                doctorService.addDoctor(newDoctor);
-//                logger.log(Level.INFO,"doctor details {0}",newDoctor);
-//
-//            }
             return loginCreator(id, email, name,loginRepo.getRoleById(id),loginRepo.getProfilePic(id));
 
-        } else {
-            logger.log(Level.WARNING,"Invalid ID token.");
         }
-        return "ID token expired.";
+        log.debug("Login:"+"login failed due to Invalid ID token.");
+        return "Invalid ID token.";
     }
 
     @Autowired
@@ -122,7 +99,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String deleteDoctorById(long id) {
-        System.out.println("in");
         loginRepo.deleteById(id);
         return "Successfully deleted";
     }

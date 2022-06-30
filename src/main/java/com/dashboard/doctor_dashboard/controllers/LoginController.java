@@ -28,7 +28,7 @@ public class LoginController {
         var jwt = new JwtToken();
         jwt.setIdtoken(loginService.tokenVerification(idToken.getIdtoken()));
         var jsonObject = new JSONObject();
-        if (!jwt.getIdtoken().equals("ID token expired.")) {
+        if (!jwt.getIdtoken().equals("Invalid ID token.")) {
             jsonObject.put("jwt_token", jwt.getIdtoken());
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
         }
