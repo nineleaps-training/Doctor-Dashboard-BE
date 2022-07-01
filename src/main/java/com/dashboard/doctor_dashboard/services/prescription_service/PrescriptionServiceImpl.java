@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.prescription_service;
 
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
@@ -12,7 +12,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.PdFGeneratorServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
+@Slf4j
 public class PrescriptionServiceImpl implements PrescriptionService   {
 
     @Autowired
@@ -70,12 +71,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
 
                       return "Prescription Added";
                     }
-               throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
+               throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
               }
                else
                    throw new APIException(HttpStatus.BAD_REQUEST,"Prescription cannot be added for other status like completed,follow Up, and to be attended");
             }
-             throw new ResourceNotFoundException("Appointment", "id", appointId);
+             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND, "id", appointId);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         if(appointmentRepository.getId(appointId) != null){
             return prescriptionRepository.getAllPrescriptionByAppointment(appointId);
         }
-        throw new ResourceNotFoundException("Appointment","id",appointId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND,"id",appointId);
 
     }
 
@@ -102,7 +103,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         String fromEmail = "mecareapplication@gmail.com";
         String senderName = "meCare Application";
         String subject = "Prescription Updated";
-
+        log.info("Prescription: Email service Started");
         String content = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
                 + "</style></head>"
                 + "<div style=\"background-color: white; color:black  \">\n"
@@ -146,8 +147,10 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
             helper.addAttachment(fileSystemResource.getFilename(),fileSystemResource);
 
 
-            System.out.println("hii");
+
             mailSender.send(message);
+            log.debug("Prescription :Email send");
+            log.info("Prescription: Email service ended");
         }catch (Exception e)
         {
             throw new ReportNotFound(e.getMessage());

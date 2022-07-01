@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;

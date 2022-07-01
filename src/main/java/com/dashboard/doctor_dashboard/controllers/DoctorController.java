@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -33,14 +34,14 @@ public class DoctorController {
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
             return details;
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("id") long id) {
         if (doctorService.getDoctorById(id) != null)
             return doctorService.getDoctorById(id);
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
     @PostMapping("/add-doctor-details/{id}")

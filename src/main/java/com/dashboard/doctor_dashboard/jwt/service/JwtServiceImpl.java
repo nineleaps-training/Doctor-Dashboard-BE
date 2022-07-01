@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.jwt.entities.AuthenticationResponse;
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class JwtServiceImpl implements JwtService {
 
     @Autowired
@@ -45,7 +47,7 @@ public class JwtServiceImpl implements JwtService {
         claims.setProfilePic(login.getProfilePic());
 
         String token = jwtTokenProvider.generateToken(authentication, claims);
-
+        log.info("JWT Token created");
         return new AuthenticationResponse(token).getAccessToken();
     }
 

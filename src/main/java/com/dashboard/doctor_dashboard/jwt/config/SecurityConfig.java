@@ -91,7 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(ALLOWED_URL).permitAll()
+                    .antMatchers(ALLOWED_URL).permitAll()
                 .antMatchers(DOCTOR_URL).hasAuthority("DOCTOR")
                 .antMatchers(PATIENT_URL).hasAuthority("PATIENT")
                 .anyRequest()

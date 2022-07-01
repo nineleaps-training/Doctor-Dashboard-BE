@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.entities.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 

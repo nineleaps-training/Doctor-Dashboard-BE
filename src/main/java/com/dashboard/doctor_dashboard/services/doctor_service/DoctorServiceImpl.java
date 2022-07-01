@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
@@ -11,6 +10,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
@@ -35,12 +36,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-
-
-    @Override
-    public DoctorDetails addDoctor(DoctorDetails details) {
-        return doctorRepository.save(details);
-    }
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
@@ -55,7 +50,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
 
     }
 
@@ -79,7 +74,6 @@ public class DoctorServiceImpl implements DoctorService {
         GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
-        System.out.println(doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
@@ -87,6 +81,7 @@ public class DoctorServiceImpl implements DoctorService {
                     doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
+                    log.debug("Doctor: Doctor onBoarding completed");
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
                 }
             }
@@ -94,7 +89,7 @@ public class DoctorServiceImpl implements DoctorService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
         }
 
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
 
     }
 
@@ -104,7 +99,6 @@ public class DoctorServiceImpl implements DoctorService {
         GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        System.out.println(loginRepo.isIdAvailable(doctorLoginId) + ", " + doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
@@ -112,15 +106,15 @@ public class DoctorServiceImpl implements DoctorService {
                     doctorRepository.updateDoctorDb(details.getPhoneNo());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
+                    log.debug("Doctor: Doctor details updated");
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
                 }
 
-                return null;
-
+            return null;
             }
 
         }
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
     }
 
 
@@ -132,6 +126,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
+        log.debug("Doctor: Doctor details deleted");
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
@@ -145,7 +140,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", speciality, 0);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, speciality, 0);
     }
 
     @Override
@@ -160,7 +155,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
     }
 
     @Override
@@ -175,7 +170,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
     }
 
     @Override
@@ -210,7 +205,7 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
 
         }
-        throw new ResourceNotFoundException("doctor", "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
 
     }
 

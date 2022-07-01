@@ -25,11 +25,6 @@ public class RecepetionistController {
         return receptionistService.getDoctorAppointments(doctorId);
     }
 
-//    @PutMapping("/updateVitals/{appointmentId}")
-//    public ResponseEntity<GenericMessage> updateVitals(@PathVariable("appointmentId") Long appointmentId, @RequestBody VitalsDto vitalsUpdateDto){
-//      return   receptionistService.updateAppointmentVitals(vitalsUpdateDto,appointmentId);
-//    }
-
     @PostMapping("/addVitals/{appointmentId}")
     public ResponseEntity<GenericMessage> addVitals(@PathVariable("appointmentId") Long appointmentId, @RequestBody Attributes vitalsDto){
         return receptionistService.addAppointmentVitals(vitalsDto,appointmentId);

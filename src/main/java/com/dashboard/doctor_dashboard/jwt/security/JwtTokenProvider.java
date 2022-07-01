@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.jwt.security;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
     @Value("${app.jwt-secret}")
@@ -58,7 +60,6 @@ public class JwtTokenProvider {
             jwtToken= bearerToken.substring(7, bearerToken.length());
         }else
             jwtToken=null;
-        System.out.println(jwtToken);
         if(validateToken(jwtToken)) {
             var claims = Jwts.parser()
                     .setSigningKey(jwtSecret)
@@ -66,7 +67,6 @@ public class JwtTokenProvider {
                     .getBody();
             ModelMapper mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
-            System.out.println(details.getDoctorId());
             return details.getDoctorId();
         }
         return null;
