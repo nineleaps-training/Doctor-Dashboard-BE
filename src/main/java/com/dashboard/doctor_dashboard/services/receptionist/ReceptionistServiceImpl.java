@@ -71,11 +71,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
 
         }
-        throw new ResourceNotFoundException("appointments","id",appointmentId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND,"id",appointmentId);
 
     }
 
-    private PatientViewDto mapToDto2(Appointment appointment) {
+    private PatientViewDto mapToDto2(Appointment appointment)
+    {
         return mapper.map(appointment, PatientViewDto.class);
     }
 

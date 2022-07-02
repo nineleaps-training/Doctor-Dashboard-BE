@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.services.login_service;
 
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
@@ -10,6 +11,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +53,10 @@ public class LoginServiceImpl implements LoginService {
             newDoctor.setEmailId(loginDetails.get(fields[2]).toString());
             newDoctor.setProfilePic(loginDetails.get(fields[3]).toString());
             loginRepo.save(newDoctor);
-            log.debug("Login:"+"User added");
+            log.debug(Constants.LOGIN +"User added");
             flag = true;
         } else {
-            log.debug("Login:"+"Existing user");
+            log.debug(Constants.LOGIN +"Existing user");
             flag = false;
         }
         return flag;
@@ -81,7 +83,7 @@ public class LoginServiceImpl implements LoginService {
             return loginCreator(id, email, name, loginRepo.getRoleById(id), loginRepo.getProfilePic(id));
 
         }
-        log.debug("login:" + "login failed due to Invalid Token id");
+        log.debug(Constants.LOGIN + "login failed due to Invalid Token id");
         return "Invalid Id Token";
 
     }

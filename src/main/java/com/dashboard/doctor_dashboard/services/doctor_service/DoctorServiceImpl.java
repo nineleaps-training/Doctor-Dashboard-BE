@@ -176,11 +176,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
         Map<String,Integer> chart = new HashMap<>();
-        chart.put("0-2",0);
-        chart.put("3-14",0);
-        chart.put("15-25",0);
-        chart.put("26-64",0);
-        chart.put("65+",0);
+        chart.put(Constants.ages[0], 0);
+        chart.put(Constants.ages[1],0);
+        chart.put(Constants.ages[2],0);
+        chart.put(Constants.ages[3],0);
+        chart.put(Constants.ages[4],0);
 
 
         if(doctorRepository.isIdAvailable(doctorId) != null){
@@ -190,15 +190,15 @@ public class DoctorServiceImpl implements DoctorService {
 
                 if(s <= 2)
                 {
-                    chart.put("0-2", chart.get("0-2")+1);
-                } else if (s>=3 && s<=14) {
-                    chart.put("3-14",chart.get("3-14")+1);
-                } else if (s>=15 && s<=25) {
-                    chart.put("15-25",chart.get("15-25")+1);
-                } else if (s>=26 && s<=64) {
-                    chart.put("26-64",chart.get("26-64")+1);
+                    chart.put(Constants.ages[0], chart.get(Constants.ages[0])+1);
+                } else if ( s<=14) {
+                    chart.put(Constants.ages[1],chart.get(Constants.ages[1])+1);
+                } else if ( s<=25) {
+                    chart.put(Constants.ages[2],chart.get(Constants.ages[2])+1);
+                } else if (s<=64) {
+                    chart.put(Constants.ages[3],chart.get(Constants.ages[3])+1);
                 } else if (s>=65) {
-                    chart.put("65+",chart.get("65+")+1);
+                    chart.put(Constants.ages[4],chart.get(Constants.ages[4])+1);
                 }
 
             }

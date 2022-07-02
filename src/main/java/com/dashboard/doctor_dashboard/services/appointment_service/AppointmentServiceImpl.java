@@ -28,6 +28,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -244,10 +245,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         ArrayList<java.sql.Date> dateList = appointmentRepository.getAllDatesByDoctorId(doctorId);
-        ArrayList<LocalDate> localDateList =new ArrayList<>();
-            for (java.sql.Date date : dateList) {
-                localDateList.add(date.toLocalDate());
-            }
+        List<LocalDate> localDateList =dateList.stream().map(Date::toLocalDate).collect(Collectors.toList());
 
         for (var i=0;i<localDateList.size();i++)
         {
@@ -301,10 +299,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         ArrayList<java.sql.Date> dateList = appointmentRepository.getAllDatesByPatientId(id);
-        ArrayList<LocalDate> localDateList =new ArrayList<>();
-        for (java.sql.Date date : dateList) {
-            localDateList.add(date.toLocalDate());
-        }
+        List<LocalDate> localDateList =dateList.stream().map(Date::toLocalDate).collect(Collectors.toList());
+
 
         for (var i=0;i<localDateList.size();i++)
         {
@@ -375,10 +371,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
         List<LocalTime> doctorBookedSlots;
         List<Time> dates=appointmentRepository.getTimesByIdAndDate(date,doctorId);
-        doctorBookedSlots=dates.stream().map((n)->n.toLocalTime()).collect(Collectors.toList());
-        if(doctorBookedSlots.isEmpty()==false){
-            for (int i = 0; i < doctorBookedSlots.size(); i++) {
-                docTimesSlots.set(times.indexOf(doctorBookedSlots.get(i).toString()),false);
+        doctorBookedSlots=dates.stream().map(Time::toLocalTime).collect(Collectors.toList());
+        if(!doctorBookedSlots.isEmpty()){
+            for (LocalTime doctorBookedSlot : doctorBookedSlots) {
+                docTimesSlots.set(times.indexOf(doctorBookedSlots.toString()),false);
             }
 
             if(slots.get(doctorId)==null){

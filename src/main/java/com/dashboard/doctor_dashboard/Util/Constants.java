@@ -6,6 +6,7 @@ public class Constants {
     public static final String PATIENT = "Patient";
     public static final String APPOINTMENT = "Appointment";
     public static final String DOCTOR = "Doctor";
+    public static final String LOGIN ="Login";
 
 
     //Login
@@ -73,6 +74,8 @@ public class Constants {
             + " Thanks & Regards, </p>\n"
             + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare team</span\n"
             + " </div>";
+
+        public static final String ages[]={"0-2","3-14","15-25","26-64","65+"};
 
     private Constants() {
         throw new IllegalArgumentException();

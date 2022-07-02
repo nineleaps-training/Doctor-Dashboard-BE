@@ -52,7 +52,7 @@ public class PatientServiceImpl implements PatientService {
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug(" Patient onboarding completed");
+            log.debug(Constants.PATIENT+" Patient on boarding completed");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }else {
             throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND, "id", loginId);
@@ -79,7 +79,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
-        log.debug("Patient deleted ");
+        log.debug(Constants.PATIENT+"Patient deleted ");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
 
     }
@@ -100,7 +100,7 @@ public class PatientServiceImpl implements PatientService {
 
             patientRepository.updateMobileNo(patient.getMobileNo(),patient.getPatientId());
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug("Patient updated completed ");
+            log.debug(Constants.PATIENT+"Patient updated completed ");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {
