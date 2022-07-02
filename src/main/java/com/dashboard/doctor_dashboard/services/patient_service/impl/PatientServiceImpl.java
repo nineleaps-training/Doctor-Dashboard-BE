@@ -35,7 +35,6 @@ public class PatientServiceImpl implements PatientService {
 
 
 
-    public static final String PATIENT = "Patient";
 
 
     @Autowired
@@ -55,7 +54,7 @@ public class PatientServiceImpl implements PatientService {
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug("Patient: On boarding completed..");
+            log.debug(Constants.PATIENT+": On boarding completed..");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }else {
             throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND, "id", loginId);
@@ -84,7 +83,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
-        log.debug("Patient: patient deleted.");
+        log.debug(Constants.PATIENT+": patient deleted.");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
     }
 
@@ -106,11 +105,11 @@ public class PatientServiceImpl implements PatientService {
 
             patientRepository.updateMobileNo(patient.getMobileNo(),patient.getPatientId());
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug("Patient: Updated completed..");
+            log.debug(Constants.PATIENT+": Updated completed..");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {
-            throw new ResourceNotFoundException(PATIENT, "id", id);
+            throw new ResourceNotFoundException(Constants.PATIENT, "id", id);
         }
     }
 

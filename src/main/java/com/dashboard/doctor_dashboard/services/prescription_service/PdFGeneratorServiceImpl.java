@@ -201,9 +201,8 @@ public class PdFGeneratorServiceImpl {
         return fs.process(text);
     }
 
-    String formatDate(String Date1){
-        String[] newArray = Date1.split("-",5);
-        String newDate = newArray[2]+"-"+newArray[1]+"-"+newArray[0];
-        return newDate;
+    String formatDate(String date1){
+        String[] newArray = date1.split("-",5);
+        return newArray[2]+"-"+newArray[1]+"-"+newArray[0];
     }
 }

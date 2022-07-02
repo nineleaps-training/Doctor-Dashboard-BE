@@ -194,13 +194,13 @@ public class DoctorServiceImpl implements DoctorService {
                 if(s <= 2)
                 {
                     chart.put(Constants.ages[0], chart.get(Constants.ages[0])+1);
-                } else if (s>=3 && s<=14) {
+                } else if (s<=14) {
                     chart.put(Constants.ages[1],chart.get(Constants.ages[1])+1);
-                } else if (s>=15 && s<=25) {
+                } else if (s<=25) {
                     chart.put(Constants.ages[2],chart.get(Constants.ages[2])+1);
-                } else if (s>=26 && s<=64) {
+                } else if (s<=64) {
                     chart.put(Constants.ages[3],chart.get(Constants.ages[3])+1);
-                } else if (s>=65) {
+                } else {
                     chart.put(Constants.ages[4],chart.get(Constants.ages[4])+1);
                 }
 

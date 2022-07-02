@@ -28,6 +28,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -129,6 +130,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         long patientId=appointment.getPatient().getPID();
         long doctorId=appointment.getDoctorDetails().getId();
+
 
         LoginDetails patientLoginDetails= loginRepo.findById(patientId).get();
         LoginDetails doctorLoginDetails= loginRepo.findById(doctorId).get();
@@ -245,27 +247,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         ArrayList<java.sql.Date> dateList = appointmentRepository.getAllDatesByDoctorId(doctorId);
-        ArrayList<LocalDate> localDateList =new ArrayList<>();
-            for (java.sql.Date date : dateList) {
-                localDateList.add(date.toLocalDate());
-            }
+        List<LocalDate> localDateList = dateList.stream().map(Date::toLocalDate).collect(Collectors.toList());
 
-        for (var i=0;i<localDateList.size();i++)
-        {
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"01"))){
+        for (LocalDate date : localDateList) {
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "01")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "08")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "01"))) {
                 firstWeekCount++;
 
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"08"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "08")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "15")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "08"))) {
                 secondWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"15"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "15")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "22")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "15"))) {
                 thirdWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"22"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "22")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "29")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "22"))) {
                 fourthWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"29")) ||localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "29")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + lengthOfMonth)) || date.equals(LocalDate.parse(year + "-" + month + "-" + "29")) || date.equals(LocalDate.parse(year + "-" + month + "-" + lengthOfMonth))) {
                 lastWeekCount++;
             }
         }
@@ -302,27 +300,23 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         ArrayList<java.sql.Date> dateList = appointmentRepository.getAllDatesByPatientId(id);
-        ArrayList<LocalDate> localDateList =new ArrayList<>();
-        for (java.sql.Date date : dateList) {
-            localDateList.add(date.toLocalDate());
-        }
+        List<LocalDate> localDateList =dateList.stream().map(Date::toLocalDate).collect(Collectors.toList());
 
-        for (var i=0;i<localDateList.size();i++)
-        {
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"01"))){
+        for (LocalDate date : localDateList) {
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "01")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "08")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "01"))) {
                 firstWeekCount++;
 
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"08"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "08")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "15")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "08"))) {
                 secondWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"15"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "15")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "22")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "15"))) {
                 thirdWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"22"))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "22")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + "29")) || date.equals(LocalDate.parse(year + "-" + month + "-" + "22"))) {
                 fourthWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"29")) ||localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth))){
+            if (date.isAfter(LocalDate.parse(year + "-" + month + "-" + "29")) && date.isBefore(LocalDate.parse(year + "-" + month + "-" + lengthOfMonth)) || date.equals(LocalDate.parse(year + "-" + month + "-" + "29")) || date.equals(LocalDate.parse(year + "-" + month + "-" + lengthOfMonth))) {
                 lastWeekCount++;
             }
         }
@@ -378,11 +372,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
         List<LocalTime> doctorBookedSlots;
         List<Time> dates=appointmentRepository.getTimesByIdAndDate(date,doctorId);
-        doctorBookedSlots=dates.stream().map((n)->n.toLocalTime()).collect(Collectors.toList());
+        doctorBookedSlots=dates.stream().map(Time::toLocalTime).collect(Collectors.toList());
         if(!doctorBookedSlots.isEmpty()){
-            for (int i = 0; i < doctorBookedSlots.size(); i++) {
-                docTimesSlots.set(times.indexOf(doctorBookedSlots.get(i).toString()),false);
+            for (LocalTime doctorBookedSlot : doctorBookedSlots) {
+                docTimesSlots.set(times.indexOf(doctorBookedSlot.toString()), false);
             }
+
 
             if(slots.get(doctorId)==null){
                 dateAndTime.put(date,docTimesSlots);
@@ -497,10 +492,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     }
 
-    String formatDate(String Date1){
-        String[] newArray = Date1.split("-",5);
-        String newDate = newArray[2]+"-"+newArray[1]+"-"+newArray[0];
-        return newDate;
+    String formatDate(String date1){
+        String[] newArray = date1.split("-",5);
+        return newArray[2]+"-"+newArray[1]+"-"+newArray[0];
     }
 
 

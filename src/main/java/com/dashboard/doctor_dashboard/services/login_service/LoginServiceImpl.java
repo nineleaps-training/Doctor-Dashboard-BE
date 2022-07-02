@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -48,10 +49,10 @@ public class LoginServiceImpl implements LoginService {
             newDoctor.setEmailId(loginDetails.get(fields[2]).toString());
             newDoctor.setProfilePic(loginDetails.get(fields[3]).toString());
             loginRepo.save(newDoctor);
-            log.debug("Login:"+"User added");
+            log.debug(Constants.LOGIN +": User added");
             flag = true;
         } else {
-            log.debug("Login:"+"Existing user");
+            log.debug(Constants.LOGIN+": Existing user");
             flag = false;
         }
         return flag;
@@ -69,7 +70,7 @@ public class LoginServiceImpl implements LoginService {
     public String takingInfoFromToken(GoogleIdToken idToken) {
 
         if (idToken != null) {
-            log.debug("Login:"+"token verified");
+            log.debug(Constants.LOGIN+": token verified");
             var payload = idToken.getPayload();
             String email = payload.getEmail();
             var name = payload.get("given_name").toString();
@@ -79,7 +80,7 @@ public class LoginServiceImpl implements LoginService {
             return loginCreator(id, email, name,loginRepo.getRoleById(id),loginRepo.getProfilePic(id));
 
         }
-        log.debug("Login:"+"login failed due to Invalid ID token.");
+        log.debug(Constants.LOGIN+": login failed due to Invalid ID token.");
         return "Invalid ID token.";
     }
 
