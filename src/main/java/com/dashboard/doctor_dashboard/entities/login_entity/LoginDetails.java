@@ -13,22 +13,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "login_details", uniqueConstraints = @UniqueConstraint(columnNames = {"emailId"}))
+@Table(name = "login_details")
 public class LoginDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false,columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(name = "emailId", nullable = false, unique = true)
+    @Column(name = "emailId", nullable = false, unique = true,columnDefinition = "varchar(80)")
     private String emailId;
-    @Column(name = "domain", nullable = false)
+    @Column(name = "domain", nullable = false,columnDefinition = "varchar(30)")
     private String domain;
     @Column(name = "profile_pic",nullable = false,unique = true)
     private String profilePic;
-    @Column(name="role",nullable = false)
+    @Column(name="role",nullable = false,columnDefinition = "varchar(8)")
     private String role;
 
     @OneToOne(mappedBy = "loginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

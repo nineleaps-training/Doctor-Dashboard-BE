@@ -19,7 +19,7 @@ import java.util.List;
 @Table(
         name = "patients"
 )
-public class Patient {
+public class    Patient {
 
     @Id
     @Column(name = "id")
@@ -30,6 +30,7 @@ public class Patient {
     @Pattern(regexp = "^(Male|Female|Others)",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Enter Correct Gender!!")
+    @Column(columnDefinition = "varchar(10)")
     private String gender;
 
 
@@ -38,15 +39,18 @@ public class Patient {
 
     @NotEmpty
     @Size(min = 10, max = 10, message = "Phone Number should Contains only 10 digits")
+    @Column(columnDefinition = "varchar(10)")
     private String mobileNo;
 
 
     @NotEmpty
     @Pattern(regexp = "^(O-|O[+]|A-|B-|A[+]|AB-|B[+]|AB[+])", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Column(columnDefinition = "varchar(3)")
     private String bloodGroup;
 
     private String address;
 
+    @Column(columnDefinition = "varchar(10)")
     private String alternateMobileNo;
 
 

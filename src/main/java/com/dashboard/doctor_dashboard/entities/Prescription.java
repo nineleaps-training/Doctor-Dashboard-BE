@@ -17,10 +17,13 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long presId;
 
+    @Column(columnDefinition = "varchar(50)")
     private String drugName;
     private Long quantity;
+    @Column(columnDefinition = "varchar(10)")
     private String type;
     private Long days;
+    @Column(columnDefinition = "varchar(10)")
     private String time;
 
     @JsonBackReference("prescription")

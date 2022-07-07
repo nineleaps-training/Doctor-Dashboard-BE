@@ -17,7 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "appointments"
+        name = "appointments",
+        indexes = @Index(name = "inedx_fn",columnList = "doctor_id,patient_id,dateOfAppointment")
 )
 public class Appointment {
     @Id
@@ -26,6 +27,7 @@ public class Appointment {
     @NotNull
     @NotEmpty
     @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
+    @Column(columnDefinition = "varchar(20) ")
     private String category;
 
     @NotNull
@@ -34,15 +36,19 @@ public class Appointment {
 
 
     @Size(max = 100)
+    @Column(columnDefinition = "varchar(100)")
     private String symptoms;
     @NotNull
     @NotEmpty
+    @Column(columnDefinition = "varchar(50)")
     private String patientName;
     @NotNull
     @NotEmpty
+    @Column(columnDefinition = "varchar(50)")
     private String patientEmail;
     @NotNull
     @NotEmpty
+   @Column(columnDefinition = "varchar(50)")
     private String doctorName;
     @NotNull
     private LocalTime appointmentTime;
@@ -50,6 +56,7 @@ public class Appointment {
     private Boolean isRead;
     @NotNull
     @NotEmpty
+    @Column(columnDefinition = "varchar(15)")
     private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
