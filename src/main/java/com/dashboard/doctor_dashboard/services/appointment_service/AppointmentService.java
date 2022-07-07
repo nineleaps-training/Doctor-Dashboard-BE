@@ -18,8 +18,8 @@ import java.util.Map;
 public interface AppointmentService {
 
     ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
-    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
-    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId,int pageNo);
+    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo);
     ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
 
 

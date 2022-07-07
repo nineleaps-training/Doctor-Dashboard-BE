@@ -5,16 +5,19 @@ import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
+public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetails, Long> {
 
 
     @Query(value = "update DoctorDetails set phoneNo=:phoneNo where id=:id")
@@ -30,7 +33,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
-    List<DoctorDropdownDto> getDoctorDetails();
+    Page<DoctorDropdownDto> getDoctorDetails(Pageable pageable);
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);

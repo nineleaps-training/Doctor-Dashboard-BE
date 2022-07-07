@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
+import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
@@ -96,17 +97,17 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  updateDoctor(PatientDetailsUpdateDto details, long id, HttpServletRequest request) {
 
         GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
-            if (doctorRepository.isIdAvailable(details.getId()) != null) {
-                if (details.getId() == id && details.getId() == doctorLoginId) {
-                    doctorRepository.updateDoctorDb(details.getPhoneNo());
-                    genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
+            if (doctorRepository.isIdAvailable(details.getPatientId()) != null) {
+                if (details.getPatientId() == id && details.getPatientId() == doctorLoginId) {
+                    doctorRepository.updateDoctorDb(details.getMobileNo());
+                    genericMessage.setData( doctorRepository.getDoctorById(details.getPatientId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor details updated.");
 
@@ -116,6 +117,7 @@ public class DoctorServiceImpl implements DoctorService {
                 return null;
 
             }
+
 
         }
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);

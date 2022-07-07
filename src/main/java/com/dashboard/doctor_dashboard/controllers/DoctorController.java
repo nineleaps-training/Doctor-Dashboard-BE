@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
@@ -58,7 +59,7 @@ public class DoctorController {
         throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request)  {
+    public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody PatientDetailsUpdateDto details, BindingResult bindingResult, HttpServletRequest request)  {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

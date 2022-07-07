@@ -15,14 +15,14 @@ public class RecepetionistController {
 
     @Autowired
     ReceptionistService receptionistService;
-    @GetMapping("/doctorNames")
-    public ResponseEntity<GenericMessage> doctorNames(){
-        return receptionistService.getDoctorDetails();
+    @GetMapping("/doctorNames/")
+    public ResponseEntity<GenericMessage> doctorNames(@RequestParam("pageNo") int pageNo){
+        return receptionistService.getDoctorDetails(pageNo);
     }
 
     @GetMapping("/appointmentList/{doctorId}")
-    public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId){
-        return receptionistService.getDoctorAppointments(doctorId);
+    public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo){
+        return receptionistService.getDoctorAppointments(doctorId,pageNo);
     }
 
 //    @PutMapping("/updateVitals/{appointmentId}")
@@ -36,8 +36,8 @@ public class RecepetionistController {
     }
 
     @GetMapping("/getAllAppointments")
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(){
-        return receptionistService.todayAllAppointmentForClinicStaff();
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo){
+        return receptionistService.todayAllAppointmentForClinicStaff(pageNo);
     }
 
 }

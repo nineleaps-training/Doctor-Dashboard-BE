@@ -13,6 +13,8 @@ import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,14 +34,17 @@ public class RecetionistServiceImpl implements ReceptionistService {
     @Autowired
     AttributeRepository attributeRepository;
     @Override
-    public ResponseEntity<GenericMessage> getDoctorDetails() {
-      return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
+    public ResponseEntity<GenericMessage> getDoctorDetails(int pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 10);
+      return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails(paging).toList()),HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId) {
-        List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId);
+    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 10);
+
+        List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId,paging).toList();
 
         List<PatientViewDto> patientViewDto = appointmentList.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
@@ -62,10 +67,11 @@ public class RecetionistServiceImpl implements ReceptionistService {
 //    }
 
     @Override
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff() {
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
         List<Appointment> appointments = new ArrayList<>();
-        List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1();
-        List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2();
+        Pageable paging = PageRequest.of(pageNo, 10);
+        List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1(paging).toList();
+        List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2(paging).toList();
         appointments.addAll(appointmentList1);
         appointments.addAll(appointmentList2);
 

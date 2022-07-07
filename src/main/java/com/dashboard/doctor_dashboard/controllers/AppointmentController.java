@@ -32,17 +32,17 @@ public class AppointmentController {
 
     }
        @GetMapping("/getAvailableSlots/{doctorId}/{date}")
-    public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
+    public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable("date") String  date,@PathVariable("doctorId") Long doctorId){
          return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
     }
     @GetMapping("/getAllAppointments/patient/{patientId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
-        return appointmentService.getAllAppointmentByPatientId(patientId) ;
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
+        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo) ;
     }
 
     @GetMapping("/getAllAppointments/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getAllAppointmentByDoctorId(doctorId) ;
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo) {
+        return appointmentService.getAllAppointmentByDoctorId(doctorId, pageNo);
     }
 
 

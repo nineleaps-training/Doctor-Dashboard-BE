@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ReceptionistService {
-    ResponseEntity<GenericMessage> getDoctorDetails();
-    ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId);
+    ResponseEntity<GenericMessage> getDoctorDetails(int pageNo);
+    ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo);
   //  ResponseEntity<GenericMessage> updateAppointmentVitals(VitalsDto attributes, long appointmentId);
-    ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff();
+    ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo);
 
     ResponseEntity<GenericMessage> addAppointmentVitals(Attributes vitalsDto, Long appointmentId);
 

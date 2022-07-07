@@ -21,7 +21,7 @@ public class TodoController {
     }
 
     @GetMapping("doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
+        public ResponseEntity<GenericMessage> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
         return todoService.getAllTodoByDoctorId(doctorId);
     }
 

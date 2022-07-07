@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.services.doctor_service;
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public interface DoctorService {
     ResponseEntity<GenericMessage> getDoctorById(long id);
 
 //<<<<<<< HEAD
-    ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request);
+    ResponseEntity<GenericMessage>  updateDoctor(PatientDetailsUpdateDto details, long id, HttpServletRequest request);
     ResponseEntity<GenericMessage>  addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
 //=======
 //    ResponseEntity<GenericMessage> updateDoctor(DoctorFormDto details, long id);

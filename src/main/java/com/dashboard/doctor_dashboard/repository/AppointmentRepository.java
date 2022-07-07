@@ -3,9 +3,12 @@ package com.dashboard.doctor_dashboard.repository;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
 import com.dashboard.doctor_dashboard.entities.dtos.NotificationDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
+public interface AppointmentRepository extends PagingAndSortingRepository<Appointment, Long> {
     @Query(value = "select appoint_id from appointments where appoint_id=:appointmentId ", nativeQuery = true)
     Long getId(Long appointmentId);
 
@@ -26,30 +29,30 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment < curdate()",nativeQuery = true)
-    List<Appointment> pastAppointment(Long patientId);
+    Page<Appointment> pastAppointment(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now())",nativeQuery = true)
-    List<Appointment> todayAppointment1(Long patientId);
+    Page<Appointment> todayAppointment1(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
-    List<Appointment> todayAppointment2(Long patientId);
+    Page<Appointment> todayAppointment2(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
-    List<Appointment> upcomingAppointment(Long patientId);
+    Page<Appointment> upcomingAppointment(Long patientId,Pageable pageable);
 
 
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
-    List<Appointment> pastDoctorAppointment(Long doctorId);
+    Page<Appointment> pastDoctorAppointment(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
-    List<Appointment> todayDoctorAppointment1(Long doctorId);
+    Page<Appointment> todayDoctorAppointment1(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and (status='Completed' or status='Follow Up') ",nativeQuery = true)
-    List<Appointment> todayDoctorAppointment2(Long doctorId);
+    Page<Appointment> todayDoctorAppointment2(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
-    List<Appointment> upcomingDoctorAppointment(Long doctorId);
+    Page<Appointment> upcomingDoctorAppointment(Long doctorId,Pageable pageable);
 
 
     @Query(value = "select count(*) from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
@@ -95,7 +98,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and status='To be attended'",nativeQuery = true)
-    List<Appointment> receptionistDoctorAppointment(Long doctorId);
+    Page<Appointment> receptionistDoctorAppointment(Long doctorId, Pageable pageNo);
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
@@ -123,14 +126,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select email_id from login_details where id=:loginId",nativeQuery = true)
     String getEmailById(Long loginId);
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
+        @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
     List<NotificationDto> getNotifications(Long patientId);
 
     @Query(value = "select * from appointments where date_of_appointment = curdate() and status ='To be attended' order by appointment_time",nativeQuery = true)
-    List<Appointment> todayAllAppointmentForClinicStaff1();
+    Page<Appointment> todayAllAppointmentForClinicStaff1(Pageable pageable);
 
     @Query(value = "select * from appointments where date_of_appointment = curdate() and status !='To be attended' order by appointment_time",nativeQuery = true)
-    List<Appointment> todayAllAppointmentForClinicStaff2();
+    Page<Appointment> todayAllAppointmentForClinicStaff2(Pageable pageable);
 
     @Query(value = "select status from appointments where appoint_id =:appointId",nativeQuery = true)
     String checkStatus(Long appointId);

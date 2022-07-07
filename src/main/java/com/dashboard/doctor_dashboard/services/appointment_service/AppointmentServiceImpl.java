@@ -18,6 +18,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -148,48 +150,49 @@ public class AppointmentServiceImpl implements AppointmentService {
         return slots;
     }
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId,int pageNo) {
 
         GenericMessage genericMessage = new GenericMessage();
         List<PatientAppointmentListDto> today = new ArrayList<>();
         Map<String,List<PatientAppointmentListDto>> m = new HashMap<>();
-
+        Pageable pageable= PageRequest.of(pageNo, 10);
         Long patientId=patientRepository.getId(loginId);
         if(patientId != null) {
-        List<PatientAppointmentListDto> past = mapToAppointList(appointmentRepository.pastAppointment(patientId));
-        List<PatientAppointmentListDto> upcoming = mapToAppointList(appointmentRepository.upcomingAppointment(patientId));
-        List<PatientAppointmentListDto> today1 = mapToAppointList(appointmentRepository.todayAppointment1(patientId));
-        List<PatientAppointmentListDto> today2 = mapToAppointList(appointmentRepository.todayAppointment2(patientId));
-        today.addAll(today1);
-        today.addAll(today2);
+            System.out.println();
+            List<PatientAppointmentListDto> past = mapToAppointList(appointmentRepository.pastAppointment(patientId,pageable).toList());
+            List<PatientAppointmentListDto> upcoming = mapToAppointList(appointmentRepository.upcomingAppointment(patientId,pageable).toList());
+            List<PatientAppointmentListDto> today1 = mapToAppointList(appointmentRepository.todayAppointment1(patientId,pageable).toList());
+            List<PatientAppointmentListDto> today2 = mapToAppointList(appointmentRepository.todayAppointment2(patientId,pageable).toList());
+            today.addAll(today1);
+            today.addAll(today2);
 
-        m.put("past",past);
-        m.put("today",today);
-        m.put("upcoming",upcoming);
+            m.put("past",past);
+            m.put("today",today);
+            m.put("upcoming",upcoming);
 
-        genericMessage.setData(m);
-        genericMessage.setStatus(Constants.SUCCESS);
+            genericMessage.setData(m);
+            genericMessage.setStatus(Constants.SUCCESS);
 
 
-      return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+          return new ResponseEntity<>(genericMessage,HttpStatus.OK);
      }
       throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND, "id", loginId);
 
 }
 
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo) {
 
         GenericMessage genericMessage = new GenericMessage();
         List<DoctorAppointmentListDto> today = new ArrayList<>();
         Map<String,List<DoctorAppointmentListDto>> m = new HashMap<>();
         Long doctorId = doctorRepository.isIdAvailable(loginId);
-
+        Pageable pageable= PageRequest.of(pageNo, 10);
         if(doctorId != null) {
-            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId));
-            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingAppointment(doctorId));
-            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayAppointment1(doctorId));
-            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayAppointment2(doctorId));
+            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId,pageable).toList());
+            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId,pageable).toList());
+            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId,pageable).toList());
+            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId,pageable).toList()    );
             today.addAll(today1);
             today.addAll(today2);
 
