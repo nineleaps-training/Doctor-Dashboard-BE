@@ -1,12 +1,12 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.Util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,15 +15,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -49,103 +50,102 @@ class DoctorControllerTest {
     }
 
 
+    @Test
+    void  getAllDoctors_Success() {
+        final Long id = 1L;
+        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
+
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
+
+
+        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> newList = doctorController.getAllDoctors(id);
+        assertThat(newList).isNotNull();
+        assertEquals(list,newList.getBody().getData());
+    }
+
 //    @Test
-//    void  getAllDoctors() {
+//    void throwErrorIfIdNotPresentDbForAllDoctor_Success() {
 //        final Long id = 1L;
-//        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","orthology");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","orthology");
-//        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
+//        List<DoctorListDto> lists = new ArrayList<DoctorListDto>();
+//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"pranay","pranay@gmail.com","profile1","orthology",(short)8,"MBBS");
+//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+//        lists.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 //
-//        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(list);
+//        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
 //
-//        List<DoctorListDto> newList = doctorController.getAllDoctors(id);
-//        System.out.println(newList);
+//        assertThrows(ResourceNotFound.class,()->{
+//            doctorController.getAllDoctors(id);
+//        });
 //
-//        assertEquals(list.size(),newList.size());
-//        assertEquals(doctorListDto1.getName(),newList.get(0).getName());
-//        assertEquals(doctorListDto2.getName(),newList.get(1).getName());
-//        assertEquals(doctorListDto1.getSpeciality(),newList.get(0).getSpeciality());
 //    }
 
     @Test
-    void throwErrorIfIdNotPresentDbForAllDoctor() {
+    void getDoctorsByIdIfIdPresent_Success() {
         final Long id = 1L;
-        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","orthology");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","orthology");
-        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
+        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Gokul","gokul123@gmail.com",
+                "dentist",null,"male", (short) 21,"MBBS",(short)8);
 
-        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorDetails);
 
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorController.getAllDoctors(id);
-        });
 
-    }
+        Mockito.when(doctorService.getDoctorById(id)).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-    @Test
-    void getDoctorsByIdIfIdPresent() {
-        final Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21);
-
-        Mockito.when(doctorService.getDoctorById(id)).thenReturn(doctorDetails);
-
-        DoctorBasicDetailsDto newDetails = doctorController.getDoctorById(1);
+        ResponseEntity<GenericMessage> newDetails = doctorController.getDoctorById(1);
         System.out.println(newDetails);
 
-        assertEquals(doctorDetails.getFirstName(),newDetails.getFirstName());
-        assertEquals(doctorDetails.getEmail(),newDetails.getEmail());
-        assertEquals(doctorDetails.getSpeciality(),newDetails.getSpeciality());
-        assertEquals(doctorDetails.getGender(),newDetails.getGender());
-        assertEquals(doctorDetails.getPhoneNo(),newDetails.getPhoneNo());
-        assertEquals(doctorDetails.getAge(),newDetails.getAge());
-
+        assertEquals(doctorDetails,newDetails.getBody().getData());
     }
 
+//    @Test
+//    void throwErrorIfIdNotPresentDb_Success() {
+//        final Long id = 1L;
+//        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Gokul","gokul123@gmail.com",
+//                "dentist",null,"male", (short) 21,"MBBS",(short)8);
+//
+//        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
+//
+//        assertThrows(ResourceNotFound.class,()->{
+//            doctorController.getDoctorById(id);
+//        });
+//
+//    }
+
     @Test
-    void throwErrorIfIdNotPresentDb() {
-        final Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21);
-
-        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
-
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorController.getDoctorById(id);
-        });
-
-    }
-
-
-    @Test
-    void updateDoctorDetails() {
+    void addDoctorDetails_Success() {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
-                null);
-
-        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
-                Mockito.any(Long.class))).thenReturn(doctorFormDto);
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"dentist","male",
+                "7025870157",(short)6,"MBBS");
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
 
 
-        ResponseEntity<DoctorFormDto> newDoctorDetails = doctorController.updateDoctorDetails(1,doctorFormDto,result,webRequest);
+        Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
+                Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+
+
+        ResponseEntity<GenericMessage> newDoctorDetails = doctorController.addDoctorDetails(1,doctorFormDto,result,request);
         System.out.println(newDoctorDetails);
         assertEquals(200,newDoctorDetails.getStatusCodeValue());
-        assertEquals(doctorFormDto.getId(),newDoctorDetails.getBody().getId());
-        assertEquals(doctorFormDto.getSpeciality(),newDoctorDetails.getBody().getSpeciality());
+        assertEquals(doctorFormDto,newDoctorDetails.getBody().getData());
     }
 
     @Test
-    void checkIfUpdateDoctorDetailsHasError() {
+    void checkIfAddDoctorDetailsHasError_Success() {
         BindingResult result = mock(BindingResult.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
         ObjectError error = new ObjectError("age","age should be between 24-100");
         result.addError(error);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
-                null);
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"dentist","male",
+                "7025870157",(short)6,"MBBS");
 
         Mockito.when(result.hasErrors()).thenReturn(true);
 
@@ -153,42 +153,186 @@ class DoctorControllerTest {
 
 
         assertThrows(ValidationsException.class,()->{
-            doctorController.updateDoctorDetails(1,doctorFormDto,result,webRequest);
+            doctorController.addDoctorDetails(1,doctorFormDto,result,request);
         });
 
     }
 
     @Test
-    void throwErrorIfIdMisMatchForUpdateDoctor() {
+    void throwErrorIfIdMisMatchForAddDoctor_Success() {
         BindingResult result = mock(BindingResult.class);
+        WebRequest webRequest = mock(WebRequest.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"dentist","male",
+                "7025870157",(short)6,"MBBS");
+
+        Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
+                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
+
+        assertThrows(APIException.class,()->{
+            doctorController.addDoctorDetails(1,doctorFormDto,result,request);
+        });
+
+    }
+
+
+
+    @Test
+    void updateDoctorDetails_Success() {
+        BindingResult result = mock(BindingResult.class);
+        WebRequest webRequest = mock(WebRequest.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"dentist","male",
+                "7025870157",(short)6,"MBBS");
+
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
+
+
+        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
+                Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+
+
+        ResponseEntity<GenericMessage> newDoctorDetails = doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
+        System.out.println(newDoctorDetails);
+        assertEquals(200,newDoctorDetails.getStatusCodeValue());
+        assertEquals(doctorFormDto,newDoctorDetails.getBody().getData());
+    }
+
+    @Test
+    void checkIfUpdateDoctorDetailsHasError_Success() {
+        BindingResult result = mock(BindingResult.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        ObjectError error = new ObjectError("age","age should be between 24-100");
+        result.addError(error);
+
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Dentist","male",
+                "7025870157",(short)6,"MBBS");
+
+        Mockito.when(result.hasErrors()).thenReturn(true);
+
         WebRequest webRequest = mock(WebRequest.class);
 
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 21,"orthology","male",
-                null);
-
-        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
-                Mockito.any(Long.class))).thenReturn(null);
-
-                assertThrows(APIException.class,()->{
-            doctorController.updateDoctorDetails(1,doctorFormDto,result,webRequest);
+        assertThrows(ValidationsException.class,()->{
+            doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
         });
 
     }
 
     @Test
-    void deleteDoctor() {
-        DoctorDetails doctorDetails = new DoctorDetails(1L,"Sagar","Singh", (short) 21,
-                "sagarssn23@gmail.com","orthology",
-                null,"male",null,null);
+    void throwErrorIfIdMisMatchForUpdateDoctor_Success() {
+        BindingResult result = mock(BindingResult.class);
+        WebRequest webRequest = mock(WebRequest.class);
+        HttpServletRequest request = mock(HttpServletRequest.class);
 
 
-        String value = "deleted";
-        Mockito.when(doctorService.deleteDoctor(Mockito.any(Long.class))).thenReturn(value);
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+                "7025870157",(short)6,"MBBS");
 
-        String res = doctorController.deleteDoctor(1);
+        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
+                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
 
-        assertEquals(value,res);
+        assertThrows(APIException.class,()->{
+            doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
+        });
+
+    }
+
+    @Test
+    void deleteDoctor_Success() {
+//        DoctorDetails doctorDetails = new DoctorDetails(1L,(short) 26,"orthology","male",
+//                "7025870157",(short)6,"MD",null,null,null,1L);
+
+//        doctorDetails.toString();
+
+
+        GenericMessage messages = new GenericMessage(Constants.SUCCESS,"Deleted");
+
+        Mockito.when(doctorService.deleteDoctor(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(messages,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> res = doctorController.deleteDoctor(1);
+
+        assertEquals("Deleted",res.getBody().getData());
+
+    }
+
+    @Test
+    void getAllDoctorsBySpecialityTest_Success() {
+        final String specialityView = "orthology";
+        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
+
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
+
+
+        Mockito.when(doctorService.getAllDoctorsBySpeciality(Mockito.any(String.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> getList = doctorController.getAllDoctorsBySpeciality(specialityView);
+        assertThat(getList).isNotNull();
+        assertEquals(list,getList.getBody().getData());
+    }
+
+    @Test
+    void genderChartTest_Success() {
+
+        final Long id = 1L;
+        Map<String,Integer> m = new HashMap<>();
+        m.put("Male",2);
+        m.put("Female",5);
+
+        GenericMessage messages = new GenericMessage(Constants.SUCCESS,m);
+
+        Mockito.when(doctorService.genderChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(messages,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> getGenderChart = doctorController.gender(id);
+        assertThat(getGenderChart).isNotNull();
+        assertEquals(m,getGenderChart.getBody().getData());
+
+
+    }
+
+    @Test
+    void bloodGroupChartTest_Success() {
+
+        final Long id = 1L;
+        Map<String,Integer> m = new HashMap<>();
+        m.put("A+",2);
+        m.put("AB-",5);
+
+        GenericMessage message = new GenericMessage(Constants.SUCCESS,m);
+
+        Mockito.when(doctorService.bloodGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> getBloodGroupChart = doctorController.bloodGroup(id);
+        assertThat(getBloodGroupChart).isNotNull();
+        assertEquals(m,getBloodGroupChart.getBody().getData());
+
+
+    }
+
+    @Test
+    void ageGroupChartTest_Success() {
+
+        final Long id = 1L;
+        Map<String,Integer> m = new HashMap<>();
+        m.put("0-2",1);
+        m.put("3-14",2);
+        m.put("26-64",7);
+
+
+        GenericMessage message = new GenericMessage(Constants.SUCCESS,m);
+
+        Mockito.when(doctorService.ageGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> getAgeGroupChart = doctorController.ageGroup(id);
+        assertThat(getAgeGroupChart).isNotNull();
+        assertEquals(m,getAgeGroupChart.getBody().getData());
 
     }
 }

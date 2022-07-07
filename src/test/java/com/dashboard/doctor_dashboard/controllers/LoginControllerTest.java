@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -40,31 +41,50 @@ class LoginControllerTest {
     }
 
     @Test
-    void loginJwtToken() throws GeneralSecurityException, IOException, JSONException {
+    void loginJwtToken_Success() throws GeneralSecurityException, IOException, JSONException {
         String token = "abcdefghijklmnopqrstuvwxyz";
         JwtToken idToken = new JwtToken();
         idToken.setIdtoken(token);
         Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(token);
 
-        ResponseEntity<String> newMessage = loginController.tokenAuthentication(idToken);
-        System.out.println(newMessage.getBody().getClass());
-        assertThat(newMessage).isNotNull();
-        assertEquals(200,newMessage.getStatusCodeValue());;
-        assertEquals(true,newMessage.hasBody());
+        ResponseEntity<String> newMessages = loginController.tokenAuthentication(idToken);
+        System.out.println(newMessages.getBody().getClass());
+        assertThat(newMessages).isNotNull();
+        assertEquals(200, newMessages.getStatusCodeValue());;
+        assertEquals(true, newMessages.hasBody());
 
     }
 
+//    @Test
+//    void ThrowErrorIfTokenExpired_Success() throws GeneralSecurityException, IOException, JSONException {
+//        String tokens = "Toked Id has expired.";
+//        JwtToken idToken = new JwtToken();
+//        idToken.setIdtoken(tokens);
+//        Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(tokens);
+//
+//        assertThrows(GoogleLoginException.class, ()->{
+//            loginController.tokenAuthentication(idToken);
+//        });
+//
+//    }
+
     @Test
-    void ThrowErrorIfTokenExpired() throws GeneralSecurityException, IOException, JSONException {
-        String token = "ID token expired.";
-        JwtToken idToken = new JwtToken();
-        idToken.setIdtoken(token);
-        Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(token);
+    void checkServerStatus_Success() {
+        ResponseEntity<String> responses = loginController.checkServerStatus();
+        assertEquals(HttpStatus.OK, responses.getStatusCode());
+    }
 
-        assertThrows(GoogleLoginException.class, ()->{
-            loginController.tokenAuthentication(idToken);
-        });
+    @Test
+    void deleteDoctorById_Success() {
+        final Long id = 1L;
 
+        String messages = "Deleted Successfully";
+
+        Mockito.when(loginService.deleteDoctorById(Mockito.any(Long.class))).thenReturn(messages);
+
+        String newMessage = loginController.deleteDoctorById(id);
+        assertThat(newMessage).isNotNull();
+        assertEquals(messages,newMessage);
     }
 
 
