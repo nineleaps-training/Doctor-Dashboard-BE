@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MyUserDetails implements UserDetails {
 
-    private LoginDetails user;
+    private transient LoginDetails user;
     public MyUserDetails(LoginDetails user) {
         this.user=user;
     }
@@ -20,7 +20,7 @@ public class MyUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String roles = user.getRole();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(roles));
+        authorities.add(new SimpleGrantedAuthority(roles));
         return authorities;
     }
 

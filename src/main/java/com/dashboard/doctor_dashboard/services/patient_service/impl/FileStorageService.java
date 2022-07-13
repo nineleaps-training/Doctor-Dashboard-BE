@@ -3,7 +3,6 @@ package com.dashboard.doctor_dashboard.services.patient_service.impl;
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
-import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,14 +14,16 @@ import java.util.stream.Stream;
 @Service
 public class FileStorageService {
 
-    @Autowired
+
     private FileDBRepository fileDBRepository;
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    public FileStorageService(FileDBRepository fileDBRepository, AppointmentRepository appointmentRepository) {
+        this.fileDBRepository = fileDBRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
 
     public FileDB store(MultipartFile file, Long id) throws IOException {
 

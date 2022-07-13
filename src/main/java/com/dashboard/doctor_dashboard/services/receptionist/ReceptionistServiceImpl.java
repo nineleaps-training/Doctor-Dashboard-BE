@@ -2,7 +2,8 @@ package com.dashboard.doctor_dashboard.services.receptionist;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.Util.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -12,9 +13,13 @@ import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,35 +27,49 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReceptionistServiceImpl implements ReceptionistService {
-    @Autowired
+
     private ModelMapper mapper;
-    @Autowired
+
     DoctorRepository doctorRepository;
-    @Autowired
+
     AppointmentRepository appointmentRepository;
-    @Autowired
+
     AttributeRepository attributeRepository;
+    @Autowired
+    public ReceptionistServiceImpl(ModelMapper mapper, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository) {
+        this.mapper = mapper;
+        this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.attributeRepository = attributeRepository;
+    }
+
     @Override
     public ResponseEntity<GenericMessage> getDoctorDetails() {
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
+
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails() ),HttpStatus.OK);
 
     }
 
     @Override
-    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId) {
-        List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId);
+    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
+        Pageable paging = PageRequest.of(pageNo, 10);
+        if(doctorRepository.isIdAvailable(doctorId) != null) {
+            List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId,paging).toList();
 
-        List<PatientViewDto> patientViewDto = appointmentList.stream()
-                .map(this::mapToDto2).collect(Collectors.toList());
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
+            List<PatientViewDto> patientViewDto = appointmentList.stream()
+                    .map(this::mapToDto2).collect(Collectors.toList());
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, patientViewDto), HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
 
     @Override
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff() {
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
         List<Appointment> appointments = new ArrayList<>();
-        List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1();
-        List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2();
+        Pageable paging = PageRequest.of(pageNo,10);
+        List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1(paging).toList();
+        List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2(paging).toList();
         appointments.addAll(appointmentList1);
         appointments.addAll(appointmentList2);
 
@@ -60,18 +79,18 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> addAppointmentVitals(Attributes vitalsDto, Long appointmentId) {
+    public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId) {
         if(appointmentRepository.existsById(appointmentId)){
             if(attributeRepository.checkAppointmentPresent(appointmentId) == null){
                 appointmentRepository.setStatus("Vitals updated",appointmentId);
-                attributeRepository.save(vitalsDto);
+                attributeRepository.save(mapper.map(vitalsDto,Attributes.class));
                 return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
             }
             else
-                throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
+                throw new APIException("update not allowed in this API endpoint.");
 
         }
-        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND,"id",appointmentId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
 

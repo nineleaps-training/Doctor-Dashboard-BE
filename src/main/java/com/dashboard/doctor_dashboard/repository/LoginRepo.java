@@ -1,14 +1,14 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface LoginRepo extends JpaRepository<LoginDetails, Long> {
+public interface LoginRepo extends PagingAndSortingRepository<LoginDetails, Long> {
     LoginDetails findByEmailId(String email);
 
     @Query(value = "select id from login_details l where l.email_id =:email", nativeQuery = true)

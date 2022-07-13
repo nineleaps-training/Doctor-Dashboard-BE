@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
+
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

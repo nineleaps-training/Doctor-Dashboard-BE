@@ -1,4 +1,6 @@
-package com.dashboard.doctor_dashboard.Util;
+package com.dashboard.doctor_dashboard.util.wrappers;
+
+import java.util.List;
 
 public class Constants {
     public static final String SUCCESS = "success";
@@ -75,7 +77,8 @@ public class Constants {
             + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare team</span\n"
             + " </div>";
 
-        public static final String ages[]={"0-2","3-14","15-25","26-64","65+"};
+    public static final List<String> ages = List.of("0-2","3-14","15-25","26-64","65+");
+    public static final String DETAILS_MISMATCH = "details mismached" ;
 
     private Constants() {
         throw new IllegalArgumentException();

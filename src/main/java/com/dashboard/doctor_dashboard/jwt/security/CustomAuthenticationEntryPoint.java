@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.jwt.security;
 
 
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -16,11 +17,12 @@ import java.util.Map;
 
 public class CustomAuthenticationEntryPoint implements AccessDeniedHandler {
 
+    String status = Constants.FAIL;
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ObjectMapper mapper = new ObjectMapper();
-        GenericMessage genericMessage=new GenericMessage();
-
+        var mapper = new ObjectMapper();
+        var genericMessage=new GenericMessage();
         Map<String,Object> error =new HashMap<>();
         error.put("timestamp", new Date().toString());
         error.put("status",403);
@@ -32,5 +34,6 @@ public class CustomAuthenticationEntryPoint implements AccessDeniedHandler {
 
         response.getWriter().write(mapper.writeValueAsString(genericMessage));
 
+        status = Constants.SUCCESS;
     }
 }

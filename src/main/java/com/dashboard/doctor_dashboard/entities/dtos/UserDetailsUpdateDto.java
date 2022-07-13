@@ -6,15 +6,17 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientDetailsUpdateDto {
+public class UserDetailsUpdateDto {
   @NotNull
-  private Long patientId;
+  private Long id;
   @NotNull
+  @Pattern(regexp = "^([0-9]{10})", message = "Number should be of 10 digits")
   @NotEmpty
   private String mobileNo;
 

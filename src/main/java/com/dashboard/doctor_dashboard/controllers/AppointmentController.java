@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.Util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.codehaus.jettison.json.JSONException;
@@ -17,40 +17,43 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("api/appointment")
+@RequestMapping("api/v1/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
 
-    @Autowired
-    private AppointmentService appointmentService;
 
+    private AppointmentService appointmentService;
+    @Autowired
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     @PostMapping("/patient")
-    public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
+    public ResponseEntity<GenericMessage> addAppointment(@RequestBody AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
 
         return appointmentService.addAppointment(appointment,request);
 
     }
        @GetMapping("/getAvailableSlots/{doctorId}/{date}")
-    public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
+    public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable("date") String  date,@PathVariable("doctorId") Long doctorId){
 
          return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
     }
     @GetMapping("/getAllAppointments/patient/{patientId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
-        return appointmentService.getAllAppointmentByPatientId(patientId) ;
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
+        return appointmentService.getAllAppointmentByPatientId(patientId, pageNo) ;
     }
 
     @GetMapping("/getAllAppointments/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getAllAppointmentByDoctorId(doctorId) ;
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo) {
+        return appointmentService.getAllAppointmentByDoctorId(doctorId, pageNo) ;
     }
 
 
 
     @GetMapping("/{appointId}/patient")
     public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         genericMessage.setData(appointmentService.getAppointmentById(appointId));
         genericMessage.setStatus(Constants.SUCCESS);

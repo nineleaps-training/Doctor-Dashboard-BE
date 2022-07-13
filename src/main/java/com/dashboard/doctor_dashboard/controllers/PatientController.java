@@ -1,10 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("api/patient")
+@RequestMapping("api/v1/patient")
 public class PatientController {
 
 
-    @Autowired
+
     private PatientService patientService;
 
     @Autowired
-    private AppointmentService appointmentService;
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
+
+    }
+
+
+
 
     //CRUD operation for patient
     @PostMapping("/{loginId}")
@@ -39,7 +43,7 @@ public class PatientController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody PatientDetailsUpdateDto patientDetailsUpdateDto) {
+    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody UserDetailsUpdateDto patientDetailsUpdateDto) {
         return patientService.updatePatientDetails(id, patientDetailsUpdateDto);
     }
 

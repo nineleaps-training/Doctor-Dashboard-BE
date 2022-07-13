@@ -15,9 +15,11 @@ public class Attributes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aID;
+    @Column(columnDefinition = "varchar(10)")
     private String  bloodPressure;
     private Long glucoseLevel;
     private Double bodyTemp;
+    @Column(columnDefinition = "varchar(100)")
     private String prescription;
 
 

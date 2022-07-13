@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Long> {
+public interface PatientRepository extends PagingAndSortingRepository<Patient, Long> {
     @Query(value = "select * from patients where doctor_id = :doctorId", nativeQuery = true)
     List<Patient> getAllPatientByDoctorId(@Param(value = "doctorId") Long doctorId);
 

@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
+
 import lombok.AllArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
