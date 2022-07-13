@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.services;
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
+import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,22 +52,22 @@ class FileStorageServiceTest {
 
 
     @Test
-    void UploadFileWhenPatientIdPresentInDb() throws IOException {
+    void UploadFileWHenPatientIdPresentInDb() throws IOException {
 
 
         final Long id = 1L;
         FileDB fileDB = new FileDB();
         fileDB.setDataReport(null);
         fileDB.setId(id);
-        fileDB.setType(".jpeg");
-        fileDB.setName("File");
+        fileDB.setType(".png");
+        fileDB.setName("file1");
         fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
-                "file_1",
-                "hi.txt",
+                "file",
+                "hello.txt",
                 MediaType.TEXT_PLAIN_VALUE,
-                "Hi!!!".getBytes()
+                "Hello, World!".getBytes()
         );
 
         Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
@@ -80,8 +86,8 @@ class FileStorageServiceTest {
         FileDB fileDB = new FileDB();
         fileDB.setDataReport(null);
         fileDB.setId(id);
-        fileDB.setType(".jpeg");
-        fileDB.setName("File");
+        fileDB.setType(".png");
+        fileDB.setName("file1");
         fileDB.setAppointmentId(id);
 
         MultipartFile file = mock(MultipartFile.class);
@@ -102,15 +108,15 @@ class FileStorageServiceTest {
         FileDB fileDB = new FileDB();
         fileDB.setDataReport(null);
         fileDB.setId(id);
-        fileDB.setType(".jpeg");
-        fileDB.setName("File");
+        fileDB.setType(".png");
+        fileDB.setName("file1");
         fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
-                "file_1",
-                "hi.txt",
+                "file",
+                "hello.txt",
                 MediaType.TEXT_PLAIN_VALUE,
-                "Hi!!!".getBytes()
+                "Hello, World!".getBytes()
         );
 
         Mockito.when(appointmentRepository.getId(id)).thenReturn(null);
@@ -129,23 +135,23 @@ class FileStorageServiceTest {
         FileDB fileDB = new FileDB();
         fileDB.setDataReport(null);
         fileDB.setId(id);
-        fileDB.setType(".jpeg");
-        fileDB.setName("File");
+        fileDB.setType(".png");
+        fileDB.setName("file1");
         fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
-                "file_1",
-                "hi.txt",
+                "file",
+                "hello.txt",
                 MediaType.TEXT_PLAIN_VALUE,
-                "Hi!!!".getBytes()
+                "Hello, World!".getBytes()
         );
 
         Mockito.when(fileDBRepository.findByAppointmentId(id)).thenReturn(fileDB);
 
-        FileDB newFiles = fileStorageService.getFile(id);
+        FileDB newFile = fileStorageService.getFile(id);
 
-        assertThat(newFiles).isNotNull();
-        assertEquals(newFiles,fileDB);
+        assertThat(newFile).isNotNull();
+        assertEquals(newFile,fileDB);
     }
 
 }

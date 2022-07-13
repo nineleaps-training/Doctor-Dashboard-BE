@@ -9,8 +9,6 @@ import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.services.login_service.LoginServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.webtoken.JsonWebSignature;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +17,6 @@ import org.mockito.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,10 +66,10 @@ class LoginServiceTest {
     @Test
     void checkIfTheDomainIsNotNineleapsForAddUser(){
         Map<String,Object> docDetails= new HashMap<>();
-        docDetails.put("given_name","pranay");
+        docDetails.put("given_name","sagar");
         docDetails.put("hd","gmail.com");
-        docDetails.put("email","pranay@gmail.com");
-        docDetails.put("picture","picture1");
+        docDetails.put("email","sagar@gmail.com");
+        docDetails.put("picture","picture2");
 
         Mockito.when(loginRepo.findByEmailId(Mockito.any(String.class))).thenReturn(null);
         Boolean f= loginService.addUser(docDetails);
@@ -84,10 +81,10 @@ class LoginServiceTest {
     void checkIfTheDomainIsNullForAddUser(){
 
         Map<String,Object> docDetails= new HashMap<>();
-        docDetails.put("given_name","pranay");
+        docDetails.put("given_name","gokul");
         docDetails.put("hd",null);
-        docDetails.put("email","pranay@gmail.com");
-        docDetails.put("picture","picture1");
+        docDetails.put("email","gokul@gmail.com");
+        docDetails.put("picture","picture2");
 
         Mockito.when(loginRepo.findByEmailId(Mockito.any(String.class))).thenReturn(null);
         Boolean f= loginService.addUser(docDetails);
@@ -95,25 +92,25 @@ class LoginServiceTest {
 
     }
 
-//    @Test
-//    void CheckingExistingUser(){
-//
-//        Map<String,Object> docDetails= new HashMap<>();
-//        docDetails.put("given_name","pranay");
-//        docDetails.put("hd","nineleaps.com");
-//        docDetails.put("email","pranay@gmail.com");
-//        docDetails.put("picture","picture1");
-//        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",null,null,null,null);
-//
-//        Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(loginDetails);
-//
-//        Boolean f=loginService.addUser(docDetails);
-//        assertEquals(false,f);
-//    }
+    @Test
+    void CheckingExistingUser(){
+
+        Map<String,Object> docDetails= new HashMap<>();
+        docDetails.put("given_name","pranay");
+        docDetails.put("hd","nineleaps.com");
+        docDetails.put("email","pranay@gmail.com");
+        docDetails.put("picture","picture1");
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",null,null,null,null);
+
+        Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(loginDetails);
+
+        Boolean f=loginService.addUser(docDetails);
+        assertEquals(false,f);
+    }
 
 
     @Test
-    void checkNewUserInfoFromGoogleToken(){
+    void newUserInfoFromGoogleToken(){
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcmFuYXkubmFyZWRkeUB";
         JsonWebSignature.Header header=new JsonWebSignature.Header();
         GoogleIdToken.Payload payload=new GoogleIdToken.Payload();
@@ -133,7 +130,7 @@ class LoginServiceTest {
 
     @Test
     void checkIfGoogleTokenIsNull(){
-        String message = "ID token expired.";
+        String message = "Invalid Id Token";
         String expectedMessage = loginService.takingInfoFromToken(null);
         assertEquals(message,expectedMessage);
     }
@@ -141,7 +138,7 @@ class LoginServiceTest {
 
     @Test
     void tokenVerification() throws GeneralSecurityException, IOException {
-        String message = "ID token expired.";
+        String message = "Invalid Id Token";
 
         String idTokenString = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2NTBhMmNlNDdiMWFiM2JhNDA5OTc5N2Y4YzA2ZWJjM2RlOTI4YWMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjYyOTc4MTQ2NTktZ2tqNjhsZnUxMTZhaTE5dGI2ZTJyZmFjcXQ5YmphMHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2NjI5NzgxNDY1OS1na2o2OGxmdTExNmFpMTl0YjZlMnJmYWNxdDliamEwcy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwMzc4MTg5NTcwNzYzOTYyMzc1NiIsImhkIjoibmluZWxlYXBzLmNvbSIsImVtYWlsIjoic2FnYXIuc2luZ2hAbmluZWxlYXBzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiVFp1dkQ1UU1JRFVUemQtRkhOT3QxUSIsIm5hbWUiOiJzYWdhciBzaW5naCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQVRYQUp4MkhDdEVrek9qQW5HUHh3QnlsOUxXNXRvYjdKZVhSYVc5amEyNT1zOTYtYyIsImdpdmVuX25hbWUiOiJzYWdhciIsImZhbWlseV9uYW1lIjoic2luZ2giLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY1NjY1NjA4NiwiZXhwIjoxNjU2NjU5Njg2LCJqdGkiOiIxNDVmNGJlOTc3NDFiZjc2ZDc5YTg5MDhhZmVjMDg5Y2RmMzQ5NGE5In0.UfCnkqit2US5Cusp8S0UpsOVgn_8RPj88JubhEQ1wOv5m2Kgm_5dVXRQiVlNqmrR5QuUPfOmmkdwtIxX1jiOeVDfePMsgXe03rsLoLCukG12oR02b11yU4hbO4OpiM87H3VkyQ2wlfQEXESr18vYwmCXTf8RiI1crB36uXE_o4QMTk0R7aWT3ZFoKj7BXJwvtMQp2z-r-9jPf8jrBxdb19FZTd8sgmL_TQ1d2Eql4FeAxxAbJAvZBdac1x56BGJZzr-GJ2ApGCm77-0Lj7uaFa4AVkGITC_U9Zdnb4zTpXYifK1xcaVUvmMk5rdV0TBp2Zx2YM2Vm2qgDYcP5aWImw";
         GoogleIdTokenVerifier verifier = mock(GoogleIdTokenVerifier.class);
@@ -179,7 +176,7 @@ class LoginServiceTest {
     @Test
     void InvalidGoogleToken(){
         String value=loginService.takingInfoFromToken(null);
-        assertEquals("ID token expired.",value);
+        assertEquals("Invalid Id Token",value);
     }
 
 

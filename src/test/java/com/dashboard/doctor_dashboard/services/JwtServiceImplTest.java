@@ -2,8 +2,8 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
-import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
+import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,9 +52,9 @@ class JwtServiceImplTest {
         String token = "ejsdetyfrbendsntsqodqpepmmgrewfetesdy";
 
         Login login = new Login();
-        login.setEmail("gokul.ravindran@nineleaps.com");
+        login.setEmail("sagar.singh@nineleaps.com");
         login.setId(1L);
-        login.setUsername("gokul0050");
+        login.setUsername("sagar24");
         login.setRole("DOCTOR");
         login.setProfilePic("profilePic");
 

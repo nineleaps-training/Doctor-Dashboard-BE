@@ -1,104 +1,116 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.Util.Constants;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
-import org.junit.jupiter.api.AfterEach;
+import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
+@ExtendWith(MockitoExtension.class)
 class TodoControllerTest {
+
+    MockMvc mockMvc;
 
     @Mock
     private TodoService todoService;
 
+    @Mock
+    private ModelMapper mapper;
+
+
     @InjectMocks
     private TodoController todoController;
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(todoController).build();
     }
 
-
-
     @Test
-    void addTodo_Success() {
-        Todolist todolist = new Todolist(1L,"Hi",true,null,null,null);
-        GenericMessage messages  = new GenericMessage(Constants.SUCCESS,todolist);
-        Mockito.when(todoService.addTodo(Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(messages, HttpStatus.OK));
-        ResponseEntity<GenericMessage> newTodo = todoController.addTodo(todolist);
-        System.out.println(newTodo);
-        assertEquals(messages.getData(),newTodo.getBody().getData());
+    void addTodo() throws Exception {
+        DoctorDetails doctorDetails = new DoctorDetails();
+        doctorDetails.setId(1L);
+        TodoListDto todolist = new TodoListDto(1L,"hello",true,doctorDetails);
+
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
+        Mockito.when(todoService.addTodo(Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.CREATED));
+        String content = objectMapper.writeValueAsString(todolist);
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/todolist").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
     }
 
-
     @Test
-    void getAllTodoByDoctorId_Success() {
-        List<Todolist> todoList = new ArrayList<Todolist>();
-        Todolist todolist1 = new Todolist(1L,"complete1",true,null,null,null);
-        Todolist todolist2 = new Todolist(2L,"complete2",false,null,null,null);
-        todoList.addAll(Arrays.asList(todolist1,todolist2));
-        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todoList);
+    void getAllTodoByDoctorId() throws Exception {
+
+        Todolist todolist1 = new Todolist(1L,"task1",true,null,null,null);
+        Todolist todolist2 = new Todolist(2L,"task2",true,null,null,null);
+        List<Todolist> list = new ArrayList<Todolist>(Arrays.asList(todolist1, todolist2));
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
 
         Mockito.when(todoService.getAllTodoByDoctorId(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
-        ResponseEntity<GenericMessage> newTodoList = todoController.getAllTodoByDoctorId(1L);
 
-        System.out.println( newTodoList);
-        assertEquals(todoList,newTodoList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/todolist/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void getTodoById_Success() {
-        Todolist todolist1 = new Todolist(1L,"Hi",false,null,null,null);
-        GenericMessage messages  = new GenericMessage(Constants.SUCCESS,todolist1);
+    void getTodoById() throws Exception {
+        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
 
-        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(messages, HttpStatus.OK));
-        ResponseEntity<GenericMessage> newTodoList = todoController.getTodoById(1L);
-        System.out.println( newTodoList);
-        assertEquals(todolist1,newTodoList.getBody().getData());
+        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void deleteTodo_Success() {
-        Todolist todolist1 = new Todolist(1L,"Hi",true,null,null,null);
+    void deleteTodo() throws Exception {
 
-        GenericMessage messages  = new GenericMessage(Constants.SUCCESS,"Deleted");
-
-        Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(messages, HttpStatus.OK));
-
-        ResponseEntity<GenericMessage> newString1 = todoController.deleteTodo(1L);
-        System.out.println(newString1);
-        assertEquals("Deleted",newString1.getBody().getData());
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Deleted");
+        Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
-
     @Test
-    void updateTodo_Success() {
-        Todolist todolist1 = new Todolist(1L,"Hi",false,null,null,null);
-        GenericMessage messages  = new GenericMessage(Constants.SUCCESS,todolist1);
+    void updateTodo() throws Exception {
+        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
+        String content = objectMapper.writeValueAsString(todolist);
 
-        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(messages, HttpStatus.OK));
+        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> newTodoList1 = todoController.updateTodo(1L,todolist1);
-
-        System.out.println(newTodoList1);
-        assertEquals(todolist1,newTodoList1.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 }
