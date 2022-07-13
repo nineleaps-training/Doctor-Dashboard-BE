@@ -56,15 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/patient/*",
             "/files/{id}"
     };
-    private static final String[] GET_API_PATIENT_URL={
-
-    };
-    private static final String[] GET_API_DOCTOR_URL={
-
-    };
-    private static final String[] PUT_API_DOCTOR_URL={
-
-    };
 
 
     @Bean
@@ -72,12 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter();
     }
 
-    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+    @Autowired
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -116,11 +109,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-//    @Bean
-//    public AuthenticationEntryPoint authenticationEntryPoint(){
-//        return new CustomAuthenticationEntryPoint();
-//    }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){

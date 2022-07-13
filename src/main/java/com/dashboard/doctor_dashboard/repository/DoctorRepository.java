@@ -5,9 +5,6 @@ import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -33,7 +30,7 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
-    Page<DoctorDropdownDto> getDoctorDetails(Pageable pageable);
+    List<DoctorDropdownDto> getDoctorDetails();
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);

@@ -4,7 +4,6 @@ import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -18,17 +17,22 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 @Slf4j
 public class LoginServiceImpl implements LoginService {
-    @Autowired
+
     private LoginRepo loginRepo;
 
+
+    private JwtService jwtService;
+
     @Autowired
-    private DoctorService doctorService;
+    public LoginServiceImpl(LoginRepo loginRepo, JwtService jwtService) {
+        this.loginRepo = loginRepo;
+        this.jwtService = jwtService;
+    }
+
     private final String[] fields = {"given_name","hd", "email","picture"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
@@ -84,8 +88,7 @@ public class LoginServiceImpl implements LoginService {
         return "Invalid ID token.";
     }
 
-    @Autowired
-    JwtService jwtService;
+
 
     @Override
     public String loginCreator(long id, String email, String name,String role,String profilePic) {

@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.exceptions;
+package com.dashboard.doctor_dashboard.util.wrappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

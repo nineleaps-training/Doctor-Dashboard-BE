@@ -1,8 +1,10 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @AllArgsConstructor
+@Data
 public class DoctorDropdownDto {
 
     private long id;
@@ -10,36 +12,4 @@ public class DoctorDropdownDto {
     private String emailId;
     private String speciality;
 
-
-
-
-
-    public long getId() {
-        return id;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSpeciality() {
-        return speciality;
-    }
-
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
 }

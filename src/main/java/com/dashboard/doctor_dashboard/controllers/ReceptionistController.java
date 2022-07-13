@@ -1,23 +1,26 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.VitalsDto;
+import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api/receptionist")
-public class RecepetionistController {
+@RequestMapping("/api/v1/receptionist")
+public class ReceptionistController {
 
-    @Autowired
     ReceptionistService receptionistService;
+    @Autowired
+    public ReceptionistController(ReceptionistService receptionistService) {
+        this.receptionistService = receptionistService;
+    }
+
     @GetMapping("/doctorNames/")
-    public ResponseEntity<GenericMessage> doctorNames(@RequestParam("pageNo") int pageNo){
-        return receptionistService.getDoctorDetails(pageNo);
+    public ResponseEntity<GenericMessage> doctorNames(){
+        return receptionistService.getDoctorDetails();
     }
 
     @GetMapping("/appointmentList/{doctorId}")
@@ -25,13 +28,9 @@ public class RecepetionistController {
         return receptionistService.getDoctorAppointments(doctorId,pageNo);
     }
 
-//    @PutMapping("/updateVitals/{appointmentId}")
-//    public ResponseEntity<GenericMessage> updateVitals(@PathVariable("appointmentId") Long appointmentId, @RequestBody VitalsDto vitalsUpdateDto){
-//      return   receptionistService.updateAppointmentVitals(vitalsUpdateDto,appointmentId);
-//    }
 
     @PostMapping("/addVitals/{appointmentId}")
-    public ResponseEntity<GenericMessage> addVitals(@PathVariable("appointmentId") Long appointmentId, @RequestBody Attributes vitalsDto){
+    public ResponseEntity<GenericMessage> addVitals(@PathVariable("appointmentId") Long appointmentId, @RequestBody AttributesDto vitalsDto){
         return receptionistService.addAppointmentVitals(vitalsDto,appointmentId);
     }
 

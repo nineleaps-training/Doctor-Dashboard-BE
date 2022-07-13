@@ -1,22 +1,25 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/todolist")
+@RequestMapping("api/v1/todolist")
 @CrossOrigin(origins = "http://localhost:3000")
 public class TodoController {
 
-    @Autowired
     private TodoService todoService;
+    @Autowired
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @PostMapping()
-    public ResponseEntity<GenericMessage> addTodo(@RequestBody Todolist todolist) {
+    public ResponseEntity<GenericMessage> addTodo(@RequestBody TodoListDto todolist) {
         return todoService.addTodo(todolist);
     }
 
@@ -38,7 +41,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage> updateTodo(@PathVariable("id") Long id, @RequestBody Todolist todolist) {
+    public ResponseEntity<GenericMessage> updateTodo(@PathVariable("id") Long id, @RequestBody TodoListDto todolist) {
         return todoService.updateTodo(id, todolist);
     }
 

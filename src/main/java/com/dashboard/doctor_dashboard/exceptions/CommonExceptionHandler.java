@@ -1,7 +1,9 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.ErrorDetails;
+import com.dashboard.doctor_dashboard.util.wrappers.ValidationsSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @ControllerAdvice
@@ -22,27 +21,13 @@ import java.util.stream.Collectors;
 public class CommonExceptionHandler {
 
 
-    //     handle specific exceptions
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException exception,
-                                                                        WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
-
-        log.error("ResourceNotFoundException:"+exception.getMessage());
-        var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-                webRequest.getDescription(false));
-
-        errorMessage.setErrorStatus(Constants.FAIL);
-        errorMessage.setErrorData(errorDetails);
-
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(APIException.class)
     public ResponseEntity<ErrorMessage> handleAPIException(APIException exception,
                                                            WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
-        log.error("APIException:"+exception.getMessage());
+
+        log.error("APIException::"+exception.getMessage());
+
+        var errorMessage = new ErrorMessage();
 
         var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
@@ -50,27 +35,28 @@ public class CommonExceptionHandler {
         errorMessage.setErrorData(errorDetails);
         errorMessage.setErrorStatus(Constants.FAIL);
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(GoogleLoginException.class)
-    public ResponseEntity<ErrorMessage> handleLoginException(GoogleLoginException exception) {
-        ErrorMessage errorMessage = new ErrorMessage();
+    public ResponseEntity<ErrorMessage> handleLoginException(GoogleLoginException ex) {
+        var errorMessage = new ErrorMessage();
 
-        log.error("GoogleLoginException:"+exception.getMessage());
+        log.error("GoogleLoginException::"+ex.getMessage());
 
-        errorMessage.setErrorData(exception);
+
+        errorMessage.setErrorData(ex.getMessage());
         errorMessage.setErrorStatus(Constants.FAIL);
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
     }
 
     //     global exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleGlobalException(Exception exception,
                                                               WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
-        log.error("Exception:"+exception.getMessage());
+        var errorMessage = new ErrorMessage();
+        log.error("Exception::"+exception.getMessage());
 
         var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
@@ -83,73 +69,56 @@ public class CommonExceptionHandler {
 
 
     @ExceptionHandler(ValidationsException.class)
-    public ResponseEntity<ErrorMessage> processException(final ValidationsException exception, WebRequest request) {
-        ErrorMessage errorMessage = new ErrorMessage();
-
-        log.error("ValidationsException:"+exception.getMessage());
-
-        var errorDetails = new ValidationsSchema(new Date(), exception.getMessages(), request.getDescription(false));
-
-        errorMessage.setErrorData(errorDetails);
-        errorMessage.setErrorStatus(Constants.FAIL);
-
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorMessage> processException(ValidationsException ex, WebRequest request) {
+        var errorMessage = new ErrorMessage();
+        log.error("ValidationsException::"+ex.getMessage());
 
 
-    }
-
-    @ExceptionHandler(MyCustomException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorMessage> handleMyCustomException(MyCustomException exception) {
-        ErrorMessage errorMessage = new ErrorMessage();
-
-        log.error("MyCustomException:"+exception.getMessage());
-
-        errorMessage.setErrorData(exception.getMessage());
-        errorMessage.setErrorStatus(Constants.FAIL);
-
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ReportNotFound.class)
-    @ResponseBody
-    public ResponseEntity<ErrorMessage> handleReportNotFoundException(ReportNotFound exception) {
-        ErrorMessage errorMessage = new ErrorMessage();
-
-        log.error("ReportNotFound:"+exception.getMessage());
-
-        errorMessage.setErrorData(exception.getMessage());
-        errorMessage.setErrorStatus(Constants.FAIL);
-
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorMessage> validation(final ConstraintViolationException exception, WebRequest webRequest) {
-        ErrorMessage errorMessage = new ErrorMessage();
-
-        log.error("ConstraintViolationException:"+exception.getMessage());
-
-        List<String> newList = exception.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
-
-        var errorDetails = new ErrorDetails(new Date(), newList.toString(), webRequest.getDescription(false));
+        var errorDetails = new ValidationsSchema(new Date(), Collections.singletonList(ex.getMessage()), request.getDescription(false));
 
         errorMessage.setErrorData(errorDetails);
         errorMessage.setErrorStatus(Constants.FAIL);
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY);
 
+
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorMessage> handleResourceNotFoundException(ResourceNotFoundException e) {
+
+        var errorMessage = new ErrorMessage();
+        log.error("ResourceNotFound::"+e.getMessage());
+
+
+        errorMessage.setErrorData(e.getMessage());
+        errorMessage.setErrorStatus(Constants.FAIL);
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidDate.class)
-    public ResponseEntity<ErrorMessage> invalidDateException(InvalidDate exception) {
-        ErrorMessage errorMessage = new ErrorMessage();
+    public ResponseEntity<ErrorMessage> invalidDateException(InvalidDate e) {
+        var errorMessage = new ErrorMessage();
+        log.error("InvalidDate::"+e.getMessage());
 
-        log.error("InvalidDate:"+exception.getMessage());
 
-        errorMessage.setErrorData(exception.toString());
+        errorMessage.setErrorData(e.toString());
         errorMessage.setErrorStatus(Constants.FAIL);
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MailErrorException.class)
+    public ResponseEntity<ErrorMessage> mailErrorException(MailErrorException e) {
+        var errorMessage = new ErrorMessage();
+        log.error("Mail Error::"+e.getMessage());
+
+
+        errorMessage.setErrorData(e.toString());
+        errorMessage.setErrorStatus(Constants.FAIL);
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.FAILED_DEPENDENCY);
     }
 }

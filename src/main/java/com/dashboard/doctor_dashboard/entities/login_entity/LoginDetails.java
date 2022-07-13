@@ -6,8 +6,10 @@ import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @NoArgsConstructor
@@ -30,6 +32,10 @@ public class LoginDetails {
     private String profilePic;
     @Column(name="role",nullable = false,columnDefinition = "varchar(8)")
     private String role;
+
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
 
     @OneToOne(mappedBy = "loginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DoctorDetails doctorDetails;

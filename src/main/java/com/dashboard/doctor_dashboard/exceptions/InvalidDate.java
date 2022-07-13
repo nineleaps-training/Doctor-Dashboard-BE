@@ -1,20 +1,13 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
-@AllArgsConstructor
+@ResponseStatus(HttpStatus.CONFLICT)
 public class InvalidDate extends RuntimeException{
-
-    String date;
-    String message;
-
-    @Override
-    public String toString() {
-        return "InvalidDate{" +
-                "date=" + date +
-                ", message='" + message + '\'' +
-                '}';
+    public InvalidDate(String message) {
+        super(message);
     }
 }

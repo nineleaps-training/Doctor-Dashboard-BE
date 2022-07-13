@@ -19,12 +19,14 @@ import java.util.List;
 @Slf4j
 public class JwtServiceImpl implements JwtService {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
+    @Autowired
+    public JwtServiceImpl(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     public String authenticateUser(Login login) {
         String roles = login.getRole();

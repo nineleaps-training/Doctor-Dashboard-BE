@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,7 +44,13 @@ public class DoctorDetails {
 
     @Column(name = "degree",columnDefinition = "varchar(250)",nullable = false)
     private String degree;
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
 
     //references

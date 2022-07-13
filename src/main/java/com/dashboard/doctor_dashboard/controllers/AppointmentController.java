@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.util.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,16 +17,19 @@ import java.time.LocalDate;
 
 
 @RestController
-@RequestMapping("api/appointment")
+@RequestMapping("api/v1/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
 
-    @Autowired
+//    @Autowired
     private AppointmentService appointmentService;
-
+    @Autowired
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     @PostMapping("/patient")
-    public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
+    public ResponseEntity<GenericMessage> addAppointment(@RequestBody AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
 
         return appointmentService.addAppointment(appointment,request);
 
@@ -49,7 +52,7 @@ public class AppointmentController {
 
     @GetMapping("/{appointId}/patient")
     public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         genericMessage.setData(appointmentService.getAppointmentById(appointId));
         genericMessage.setStatus(Constants.SUCCESS);

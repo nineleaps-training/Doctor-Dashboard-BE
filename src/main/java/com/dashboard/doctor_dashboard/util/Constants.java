@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.util;
 
 
+import java.util.List;
+
 public class Constants {
         public static final String SUCCESS = "success";
         public static final String FAIL = "fail";
@@ -27,7 +29,7 @@ public class Constants {
 
         //APPOINTMENT
         public static final String APPOINTMENT_NOT_FOUND = "appointment not found with the id provided.";
-//        public static final String APPOINTMENT_CREATED = "appointment successfully created";
+        public static final String APPOINTMENT_CREATED = "appointment successfully created";
 
         public static final String APPOINTMENT_ALREADY_BOOKED = "appointment is already booked for this time, please refresh.";
         public static final String APPOINTMENT_CANNOT_BE_BOOKED = "appointment cannot be booked on this date";
@@ -38,9 +40,9 @@ public class Constants {
         public static final String INVALID_PATIENT_EMAIL = "invalid patient email";
         public static final String INVALID_DOCTOR_NAME = "invalid doctor name";
 
-//        public static final String MAIL_ERROR = "mail error!!! cant connect with the host server";
+        public static final String MAIL_ERROR = "mail error!!! can't connect with the host server";
 
-//        public static final String PRESCRIPTION_CREATED = "prescription added";
+        public static final String PRESCRIPTION_CREATED = "prescription added";
 
 
 
@@ -86,7 +88,9 @@ public class Constants {
                 + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare team</span\n"
                 + " </div>";
 
-        public static final String ages[]={"0-2","3-14","15-25","26-64","65+"};
+        public static final List<String> ages = List.of("0-2","3-14","15-25","26-64","65+");
+        public static final String DETAILS_MISMATCH = "provided details are incorrect.";
+
         private Constants() {
             throw new IllegalArgumentException();
         }

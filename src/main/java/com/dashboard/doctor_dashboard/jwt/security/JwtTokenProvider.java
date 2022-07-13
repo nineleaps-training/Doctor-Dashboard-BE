@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import io.jsonwebtoken.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -55,18 +54,17 @@ public class JwtTokenProvider {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             jwtToken= bearerToken.substring(7, bearerToken.length());
-        }else
-            jwtToken=null;
-        if(validateToken(jwtToken)) {
+            validateToken(jwtToken);
             var claims = Jwts.parser()
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(jwtToken)
                     .getBody();
-            ModelMapper mapper = new ModelMapper();
+            var mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
             return details.getDoctorId();
+        }else{
+            throw new APIException("JWT claims string is empty.");
         }
-        return null;
     }
     // validate JWT token
     public boolean validateToken(String token) {
@@ -74,15 +72,15 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "Invalid JWT signature");
+            throw new APIException( "Invalid JWT signature");
         } catch (MalformedJwtException ex) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "Invalid JWT token");
+            throw new APIException( "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "Expired JWT token");
+            throw new APIException( "Expired JWT token");
         } catch (UnsupportedJwtException ex) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "Unsupported JWT token");
+            throw new APIException("Unsupported JWT token");
         } catch (IllegalArgumentException ex) {
-            throw new APIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
+            throw new APIException("JWT claims string is empty.");
         }
     }
 

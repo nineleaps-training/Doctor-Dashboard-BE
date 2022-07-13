@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -52,7 +54,7 @@ public class Appointment {
     private String doctorName;
     @NotNull
     private LocalTime appointmentTime;
-    @Column(name = "is_read",columnDefinition = "boolean default 0")
+    @Column(name = "is_read",columnDefinition = "bit default 0")
     private Boolean isRead;
     @NotNull
     @NotEmpty
@@ -63,6 +65,13 @@ public class Appointment {
     @Column(nullable = false)
     private Date timestamp;
 
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
     @Column
     private Boolean isBookedAgain;
 
@@ -74,8 +83,6 @@ public class Appointment {
         timestamp = new Date();
     }
 
-
-    //private UUID referenceId;
     @NotNull
     @ManyToOne()
     @JsonBackReference

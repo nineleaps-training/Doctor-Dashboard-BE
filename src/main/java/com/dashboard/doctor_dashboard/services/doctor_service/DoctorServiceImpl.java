@@ -1,16 +1,16 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,23 +27,24 @@ import java.util.Map;
 @Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
-    @Autowired
     private DoctorRepository doctorRepository;
 
 
-    @Autowired
     private LoginRepo loginRepo;
 
 
+    private JwtTokenProvider jwtTokenProvider;
     @Autowired
-    JwtTokenProvider jwtTokenProvider;
-
-
+    public DoctorServiceImpl(DoctorRepository doctorRepository, LoginRepo loginRepo, JwtTokenProvider jwtTokenProvider) {
+        this.doctorRepository = doctorRepository;
+        this.loginRepo = loginRepo;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctors(id);
@@ -53,14 +54,14 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
 
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 
     @Override
      public ResponseEntity<GenericMessage> getDoctorById(long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             genericMessage.setData(doctorRepository.findDoctorById(id));
@@ -68,19 +69,19 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
 
-        return null;
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @Override
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
-                if (details.getId() == id && details.getId()==doctorLoginId) {
+                if (details.getId() == id && details.getId().equals(doctorLoginId)) {
                     doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
@@ -89,45 +90,37 @@ public class DoctorServiceImpl implements DoctorService {
                 }
             }
             else if(doctorRepository.isIdAvailable(details.getId())!=null)
-                throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
+                throw new APIException("update not allowed in this API endpoint.");
         }
 
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 
     @Override
-    public ResponseEntity<GenericMessage>  updateDoctor(PatientDetailsUpdateDto details, long id, HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(doctorLoginId) != null) {
-
-            if (doctorRepository.isIdAvailable(details.getPatientId()) != null) {
-                if (details.getPatientId() == id && details.getPatientId() == doctorLoginId) {
-                    doctorRepository.updateDoctorDb(details.getMobileNo());
-                    genericMessage.setData( doctorRepository.getDoctorById(details.getPatientId()));
-                    genericMessage.setStatus(Constants.SUCCESS);
-                    log.debug("Doctor: Doctor details updated.");
-
-                    return new ResponseEntity<>(genericMessage,HttpStatus.OK);
-                }
-
-                return null;
-
+        if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
+            if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
+                doctorRepository.updateDoctorDb(details.getMobileNo());
+                genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
+                genericMessage.setStatus(Constants.SUCCESS);
+                return new ResponseEntity<>(genericMessage,HttpStatus.OK);
             }
 
-
+            throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
         }
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
 
     @Override
     public ResponseEntity<GenericMessage> deleteDoctor(long id) {
 
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
@@ -138,7 +131,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         if (doctorRepository.isSpecialityAvailable(speciality) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctorsBySpeciality(speciality);
@@ -146,7 +139,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY, speciality, 0);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY);
     }
 
     @Override
@@ -161,7 +154,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @Override
@@ -176,17 +169,17 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @Override
     public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
         Map<String,Integer> chart = new HashMap<>();
-        chart.put(Constants.ages[0],0);
-        chart.put(Constants.ages[1],0);
-        chart.put(Constants.ages[2],0);
-        chart.put(Constants.ages[3],0);
-        chart.put(Constants.ages[4],0);
+        chart.put(Constants.ages.get(0),0);
+        chart.put(Constants.ages.get(1),0);
+        chart.put(Constants.ages.get(2),0);
+        chart.put(Constants.ages.get(3),0);
+        chart.put(Constants.ages.get(4),0);
 
 
         if(doctorRepository.isIdAvailable(doctorId) != null){
@@ -195,22 +188,22 @@ public class DoctorServiceImpl implements DoctorService {
 
                 if(s <= 2)
                 {
-                    chart.put(Constants.ages[0], chart.get(Constants.ages[0])+1);
+                    chart.put(Constants.ages.get(0), chart.get(Constants.ages.get(0))+1);
                 } else if (s<=14) {
-                    chart.put(Constants.ages[1],chart.get(Constants.ages[1])+1);
+                    chart.put(Constants.ages.get(1),chart.get(Constants.ages.get(1))+1);
                 } else if (s<=25) {
-                    chart.put(Constants.ages[2],chart.get(Constants.ages[2])+1);
+                    chart.put(Constants.ages.get(2),chart.get(Constants.ages.get(2))+1);
                 } else if (s<=64) {
-                    chart.put(Constants.ages[3],chart.get(Constants.ages[3])+1);
+                    chart.put(Constants.ages.get(3),chart.get(Constants.ages.get(3))+1);
                 } else {
-                    chart.put(Constants.ages[4],chart.get(Constants.ages[4])+1);
+                    chart.put(Constants.ages.get(4),chart.get(Constants.ages.get(4))+1);
                 }
 
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
 
         }
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND, "id", doctorId);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 

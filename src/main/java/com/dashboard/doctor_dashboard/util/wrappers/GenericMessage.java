@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.util.wrappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

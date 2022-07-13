@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
     private LoginRepo loginRepo;
-
+    @Autowired
+    public CustomUserDetailsService(LoginRepo loginRepo) {
+        this.loginRepo = loginRepo;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
@@ -25,22 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return new MyUserDetails(user);
 
-//        return new org.springframework.security.core.userdetails.User(
-//                user.getUserName(),
-//                user.getUserPassword(),
-//                getAuthority(user)
-//        );
-//        return new org.springframework.security.core.userdetails.User(user.getEmailId(), user.getName(),
-//                getAuthority(user));
 
     }
-//    private Set getAuthority(LoginDetails user) {
-//        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-////        user.getRole().forEach(role -> {
-//            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
-////        });
-//        return authorities;
-//    }
-
 }
 
