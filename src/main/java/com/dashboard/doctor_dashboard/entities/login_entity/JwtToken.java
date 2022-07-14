@@ -1,6 +1,12 @@
 package com.dashboard.doctor_dashboard.entities.login_entity;
 
-public class JwtToken {//Auth
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+public class JwtToken {
+
+    @NotNull
+    @NotEmpty
     private String token;
 
     public String getIdtoken() {

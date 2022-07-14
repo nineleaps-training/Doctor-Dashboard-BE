@@ -72,6 +72,9 @@ public class DoctorDetails {
     private Long loginId;
 
 
+    public void setLoginId(Long loginId) {
+        this.loginId = loginId;
+    }
 
     public Long getLoginId() {
         return loginId;
