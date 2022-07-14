@@ -15,8 +15,6 @@ import javax.validation.constraints.NotNull;
 public class PatientEntityDto {
 
     @NotNull
-    private Long pID;
-    @NotNull
     @NotEmpty(message = "mobile no  can't be empty")
     private String mobileNo;
     @NotNull
