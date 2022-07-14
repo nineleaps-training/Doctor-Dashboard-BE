@@ -37,60 +37,6 @@ public class AppointmentViewDto {
         this.gender=gender;
         this.age=age;
     }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setPrescription(List<Prescription> prescription) {
-        this.prescription = prescription;
-    }
-
-    public void setAttributes(Attributes attributes) {
-        this.attributes = attributes;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getSpeciality() {
-        return speciality;
-    }
-
-    public LocalDate getDateOfAppointment() {
-        return dateOfAppointment;
-    }
-
-    public LocalTime getTimeOfAppointment() {
-        return timeOfAppointment;
-    }
-
-    public Attributes getAttributes() {
-        return attributes;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public List<Prescription> getPrescription() {
-        return prescription;
-    }
-
-
-
 
 }
 

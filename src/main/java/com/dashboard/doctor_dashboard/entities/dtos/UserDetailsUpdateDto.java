@@ -15,9 +15,8 @@ import javax.validation.constraints.Pattern;
 public class UserDetailsUpdateDto {
   @NotNull
   private Long id;
-  @NotNull
+
   @Pattern(regexp = "^([0-9]{10})", message = "Number should be of 10 digits")
-  @NotEmpty
   private String mobileNo;
 
 }
