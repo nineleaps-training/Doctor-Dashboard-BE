@@ -1,8 +1,12 @@
 package com.dashboard.doctor_dashboard.exceptions;
-import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
-import lombok.extern.slf4j.Slf4j;
 
+
+import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+
+import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,15 +14,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+
 import java.util.Collections;
 import java.util.Date;
 
 
 @ControllerAdvice
 @Slf4j
-public class CommonExceptionhandler {
+public class CommonExceptionHandler {
 
-    //     handle specific exceptions
 
     @ExceptionHandler(APIException.class)
     public ResponseEntity<ErrorMessage> handleAPIException(APIException exception,
@@ -51,7 +55,20 @@ public class CommonExceptionhandler {
     }
 
     //     global exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorMessage> handleGlobalException(Exception exception,
+                                                              WebRequest webRequest) {
+        var errorMessage = new ErrorMessage();
+        log.error("Exception::"+exception.getMessage());
 
+        var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                webRequest.getDescription(false));
+
+        errorMessage.setErrorData(errorDetails);
+        errorMessage.setErrorStatus(Constants.FAIL);
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
