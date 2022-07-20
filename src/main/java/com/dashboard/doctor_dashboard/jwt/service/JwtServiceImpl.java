@@ -29,6 +29,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public String authenticateUser(Login login) {
+        log.info("inside: JwtServiceImpl::authenticateUser");
         String roles = login.getRole();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(roles));
@@ -49,6 +50,7 @@ public class JwtServiceImpl implements JwtService {
 
         String token = jwtTokenProvider.generateToken(authentication, claims);
         log.debug("JWTService: JWT token created.");
+        log.info("exit: JwtServiceImpl::authenticateUser");
         return new AuthenticationResponse(token).getAccessToken();
     }
 
