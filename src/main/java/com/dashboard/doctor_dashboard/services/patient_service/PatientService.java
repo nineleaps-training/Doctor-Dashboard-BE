@@ -1,11 +1,16 @@
 package com.dashboard.doctor_dashboard.services.patient_service;
 
+
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for patient service layer.
+ */
 @Service
 public interface PatientService {
     ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId);
@@ -15,7 +20,7 @@ public interface PatientService {
 
     ResponseEntity<GenericMessage> deletePatientById(Long id);
 
-    ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto patientDetailsUpdateDto);
+    ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto userDetailsUpdateDto);
 
     ResponseEntity<GenericMessage> viewAppointment(Long appointmentId, long patientId);
 

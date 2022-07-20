@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ *  Implementation of Patient Service interface
+ */
 @Service
 @Slf4j
 public class PatientServiceImpl implements PatientService {
@@ -63,7 +66,7 @@ public class PatientServiceImpl implements PatientService {
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug(Constants.PATIENT+" Patient on boarding completed");
+            log.debug("PatientServiceImpl::addPatient"+Constants.PATIENT+" on boarding completed");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
         }else {
             throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
@@ -90,7 +93,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
-        log.debug(Constants.PATIENT+"Patient deleted ");
+        log.debug("PatientServiceImpl::deletePatientById"+Constants.PATIENT+"Patient deleted ");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
 
     }
@@ -110,7 +113,7 @@ public class PatientServiceImpl implements PatientService {
 
             patientRepository.updateMobileNo(patient.getMobileNo(),patient.getId());
             genericMessage.setStatus(Constants.SUCCESS);
-            log.debug(Constants.PATIENT+"Patient updated completed ");
+            log.debug("PatientServiceImpl::updatePatientDetails"+Constants.PATIENT+"Patient updated completed ");
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
         } else {

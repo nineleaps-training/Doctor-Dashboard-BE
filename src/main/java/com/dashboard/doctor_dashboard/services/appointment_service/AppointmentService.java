@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
-
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +12,11 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * interface for appointment service layer.
+ */
 @Service
 public interface AppointmentService {
-
     ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
     ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId,int pageNo);
     ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo);
@@ -39,4 +40,6 @@ public interface AppointmentService {
     List<Boolean> checkSlots(LocalDate date, Long doctorId);
 
 
+
 }
+

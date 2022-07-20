@@ -1,8 +1,10 @@
 package com.dashboard.doctor_dashboard.services.prescription_service;
 
 
+
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
+
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
+/**
+ * interface for prescription service layer.
+ */
 @Service
 public interface PrescriptionService {
 

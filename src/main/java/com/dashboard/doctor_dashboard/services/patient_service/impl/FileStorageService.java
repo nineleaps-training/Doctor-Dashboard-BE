@@ -11,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+/**
+ *  Interface of AppointmentService layer
+ */
 @Service
 public class FileStorageService {
 

@@ -1,11 +1,13 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
-
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for todoservice layer.
+ */
 @Service
 public interface TodoService {
 

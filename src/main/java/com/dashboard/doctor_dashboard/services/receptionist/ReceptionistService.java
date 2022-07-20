@@ -1,10 +1,15 @@
 package com.dashboard.doctor_dashboard.services.receptionist;
 
+
 import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for receptionist service layer.
+ */
 @Service
 public interface ReceptionistService {
     ResponseEntity<GenericMessage> getDoctorDetails();
