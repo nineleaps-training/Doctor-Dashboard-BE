@@ -13,15 +13,18 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class UpdatePrescriptionDto {
+    @NotNull(message = "patient details can't be empty")
     private PatientDto patientDto;
+
     private List<Prescription> prescriptions;
+
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "status can't be empty")
     private String status;
 
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "notes can't be empty")
     private String notes;
 
     private Boolean isBookedAgain;
