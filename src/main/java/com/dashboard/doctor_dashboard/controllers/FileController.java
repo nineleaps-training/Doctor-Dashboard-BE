@@ -18,10 +18,16 @@ public class FileController {
 
     private FileStorageService storageService;
     @Autowired
-    public FileController(FileStorageService storageService) {
+    public FileController(FileStorageService storageService){
         this.storageService = storageService;
     }
 
+    /**
+     * This endpoint is used for uploading patient medical reports.
+     * @param file this variable contains file .
+     * @param id this variable contains id.
+     * @return A success message wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
+     */
     @ResponseBody
     @PostMapping("/api/v1/patient/upload/{id}")
     public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) {
@@ -47,8 +53,13 @@ public class FileController {
         }
     }
 
+    /**
+     * This endpoint is used for download the medical reports uploaded by the patient.
+     * @param id this variable contains id.
+     * @return A file wrapped under ResponseEntity<byte[]> with HTTP status code 200.
+     */
     @GetMapping("/v1/files/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Long id)  {
+    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         try {
             var fileDB = storageService.getFile(id);
             return ResponseEntity.ok()
