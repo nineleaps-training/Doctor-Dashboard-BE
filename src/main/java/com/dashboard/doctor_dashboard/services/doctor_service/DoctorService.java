@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * interface for doctor service layer.
+ */
 @Service
 public interface DoctorService {
 

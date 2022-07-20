@@ -5,6 +5,9 @@ import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for receptionist service layer.
+ */
 @Service
 public interface ReceptionistService {
     ResponseEntity<GenericMessage> getDoctorDetails();

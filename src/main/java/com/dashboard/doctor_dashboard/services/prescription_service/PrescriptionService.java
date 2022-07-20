@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.io.IOException;
 
+/**
+ * interface for prescription service layer.
+ */
 @Service
 public interface PrescriptionService {
 

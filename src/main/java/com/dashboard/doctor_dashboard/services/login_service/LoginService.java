@@ -1,18 +1,24 @@
 package com.dashboard.doctor_dashboard.services.login_service;
 
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import org.codehaus.jettison.json.JSONException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 
+/**
+ * interface for login service layer.
+ */
 @Service
 public interface LoginService {
 
     boolean addUser(Map<String, Object> loginDetails);
 
-    String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException;
+    ResponseEntity<GenericMessage> tokenVerification(String idTokenString) throws GeneralSecurityException, IOException, JSONException;
 
     String takingInfoFromToken(GoogleIdToken idToken);
 

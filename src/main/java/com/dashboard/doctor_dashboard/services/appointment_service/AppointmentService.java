@@ -12,6 +12,9 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * interface for appointment service layer.
+ */
 @Service
 public interface AppointmentService {
     ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;

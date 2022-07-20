@@ -11,6 +11,7 @@ import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * implementation of ReceptionistService interface
+ */
 @Service
+@Slf4j
 public class ReceptionistServiceImpl implements ReceptionistService {
 
     private ModelMapper mapper;
@@ -33,6 +38,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     private AppointmentRepository appointmentRepository;
 
     private AttributeRepository attributeRepository;
+
     @Autowired
     public ReceptionistServiceImpl(ModelMapper mapper, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository) {
         this.mapper = mapper;
@@ -43,20 +49,27 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
     @Override
     public ResponseEntity<GenericMessage> getDoctorDetails() {
-      return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
+        log.info("inside: ReceptionistServiceImpl::getDoctorDetails");
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
 
     }
 
     @Override
     public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
+        log.info("inside: ReceptionistServiceImpl::getDoctorAppointments");
+
         Pageable paging = PageRequest.of(pageNo, 10);
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId,paging).toList();
 
             List<PatientViewDto> patientViewDto = appointmentList.stream()
                     .map(this::mapToDto2).collect(Collectors.toList());
+            log.info("exit: ReceptionistServiceImpl::getDoctorAppointments");
+
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, patientViewDto), HttpStatus.OK);
         }
+        log.info("ReceptionistServiceImpl::getDoctorAppointments"+Constants.APPOINTMENT_NOT_FOUND);
+
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
@@ -64,6 +77,8 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
+        log.info("inside: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
+
         List<Appointment> appointments = new ArrayList<>();
         Pageable paging = PageRequest.of(pageNo, 10);
         List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1(paging).toList();
@@ -73,21 +88,30 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         List<PatientViewDto> patientViewDto = appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
+        log.info("exit: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
+
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId) {
+        log.info("inside: ReceptionistServiceImpl::addAppointmentVitals");
+
         if(appointmentRepository.existsById(appointmentId)){
             if(attributeRepository.checkAppointmentPresent(appointmentId) == null){
                 appointmentRepository.setStatus("Vitals updated",appointmentId);
                 attributeRepository.save(mapper.map(vitalsDto,Attributes.class));
-               return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
-             }
-            else
-                throw new APIException("update not allowed in this API endpoint.");
+                log.info("exit: ReceptionistServiceImpl::addAppointmentVitals");
 
+                return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
+             }
+            else {
+                log.info("ReceptionistServiceImpl::addAppointmentVitals"+Constants.APPOINTMENT_NOT_FOUND);
+                throw new APIException("update not allowed in this API endpoint.");
+            }
         }
+        log.info("ReceptionistServiceImpl::addAppointmentVitals"+Constants.APPOINTMENT_NOT_FOUND);
+
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }

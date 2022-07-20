@@ -6,6 +6,9 @@ import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for patient service layer.
+ */
 @Service
 public interface PatientService {
     ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId);

@@ -5,6 +5,9 @@ import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+/**
+ * interface for todoservice layer.
+ */
 @Service
 public interface TodoService {
 
