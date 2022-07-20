@@ -7,6 +7,7 @@ import com.dashboard.doctor_dashboard.util.wrappers.ValidationsSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,8 +69,8 @@ public class CommonExceptionHandler {
     }
 
 
-    @ExceptionHandler(ValidationsException.class)
-    public ResponseEntity<ErrorMessage> processException(ValidationsException ex, WebRequest request) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> processException(MethodArgumentNotValidException ex, WebRequest request) {
         var errorMessage = new ErrorMessage();
         log.error("ValidationsException::"+ex.getMessage());
 
