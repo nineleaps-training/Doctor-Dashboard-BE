@@ -1,6 +1,9 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
+
 import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +18,10 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class GlobalExceptionHandlerTest {
+class CommonExceptionHandlerTest {
 
     @InjectMocks
-    CommonExceptionhandler globalExceptionHandler;
+    CommonExceptionHandler globalExceptionHandler;
 
     @BeforeEach
     void init() {

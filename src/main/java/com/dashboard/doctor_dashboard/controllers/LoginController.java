@@ -1,11 +1,11 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
-import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.services.login_service.LoginService;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,40 +14,39 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("api/v1")
+@Slf4j
 public class LoginController {
 
-
     private LoginService loginService;
-
     @Autowired
+
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
-    @PostMapping(value = "api/v1/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericMessage> tokenAuthentication(@RequestBody JwtToken idToken) throws GeneralSecurityException, IOException, JSONException {
+    @PostMapping(value = "/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GenericMessage> tokenAuthentication(@Valid @RequestBody JwtToken idToken) throws GeneralSecurityException, IOException, JSONException {
         //authToken
-        var jwt = new JwtToken();
-        jwt.setIdtoken(loginService.tokenVerification(idToken.getIdtoken()));
-        var jsonObject = new JSONObject();
-        if (!jwt.getIdtoken().equals("ID token expired.")) {
-            jsonObject.put("jwt_token", jwt.getIdtoken());
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,jsonObject.toMap()) , HttpStatus.CREATED);
-        }
-        throw new GoogleLoginException(jwt.getIdtoken());
+        log.info("LoginController:: tokenAuthentication");
+        return loginService.tokenVerification(idToken.getIdtoken());
     }
 
-    @GetMapping(value = "api/v1/check")
+    @GetMapping(value = "/check")
     public ResponseEntity<String> checkServerStatus(){
+        log.info("LoginController:: checkServerStatus");
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping(value = "api/v1/doctor/login/delete/{id}")
+    @DeleteMapping(value = "/doctor/login/delete/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
+        log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);
     }
 }
