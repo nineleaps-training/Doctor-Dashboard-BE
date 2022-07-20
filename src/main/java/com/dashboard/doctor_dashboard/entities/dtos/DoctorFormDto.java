@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
 public class DoctorFormDto {
 
     @NotNull
-    private Long id;
+    private Long loginId;
     @Range(min = 24, max = 100, message = "Enter age between 24-100")
     private Short age;
     @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")

@@ -26,7 +26,7 @@ public class AppointmentViewDto {
     private Attributes attributes;
     private String status;
     private List<Prescription> prescription;
-
+    @SuppressWarnings("squid:S107")
     public AppointmentViewDto(String name, String speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status,String bloodGroup,short age,String gender) {
         this.name = name;
         this.speciality = speciality;
