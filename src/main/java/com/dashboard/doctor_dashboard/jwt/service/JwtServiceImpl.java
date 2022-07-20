@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of JWT Service interface
+ */
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
@@ -26,7 +29,12 @@ public class JwtServiceImpl implements JwtService {
     private JwtTokenProvider jwtTokenProvider;
 
 
+    /**
+     * @param login this variable contains login details.
+     * @return it returns
+     */
     public String authenticateUser(Login login) {
+        log.info("inside: JwtServiceImpl::authenticateUser");
         String roles = login.getRole();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(roles));
@@ -46,7 +54,8 @@ public class JwtServiceImpl implements JwtService {
         claims.setProfilePic(login.getProfilePic());
 
         String token = jwtTokenProvider.generateToken(authentication, claims);
-        log.info("JWT Token created");
+        log.info("JwtServiceImpl::JWT Token created");
+        log.info("exit: JwtServiceImpl::authenticateUser");
         return new AuthenticationResponse(token).getAccessToken();
     }
 
