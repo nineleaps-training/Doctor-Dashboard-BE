@@ -52,7 +52,12 @@ public class PatientServiceImpl implements PatientService {
         this.mapper = mapper;
     }
 
-
+    /**
+     * This function of service is for adding patient details.
+     * @param patient
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient,Long loginId) {
 
@@ -73,7 +78,11 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
-
+    /**
+     * This function of service is for getting patient details by login id
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 200 and patient details
+     */
     @Override
     public ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId) {
         var genericMessage = new GenericMessage();
@@ -89,7 +98,11 @@ public class PatientServiceImpl implements PatientService {
         }
 
     }
-
+    /**
+     * This function of service is for deleting patient by id
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
+     */
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
@@ -98,12 +111,23 @@ public class PatientServiceImpl implements PatientService {
 
     }
 
-
+    /**
+     * This function of service converts patient entity to patientEntityDto
+     * @param patient
+     * @return patientEntityDto which contains mobileNo,gender,age etc
+     */
+    // convert entity to dto
     private PatientEntityDto mapToDto(Patient patient) {
+
         return mapper.map(patient, PatientEntityDto.class);
     }
 
-
+    /**
+     * This function of service is for updating patient details
+     * @param id
+     * @param patient
+     * @return ResponseEntity<GenericMessage> with status code 200 and message successfully updated.
+     */
     @Override
     public ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto patient) {
 
@@ -120,7 +144,11 @@ public class PatientServiceImpl implements PatientService {
             throw new ResourceNotFoundException(Constants.PATIENT);
         }
     }
-
+    /**
+     * This function of service is for getting all notification by patient id
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of doctorName and appointId.
+     */
     @Override
     public ResponseEntity<GenericMessage> getNotifications(long patientId) {
             if (loginRepo.existsById(patientId)&&patientRepository.getId(patientId)!=null) {
@@ -129,6 +157,12 @@ public class PatientServiceImpl implements PatientService {
         }
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
     }
+    /**
+     * This function of service is for getting appointment details by appointmentId and patientId
+     * @param appointmentId
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and appointment details
+     */
     @Override
     public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
 

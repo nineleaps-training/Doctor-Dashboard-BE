@@ -49,14 +49,22 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         this.appointmentRepository = appointmentRepository;
         this.attributeRepository = attributeRepository;
     }
-
+    /**
+     * This function of service is for getting all the doctor present.
+     * @return ResponseEntity<GenericMessage> with status code 200 and list doctor present in the database.
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorDetails() {
         log.info("inside: ReceptionistServiceImpl::getDoctorDetails");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
 
     }
-
+    /**
+     * This function of service is for getting all the appointments of the doctor
+     * @param doctorId
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of appointments for the particular doctor
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
         log.info("inside: ReceptionistServiceImpl::getDoctorAppointments");
@@ -75,9 +83,11 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
-
-
-
+    /**
+     * This function of service is for getting all the today's appointments present for vitals update.
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of today appointments
+     */
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
         log.info("inside: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
@@ -95,7 +105,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
     }
-
+    /**
+     * This function of service is for adding vitals of patients.
+     * @param vitalsDto which contains fields bloodGroup,bodyTemp,notes and glucose level...
+     * @param appointmentId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId) {
         log.info("inside: ReceptionistServiceImpl::addAppointmentVitals");
@@ -118,8 +133,13 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
-
-    private PatientViewDto mapToDto2(Appointment appointment) {
+    /**
+     * This function of service converts appointment entity to patientViewDto
+     * @param appointment which contains fields category,dateOfAppointment,symptoms,patientName etc..
+     * @return PatientViewDto which contains appointment appointId,appointmentTime,patientName,patientEmail and status
+     */
+    private PatientViewDto mapToDto2(Appointment appointment)
+    {
         return mapper.map(appointment, PatientViewDto.class);
     }
 

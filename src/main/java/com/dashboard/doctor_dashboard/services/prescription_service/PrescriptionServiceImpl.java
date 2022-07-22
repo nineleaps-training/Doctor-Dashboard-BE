@@ -56,7 +56,15 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         this.pdFGeneratorService = pdFGeneratorService;
         this.mailService=mailService;
     }
-
+    /**
+     * This function of service is for adding prescription of patient.
+     * @param appointId
+     * @param updatePrescriptionDto which contains patientDto,prescription status,notes etc
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     * @throws IOException
+     * @throws MessagingException
+     * @throws JSONException
+     */
     @Override
     public ResponseEntity<GenericMessage> addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
         log.info("inside: PrescriptionServiceImpl::addPrescription");
@@ -86,7 +94,11 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         log.info("PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
-
+    /**
+     * This function of service is for getting all prescription of patient by appointment id
+     * @param appointId
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of prescription
+     */
     @Override
     public ResponseEntity<GenericMessage> getAllPrescriptionByAppointment(Long appointId) {
         log.info("inside: PrescriptionServiceImpl::getAllPrescriptionByAppointment");
@@ -100,7 +112,11 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
-
+    /**
+     * This function of service is for deleting appointment by id
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
+     */
     @Override
     public ResponseEntity<GenericMessage> deleteAppointmentById(Long id) {
         var genericMessage = new GenericMessage();
@@ -110,7 +126,13 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         log.info("exit: PrescriptionServiceImpl::deleteAppointmentById");
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
-
+    /**
+     * This function of service is for sending mail to user after successfully updating his prescription.
+     * @param patientDto which contains field category,doctorName,status,patientName etc
+     * @throws JSONException
+     * @throws MessagingException
+     * @throws UnsupportedEncodingException
+     */
 
     public void sendEmailToUserAfterPrescription(PatientDto patientDto) throws JSONException, MessagingException, UnsupportedEncodingException {
         log.info("inside: PrescriptionServiceImpl::sendEmailToUserAfterPrescription");

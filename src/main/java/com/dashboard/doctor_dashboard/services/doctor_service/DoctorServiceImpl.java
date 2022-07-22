@@ -49,6 +49,10 @@ public class DoctorServiceImpl implements DoctorService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    /**
+     * @param id  this variable contains Id.
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id){
         log.info("inside: DoctorServiceImpl::getAllDoctors");
@@ -72,6 +76,10 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
 
+    /**
+     * @param id  this variable contains Id.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorById(long id){
         log.info("inside: DoctorServiceImpl::getDoctorById");
@@ -92,6 +100,12 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
+    /**
+     * @param details this variable contains details.
+     * @param id this variable contains Id.
+     * @param request this variable contains request.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::addDoctorDetails");
@@ -125,6 +139,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
 
+    /**
+     * @param details this variable contains details.
+     * @param id this variable contains Id.
+     * @param request this variable contains request.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::updateDoctor");
@@ -153,6 +173,10 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
+    /**
+     * @param id this variable contains Id.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> deleteDoctor(long id){
         log.info("inside: DoctorServiceImpl::deleteDoctor");
@@ -169,6 +193,10 @@ public class DoctorServiceImpl implements DoctorService {
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
+    /**
+     * @param speciality this variable contains speciality.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality){
         log.info("inside: DoctorServiceImpl::getAllDoctorsBySpeciality");
@@ -188,6 +216,10 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY);
     }
 
+    /**
+     * @param doctorId this variable contains doctor Id.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> genderChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::genderChart");
@@ -209,6 +241,10 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
+    /**
+     * @param doctorId this variable contains doctor Id.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::bloodGroupChart");
@@ -230,6 +266,10 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
+    /**
+     * @param doctorId  this variable contains doctor Id.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
     @Override
     public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::ageGroupChart");
