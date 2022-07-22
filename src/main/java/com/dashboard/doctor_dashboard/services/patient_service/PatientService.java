@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.patient_service;
+package com.dashboard.doctor_dashboard.services.patient_service.impl;
 
 
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
