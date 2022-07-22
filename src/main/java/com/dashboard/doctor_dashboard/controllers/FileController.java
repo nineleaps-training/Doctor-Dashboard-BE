@@ -6,6 +6,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
 import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,6 +37,7 @@ public class FileController {
      * @param id this variable contains Id.
      * @return  A success message  wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
      */
+    @ApiOperation("This controller is for handling the API call to upload a file")
     @ResponseBody
     @PostMapping("/api/v1/patient/upload/{id}")
     public ResponseEntity<GenericMessage> uploadFile(@Valid  @RequestParam MultipartFile file, @PathVariable("id") Long id) {
@@ -68,6 +70,7 @@ public class FileController {
      * @return A file wrapped under  ResponseEntity<GenericMessage> with HTTP status code 200.
      * @throws ReportNotFound
      */
+    @ApiOperation("This API is responsible for downloading of file")
     @GetMapping("v1/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) throws ReportNotFound {
         try {
