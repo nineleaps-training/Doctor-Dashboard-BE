@@ -1,16 +1,16 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
-import io.swagger.annotations.ApiOperation;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -24,15 +24,17 @@ import java.time.LocalDate;
 @Slf4j
 public class AppointmentController {
 
-
     private AppointmentService appointmentService;
+
+
     @Autowired
-    public AppointmentController(AppointmentService appointmentService) {
+    public AppointmentController(AppointmentService appointmentService){
+
         this.appointmentService = appointmentService;
     }
 
     /**
-     * This endpoint is used to book an appointment.
+     * This endpoint is used to book an appointment
      * @param appointment this object contains appointment details.
      * @param request this object contains information related to user HTTP request.
      * @return A success message is returned wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
@@ -40,7 +42,6 @@ public class AppointmentController {
      * @throws JSONException
      * @throws UnsupportedEncodingException
      */
-    @ApiOperation("Saves the details in appointment table")
     @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@Valid  @RequestBody AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
         log.info("AppointmentController:: addAppointment");
@@ -49,64 +50,64 @@ public class AppointmentController {
     }
 
     /**
-     *  This endpoint returns a List<Boolean> with available time slots of the doctor on a given date.
+     * This endpoint creates a List<Boolean> with available time slots of the doctor on a given date.
+
      * @param date this variable contains date.
-     * @param loginId this variable contains loginId
-     * @return It returns a List<Boolean> wrapped under <GenericMessages> with HTTP status 200.
+     * @param loginId this variable contains loginId.
+     * @return It returns a List<Boolean> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("Shows all the available slots of the doctor")
-    @GetMapping("/getAvailableSlots/{loginId}/{date}")
+    @GetMapping("/available-slots/{loginId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable("date") String  date,@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: showAvailableSlots");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),loginId)),HttpStatus.OK);
     }
 
     /**
-     *  This endpoint creates a Map<String,List<PatientAppointmentListDto>with values post , today and upcoming of the doctor based on patientId.
+     * This endpoint creates a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming of the patient based on patientId
+
+     * @param patientId this variable contains patientId.
      * @param pageNo this variable contains pageNo.
-     * @return It returns a List<PatientAppointmentListDto> with values post , today and upcoming,  wrapped under <GenericMessages> with HTTP status 200.
+     * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("Shows all appointments of the patient")
-    @GetMapping("/getAllAppointments/patient/{patientId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
-        log.info("AppointmentController:: getAllAppointmentByPatientId");
-        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo) ;
+    @GetMapping("/all-appointments/patient/{patientId}")
+    public ResponseEntity<GenericMessage> allAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info("AppointmentController:: allAppointmentByPatientId");
+        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize) ;
     }
 
     /**
-     *  This endpoint creates a Map<String,List<PatientAppointmentListDto>with values post , today and upcoming of the doctor based on loginId.
-     * @param doctorId this variable contains doctorId.
+     * This endpoint creates a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming of the doctor based on loginId.
+     * @param loginId this variable contains loginId.
      * @param pageNo this variable contains pageNo.
-     *  It returns a List<PatientAppointmentListDto> with values post , today and upcoming,  wrapped under <GenericMessages> with HTTP status 200.
+     * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("Shows all appointments of the doctor")
-    @GetMapping("/getAllAppointments/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo) {
-        log.info("AppointmentController::getAllAppointmentByDoctorId");
-        return appointmentService.getAllAppointmentByDoctorId(doctorId, pageNo) ;
+    @GetMapping("/all-appointments/doctor/{loginId}")
+    public ResponseEntity<GenericMessage> allAppointmentByDoctorId(@PathVariable("loginId") Long loginId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info("AppointmentController:: allAppointmentByDoctorId");
+        return appointmentService.getAllAppointmentByDoctorId(loginId, pageNo,pageSize );
     }
 
 
     /**
-     *  This endpoint creates a PatientprofileDto based on appointmentId for patient to view an appointment,
+     * This endpoint creates a PatientProfileDto based on appointmentId for patient to view an appointment.
      * @param appointId this variable contains appointmentId.
-     * @return It creates a patientProfileDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns a PatientProfileDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("appointment details of patient for the doctor")
     @GetMapping("/{appointId}/patient")
-    public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
-        log.info("AppointmentController::getAppointmentById");
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GenericMessage> appointmentById(@PathVariable("appointId") Long appointId) {
+        log.info("AppointmentController:: appointmentById");
 
         return appointmentService.getAppointmentById(appointId);
     }
 
     /**
-     * This endpoint creates an Array<String> based on doctorId for doctor to view weekly appointments count in a month.
+     * This endpoint creates a ArrayList<String> based on loginId for doctor to view weekly appointments count in a month.
+
      * @param loginId this variable contains loginId.
-     * @return It returns an Array<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns a ArrayList<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("return no of appointment booked for the doctor per week in a month")
-    @GetMapping("chart/{loginId}/weeklyGraphDoctor")
+    @GetMapping("chart/{loginId}/weekly-graph-doctor")
     public ResponseEntity<GenericMessage> weeklyDoctorCountChart(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: weeklyDoctorCountChart");
 
@@ -114,26 +115,26 @@ public class AppointmentController {
     }
 
     /**
-     * This endpoint creates an Array<String> based on patientId for doctor to view weekly appointments booked by patients in a month.
+     * This endpoint creates a ArrayList<String> based on patientId, to view weekly appointments booked by a patient in a month.
+
      * @param patientId this variable contains patientId.
-     * @return It returns an Array<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns a ArrayList<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("return no of appointment booked by patient per week in a month")
-    @GetMapping("chart/{patientId}/weeklyGraphPatient")
+    @GetMapping("chart/{patientId}/weekly-graph-patient")
     public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("patientId") Long patientId) {
-        log.info("AppointmentController::weeklyPatientCountChart");
+        log.info("AppointmentController:: weeklyPatientCountChart");
+
         return appointmentService.weeklyPatientCountChart(patientId);
     }
 
 
     /**
-     *  This endpoint creates an List<AppointmentListDto> it contains upcoming appointments, for the doctor
+     * This endpoint creates a List<DoctorAppointmentListDto> it contains upcoming appointments of the doctor of the current day with limit 3.
+
      * @param loginId loginId this variable contains loginId.
-     * @return  It returns an List<AppointmentListDto>  wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
-     *
+     * @return It returns a List<DoctorAppointmentListDto> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("return today's latest 3 recent appointment booked for the doctor")
-    @GetMapping("/recentAdded/doctor/{loginId}")
+    @GetMapping("/recent-added/doctor/{loginId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: recentAppointment");
 
@@ -141,26 +142,24 @@ public class AppointmentController {
     }
 
 
-
     /**
-     * This endpoint creates a Array<String>based on patient , to view an appointments booked by a patient in a month.
+     * This endpoint returns an int of total number of appointments of the doctor.
      * @param loginId loginId this variable contains loginId.
-     * @return  It returns int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("return total no of appointments for the doctor")
-    @GetMapping("/chart/{loginId}/totalPatient")
+    @GetMapping("/chart/{loginId}/total-patient")
     public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: totalNoOfAppointment");
+
         return appointmentService.totalNoOfAppointment(loginId);
     }
 
     /**
-     *  This endpoint returns on int of total number of Appointments for current day  ,of the doctor.
-     *@param loginId loginId this variable contains loginId.
-     * @return It returns int  wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
-z     */
-    @ApiOperation("return today's appointment count for the doctor")
-    @GetMapping("/chart/{loginId}/todayAppointments")
+     * This endpoint returns an int of total number of appointments for current day, for the doctor.
+     * @param loginId loginId this variable contains loginId.
+     * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     */
+    @GetMapping("/chart/{loginId}/today-appointments")
     public ResponseEntity<GenericMessage> todayAppointments(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: todayAppointments");
 
@@ -168,38 +167,34 @@ z     */
     }
 
     /**
-     *  This endpoint returns on int of total number of Appointments for current week ,of the doctor.
-     *@param loginId loginId this variable contains loginId.
-     * @return This endpoint returns on int of total number of Appointments for current week ,of the doctor.
+     * This endpoint returns an int of total number of appointments added in the current week, for the doctor.
+     * @param loginId loginId this variable contains loginId.
+     * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("returns total no of appointment booked in a week for the doctor")
-    @GetMapping("/chart/{loginId}/totalActivePatient")
-    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("loginId") Long loginId) {
+    @GetMapping("/chart/{loginId}/appointments-this-week")
+    public ResponseEntity<GenericMessage> appointmentsAddedThisWeek(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: totalNoOfAppointmentAddedThisWeek");
 
         return appointmentService.totalNoOfAppointmentAddedThisWeek(loginId);
-
     }
 
     /**
-     *  This endpoint returns on Array<String> of categories and their count, which are appointments booked by patient with different category doctors.
-     * @param loginId this variable contains loginId.
-     * @returnthis  It returns int  wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
-     *
+     * This endpoint returns an ArrayList<String> of categories and their count, which are appointments booked by patient with different category doctors.
+     * @param loginId loginId this variable contains loginId.
+     * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("returns categories of the appointment booked and it's count according to the id provided ")
     @GetMapping("/{loginId}/category")
     public ResponseEntity<GenericMessage> patientCategoryGraph(@PathVariable("loginId") Long loginId) {
-        log.info("AppointmentController::patientCategoryGraph");
+        log.info("AppointmentController:: patientCategoryGraph");
+
         return appointmentService.patientCategoryGraph(loginId);
     }
 
     /**
-     *  This endpoint returns on FollowUpDto , it contains previous appointment details for a follow-up appointment.
-     * @param appointId this variable contains AppointmentId.
-     * @return  It returns int  wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * This endpoint returns an FollowUpDto, it contains previous appointment details for a follow-up appointment.
+     * @param appointId this variable contains appointmentId.
+     * @return It returns an FollowUpDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @ApiOperation("returns detail of doctor for which patient is booking appointment again")
     @GetMapping("/{appointId}")
     public ResponseEntity<GenericMessage>getFollowDetails(@PathVariable("appointId") Long appointId) {
         log.info("AppointmentController:: getFollowDetails");

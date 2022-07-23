@@ -1,13 +1,12 @@
 package com.dashboard.doctor_dashboard.util.wrappers;
 
 import java.util.List;
-
+@SuppressWarnings("squid:S6126")
 public class Constants {
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
     public static final String PATIENT = "Patient";
-    public static final String APPOINTMENT = "Appointment";
-    public static final String DOCTOR = "Doctor";
+
     public static final String LOGIN ="Login";
 
 
@@ -79,6 +78,10 @@ public class Constants {
 
     public static final List<String> ages = List.of("0-2","3-14","15-25","26-64","65+");
     public static final String DETAILS_MISMATCH = "details mismached" ;
+    public static final String FILE_NAME_PRESENT = "file name is empty";
+    public static final String FILE_UPLOADED = "Uploaded the file successfully: ";
+    public static final String REPORT_NOT_FOUND ="No Report Found!! " ;
+    public static final String DEFAULT_PAGE_SIZE = "10";
 
     private Constants() {
         throw new IllegalArgumentException();
