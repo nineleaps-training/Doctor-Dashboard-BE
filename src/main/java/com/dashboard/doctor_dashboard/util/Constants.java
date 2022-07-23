@@ -90,6 +90,9 @@ public class Constants {
 
         public static final List<String> ages = List.of("0-2","3-14","15-25","26-64","65+");
         public static final String DETAILS_MISMATCH = "provided details are incorrect.";
+        public static final String FILE_NAME_PRESENT = "File name not present.";
+        public static final String FILE_UPLOADED = "File uploaded successfully.";
+        public static final String REPORT_NOT_FOUND = "Report not found.";
 
         private Constants() {
             throw new IllegalArgumentException();
