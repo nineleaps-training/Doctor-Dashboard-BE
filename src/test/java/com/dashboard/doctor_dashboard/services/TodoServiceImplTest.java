@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
@@ -54,7 +55,7 @@ class TodoServiceImplTest {
 
     @Test
     void testAddList() {
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
         Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
 
 
@@ -117,7 +118,7 @@ class TodoServiceImplTest {
     void updateList() {
         final Long id = 1L;
 
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
         Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist1));
@@ -133,13 +134,15 @@ class TodoServiceImplTest {
     @Test
     void checkIfIdNotPresentInDBForUpdateList() {
         final Long id = 1L;
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
 
-        ResponseEntity<GenericMessage> newTodo = todoService.updateTodo(id,todolist);
+        ResourceNotFoundException resourceNotFoundException= assertThrows(ResourceNotFoundException.class,()->todoService.updateTodo(id,todolist));
 
-        assertThat(newTodo).isNull();
+        assertThat(resourceNotFoundException).isNotNull();
+
+        assertEquals("Todo not found.",resourceNotFoundException.getMessage());
     }
 
     @Test

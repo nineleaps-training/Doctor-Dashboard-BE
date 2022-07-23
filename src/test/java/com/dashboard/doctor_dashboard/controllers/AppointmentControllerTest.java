@@ -1,5 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import com.dashboard.doctor_dashboard.util.Constants;
@@ -62,16 +64,14 @@ class AppointmentControllerTest {
 
     @Test
     void addAppointmentTest() throws Exception {
-        LocalDate localDate = LocalDate.of(2022,07,10);
+        LocalDate localDate = LocalDate.now().plusDays(1);
         LocalTime localTime = LocalTime.of(10,30);
-
-        HttpServletRequest request = mock(HttpServletRequest.class);
         Map<String,String> m = new HashMap<>();
         m.put("appointId","1L");
         m.put("message","Successfully created");
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist",localDate,"fever","sagar","sagarssn23@gmal.com",
-                "pranay", localTime,true,"completed",null,null,null,null);
+        AppointmentDto appointment = new AppointmentDto("dentist",localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,null,new Patient(),new DoctorDetails());
 
         Mockito.when(appointmentService.addAppointment(Mockito.any(AppointmentDto.class),Mockito.any(HttpServletRequest.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m), HttpStatus.CREATED));
@@ -87,15 +87,13 @@ class AppointmentControllerTest {
 
     @Test
     void showAvailableSlotsTest() throws Exception {
-        String date = "2022-06-28";
-        final Long id = 1L;
+
         final List<Boolean> timesSlots=List.of(true,true,true,true,true,true,true,true,true,true,true,true);
 
         Mockito.when(appointmentService.checkSlots(Mockito.any(LocalDate.class),Mockito.any(Long.class))).thenReturn(timesSlots);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/getAvailableSlots/1/2022-07-12").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
+                .get("/api/v1/appointment/getAvailableSlots/1/"+LocalDate.now().plusDays(1).toString()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -112,7 +110,7 @@ class AppointmentControllerTest {
         map.put("today",dto);
         map.put("upcoming",dto);
 
-        Mockito.when(appointmentService.getAllAppointmentByPatientId(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(appointmentService.getAllAppointmentByPatientId(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,map), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -135,7 +133,7 @@ class AppointmentControllerTest {
         map.put("today",dto);
         map.put("upcoming",dto);
 
-        Mockito.when(appointmentService.getAllAppointmentByDoctorId(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(appointmentService.getAllAppointmentByDoctorId(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,map), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders

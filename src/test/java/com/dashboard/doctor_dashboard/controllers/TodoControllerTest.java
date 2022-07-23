@@ -58,7 +58,7 @@ class TodoControllerTest {
     void addTodo() throws Exception {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(1L);
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,doctorDetails);
+        TodoListDto todolist = new TodoListDto("work1",true,doctorDetails);
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
         Mockito.when(todoService.addTodo(Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.CREATED));
@@ -103,7 +103,7 @@ class TodoControllerTest {
 
     @Test
     void updateTodo() throws Exception {
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,new DoctorDetails());
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
         String content = objectMapper.writeValueAsString(todolist);
 

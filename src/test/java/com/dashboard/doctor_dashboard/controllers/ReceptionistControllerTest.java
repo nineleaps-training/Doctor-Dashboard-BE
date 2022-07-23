@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
@@ -76,7 +77,7 @@ class ReceptionistControllerTest {
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
-        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -88,7 +89,7 @@ class ReceptionistControllerTest {
     void getAddVitalsTest() throws Exception {
         String message = "Vital Successfully updated";
 
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",new Appointment());
 
         Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(AttributesDto.class),Mockito.any(Long.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.CREATED));
@@ -109,7 +110,7 @@ class ReceptionistControllerTest {
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2, dto3));
 
-        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/api/v1/receptionist/getAllAppointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());

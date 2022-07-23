@@ -2,20 +2,28 @@ package com.dashboard.doctor_dashboard.services;
 
 
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.services.login_service.LoginServiceImpl;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.webtoken.JsonWebSignature;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -23,7 +31,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class LoginServiceTest {
@@ -134,21 +144,28 @@ class LoginServiceTest {
     @Test
     void checkIfGoogleTokenIsNull(){
         String message = "Invalid ID token.";
-        String expectedMessage = loginService.takingInfoFromToken(null);
-        assertEquals(message,expectedMessage);
+
+        GoogleLoginException googleLoginException=assertThrows(GoogleLoginException.class,()->loginService.takingInfoFromToken(null));
+        assertThat(googleLoginException).isNotNull();
+        assertEquals(message,googleLoginException.getMessage());
     }
 
 
     @Test
-    void tokenVerification() throws GeneralSecurityException, IOException {
+    void tokenVerification() throws GeneralSecurityException, IOException, JSONException {
         String message = "Invalid ID token.";
 
-        String idTokenString = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjI2NTBhMmNlNDdiMWFiM2JhNDA5OTc5N2Y4YzA2ZWJjM2RlOTI4YWMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjYyOTc4MTQ2NTktZ2tqNjhsZnUxMTZhaTE5dGI2ZTJyZmFjcXQ5YmphMHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2NjI5NzgxNDY1OS1na2o2OGxmdTExNmFpMTl0YjZlMnJmYWNxdDliamEwcy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwMzc4MTg5NTcwNzYzOTYyMzc1NiIsImhkIjoibmluZWxlYXBzLmNvbSIsImVtYWlsIjoic2FnYXIuc2luZ2hAbmluZWxlYXBzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiVFp1dkQ1UU1JRFVUemQtRkhOT3QxUSIsIm5hbWUiOiJzYWdhciBzaW5naCIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQVRYQUp4MkhDdEVrek9qQW5HUHh3QnlsOUxXNXRvYjdKZVhSYVc5amEyNT1zOTYtYyIsImdpdmVuX25hbWUiOiJzYWdhciIsImZhbWlseV9uYW1lIjoic2luZ2giLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY1NjY1NjA4NiwiZXhwIjoxNjU2NjU5Njg2LCJqdGkiOiIxNDVmNGJlOTc3NDFiZjc2ZDc5YTg5MDhhZmVjMDg5Y2RmMzQ5NGE5In0.UfCnkqit2US5Cusp8S0UpsOVgn_8RPj88JubhEQ1wOv5m2Kgm_5dVXRQiVlNqmrR5QuUPfOmmkdwtIxX1jiOeVDfePMsgXe03rsLoLCukG12oR02b11yU4hbO4OpiM87H3VkyQ2wlfQEXESr18vYwmCXTf8RiI1crB36uXE_o4QMTk0R7aWT3ZFoKj7BXJwvtMQp2z-r-9jPf8jrBxdb19FZTd8sgmL_TQ1d2Eql4FeAxxAbJAvZBdac1x56BGJZzr-GJ2ApGCm77-0Lj7uaFa4AVkGITC_U9Zdnb4zTpXYifK1xcaVUvmMk5rdV0TBp2Zx2YM2Vm2qgDYcP5aWImw";
+        String idTokenString = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjYzMWZhZTliNTk0MGEyZDFmYmZmYjAwNDAzZDRjZjgwYTIxYmUwNGUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjYyOTc4MTQ2NTktZ2tqNjhsZnUxMTZhaTE5dGI2ZTJyZmFjcXQ5YmphMHMuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2NjI5NzgxNDY1OS1na2o2OGxmdTExNmFpMTl0YjZlMnJmYWNxdDliamEwcy5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwMTEwNzgzMDg2MTcxMTUwOTU3OSIsImhkIjoibmluZWxlYXBzLmNvbSIsImVtYWlsIjoicHJhbmF5Lm5hcmVkZHlAbmluZWxlYXBzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiZDZSOFRmdFZSMm8zWXN6OTZEY1lLUSIsIm5hbWUiOiJwcmFuYXkgbmFyZWRkeSIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BSXRidm1tcVhTdGZ4RVhObHJfT3U1ZDliU21Jd0ZfNVFzX3g5Q0ZOTFVvPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6InByYW5heSIsImZhbWlseV9uYW1lIjoibmFyZWRkeSIsImxvY2FsZSI6ImVuIiwiaWF0IjoxNjU4MjIxNzQwLCJleHAiOjE2NTgyMjUzNDAsImp0aSI6IjJjYWQxODIyM2E1NTEzZTJkYTdlODM5OTY3ZjMwOWMwMDg2NTMzMDcifQ.moCDJsA0NAcIxKvK3mWJOHZaW5gnO665LUv4ore7MEKmfhgp-kfsESk9jFYJv-kWmj2JaOmJTo6zCBZVcdlUQ96dafMlYJRkj48RIDbOVEMTtaMl5YRWPXYvJinHHN4QcIXpY27_F8w8YKFPxImNSz6Uq7DeasvAzcOlRfzrxmFWAxtdaVWawci423Ubz6GSkzb03ldhDmx_CZSepfH02CKkOOc-ytVXhsqWDIZKgUKvrEToAr254UJTf0sjGqaHzwHSxErVcAKsS-JgrIWDsSF_FnCoZNFZffcIVsVu6292-otwtaPn-tZsbatrylx8tQcMF_ezgss1n-cXKcTjqw";
+//        String jwtToken="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcmFuYXkubmFyZWRkeUBuaW5lbGVhcHMuY29tIiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6MiwiZG9jdG9yTmFtZSI6InByYW5heSIsImRvY3RvckVtYWlsIjoicHJhbmF5Lm5hcmVkZHlAbmluZWxlYXBzLmNvbSIsInJvbGUiOiJET0NUT1IiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUl0YnZtbXFYU3RmeEVYTmxyX091NWQ5YlNtSXdGXzVRc194OUNGTkxVbz1zOTYtYyJ9LCJyb2xlIjoiRE9DVE9SIiwiZXhwIjoxNjU4MzA4NDMwLCJpYXQiOjE2NTgyMjIwMzB9.XfCkZCob1Yfe1yVl1v5Xu7aHN0UdavHs-vZkdLPt9CO6TI1BYX13anXNVsn1Gnv8qLD2yHFmX4Cu-tJrRU3tyA";
         GoogleIdTokenVerifier verifier = mock(GoogleIdTokenVerifier.class);
-
         Mockito.when(verifier.verify(Mockito.any(String.class))).thenReturn(null);
-        String expectedMessage = loginService.tokenVerification(idTokenString);
-        assertEquals(message,expectedMessage);
+
+
+        GoogleLoginException googleLoginException=assertThrows(GoogleLoginException.class,()->loginService.tokenVerification(idTokenString));
+        System.out.println("googleLoginException"+googleLoginException);
+        assertThat(googleLoginException).isNotNull();
+        assertEquals(message,googleLoginException.getMessage());
+
 
     }
 
@@ -178,8 +195,10 @@ class LoginServiceTest {
 
     @Test
     void InvalidGoogleToken(){
-        String value=loginService.takingInfoFromToken(null);
-        assertEquals("Invalid ID token.",value);
+        String message = "Invalid ID token.";
+        GoogleLoginException googleLoginException=assertThrows(GoogleLoginException.class,()->loginService.takingInfoFromToken(null));
+        assertThat(googleLoginException).isNotNull();
+        assertEquals(message,googleLoginException.getMessage());
     }
 
 

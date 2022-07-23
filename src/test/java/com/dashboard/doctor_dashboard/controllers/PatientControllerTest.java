@@ -62,7 +62,7 @@ class PatientControllerTest {
     @Test
     void addPatientTest() throws Exception {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
@@ -99,7 +99,7 @@ class PatientControllerTest {
     @Test
     void patientProfileTest() throws Exception {
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(patientService.getPatientDetailsById(Mockito.any(Long.class)))
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));
