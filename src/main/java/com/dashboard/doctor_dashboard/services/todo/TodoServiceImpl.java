@@ -2,7 +2,6 @@ package com.dashboard.doctor_dashboard.services.todo;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * implementation of TodoService interface
@@ -30,6 +27,11 @@ public class TodoServiceImpl implements TodoService {
         this.mapper=mapper;
     }
 
+    /**
+     * This function of service is for adding todos/task  for doctor.
+     * @param todolist which contains fields description,status and doctor details
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addTodo(TodoListDto todolist) {
         log.info("inside: TodoServiceImpl::addTodo");
@@ -43,7 +45,11 @@ public class TodoServiceImpl implements TodoService {
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
-
+    /**
+     * This function of service is for getting all todos of the doctor by id
+     * @param doctorId
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of todos.
+     */
     @Override
     public ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId) {
         log.info("inside: TodoServiceImpl::getAllTodoByDoctorId");
@@ -58,7 +64,11 @@ public class TodoServiceImpl implements TodoService {
     }
 
 
-
+    /**
+     * This function of service is for deleting todos/task by id
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
+     */
     @Override
     public ResponseEntity<GenericMessage> deleteTodoById(Long id) {
         log.info("inside: TodoServiceImpl::deleteTodoById");

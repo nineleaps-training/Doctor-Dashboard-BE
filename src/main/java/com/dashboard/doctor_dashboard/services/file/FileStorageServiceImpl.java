@@ -30,6 +30,14 @@ public class FileStorageServiceImpl implements FileStorage {
         this.fileDBRepository = fileDBRepository;
         this.appointmentRepository = appointmentRepository;
     }
+
+
+    /**
+     * This function of service is for uploading files.
+     * @param file
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage>  store(MultipartFile file, Long id)  {
 
@@ -53,6 +61,12 @@ public class FileStorageServiceImpl implements FileStorage {
         }
     }
 
+
+    /**
+     * This function of service is for downloading file.
+     * @param id
+     * @return ResponseEntity<byte[]> with status code 200 and Blob object of file.
+     */
     @Override
     public ResponseEntity<byte[]> getFile(Long id) {
         try {

@@ -44,6 +44,11 @@ public class LoginServiceImpl implements LoginService {
 
     private final String[] fields = {"given_name","hd", "email","picture"};
 
+    /**
+     * This function is for adding user into the database
+     * @param loginDetails this variable contains Login details.
+     * @return It returns a Map<String, Object>.
+     */
     public boolean addUser(Map<String, Object> loginDetails) {
         log.info("inside: LoginServiceImpl::addUser");
         var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[2]).toString());
@@ -73,6 +78,14 @@ public class LoginServiceImpl implements LoginService {
         return flag;
     }
 
+    /**
+     * This function of service is for verification of google token and then returns jwt token
+     * @param idTokenString this variable contain Id token String.
+     * @return It returns a ResponseEntity<GenericMessage> with status code 201 and a Jwt Token.
+     * @throws GeneralSecurityException
+     * @throws IOException
+     * @throws JSONException
+     */
     //Token verification
     public ResponseEntity<GenericMessage> tokenVerification(String idTokenString) throws GeneralSecurityException, IOException, JSONException {
         log.info("inside: LoginServiceImpl::addUser");
@@ -85,6 +98,11 @@ public class LoginServiceImpl implements LoginService {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,new JSONObject().put("jwt_token",jwtToken).toMap()),HttpStatus.CREATED);
     }
 
+    /**
+     * This function extracts data from the Google token.
+     * @param idToken this variable contains Id token.
+     * @return It returns a Jwt token.
+     */
     public String takingInfoFromToken(GoogleIdToken idToken) {
         log.info("inside: LoginServiceImpl::takingInfoFromToken");
         if (idToken != null) {
@@ -101,14 +119,19 @@ public class LoginServiceImpl implements LoginService {
 
         }
         log.debug(Constants.LOGIN+"::takingInfoFromToken"+": login failed due to Invalid ID token.");
-//        return  jwt.setIdtoken( takingInfoFromToken(idToken));
-
         throw new GoogleLoginException("Invalid ID token.");
-//        return "Invalid ID token.";
     }
 
 
-
+    /**
+     * This function of service is for creating jwt token
+     * @param id this variable contain Id .
+     * @param email this variable contain email.
+     * @param name this variable contain name.
+     * @param role this variable contain role.
+     * @param profilePic this variable contain profile picture.
+     * @return  It returns a Jwt token.
+     */
     @Override
     public String loginCreator(long id, String email, String name,String role,String profilePic) {
         log.info("inside: LoginServiceImpl::loginCreator");
@@ -123,7 +146,11 @@ public class LoginServiceImpl implements LoginService {
 
         return jwtService.authenticateUser(login);
     }
-
+    /**
+     * This function of service is for deleting user.
+     * @param id this variable contains loginId .
+     * @return  It returns a Jwt token.
+     */
     @Override
     public String deleteDoctorById(long id) {
         log.info("inside: LoginServiceImpl::deleteDoctorById");

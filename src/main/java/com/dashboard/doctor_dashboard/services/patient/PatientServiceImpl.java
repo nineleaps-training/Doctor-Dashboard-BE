@@ -6,7 +6,6 @@ import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
-import com.dashboard.doctor_dashboard.services.patient.PatientService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +55,12 @@ public class PatientServiceImpl implements PatientService {
         this.mapper = mapper;
     }
 
+    /**
+     * This function of service is for adding patient details.
+     * @param patient
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId) {
         log.info("inside: PatientServiceImpl::addPatient");
@@ -78,7 +83,11 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
-
+    /**
+     * This function of service is for getting patient details by login id
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 200 and patient details
+     */
     @Override
     public ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId) {
         log.info("inside: PatientServiceImpl::getPatientDetailsById");
@@ -100,6 +109,11 @@ public class PatientServiceImpl implements PatientService {
 
 
 
+    /**
+     * This function of service is for deleting patient by id
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
+     */
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         log.info("inside: PatientServiceImpl::deletePatientById");
@@ -112,13 +126,21 @@ public class PatientServiceImpl implements PatientService {
 
 
 
-
-    // convert entity to dto
+    /**
+     * This function of service converts patient entity to patientEntityDto
+     * @param patient
+     * @return patientEntityDto which contains mobileNo,gender,age etc
+     */
     private PatientEntityDto mapToDto(Patient patient) {
         return mapper.map(patient, PatientEntityDto.class);
     }
 
-
+    /**
+     * This function of service is for updating patient details
+     * @param id
+     * @param patient
+     * @return ResponseEntity<GenericMessage> with status code 200 and message successfully updated.
+     */
     @Override
     public ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto patient) {
         log.info("inside: PatientServiceImpl::updatePatientDetails");
@@ -140,6 +162,11 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    /**
+     * This function of service is for getting all notification by patient id
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of doctorName and appointId.
+     */
     @Override
     public ResponseEntity<GenericMessage> getNotifications(long patientId) {
 
@@ -153,6 +180,13 @@ public class PatientServiceImpl implements PatientService {
 
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
     }
+
+    /**
+     * This function of service is for getting appointment details by appointmentId and patientId
+     * @param appointmentId
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and appointment details
+     */
     @Override
     public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
         log.info("inside: PatientServiceImpl::viewAppointment");
@@ -171,7 +205,7 @@ public class PatientServiceImpl implements PatientService {
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, viewDto), HttpStatus.OK);
                 }
                 else{
-                    log.info("PatientServiceImpl::viewAppointment"+Constants.DOCTOR_NOT_FOUND);
+                    log.info("PatientServiceImpl::viewAppointment "+Constants.DOCTOR_NOT_FOUND);
                     throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);}
             }
             else{

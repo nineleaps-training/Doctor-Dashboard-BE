@@ -20,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,6 +49,10 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         this.attributeRepository = attributeRepository;
     }
 
+    /**
+     * This function of service is for getting all the doctor present.
+     * @return ResponseEntity<GenericMessage> with status code 200 and list doctor present in the database.
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorDetails() {
         log.info("inside: ReceptionistServiceImpl::getDoctorDetails");
@@ -57,6 +60,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
     }
 
+    /**
+     * This function of service is for getting all the appointments of the doctor
+     * @param doctorId
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of appointments for the particular doctor
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo,int pageSize) {
         log.info("inside: ReceptionistServiceImpl::getDoctorAppointments");
@@ -66,7 +75,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
             Page<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId,paging);
             List<PatientViewDto> patientViewDto = appointmentList.toList().stream()
                     .map(this::mapToDto2).collect(Collectors.toList());
-            PageRecords pageRecords=new PageRecords(patientViewDto,pageNo,pageSize,appointmentList.getTotalElements(),appointmentList.getTotalPages(),appointmentList.isLast());
+            var pageRecords=new PageRecords(patientViewDto,pageNo,pageSize,appointmentList.getTotalElements(),appointmentList.getTotalPages(),appointmentList.isLast());
 
             log.info("exit: ReceptionistServiceImpl::getDoctorAppointments");
 
@@ -78,7 +87,11 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     }
 
 
-
+    /**
+     * This function of service is for getting all the today's appointments present for vitals update.
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of today appointments
+     */
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo,int pageSize) {
         log.info("inside: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
@@ -92,12 +105,19 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         List<PatientViewDto> patientViewDto = appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
-        PageRecords pageRecords=new PageRecords(patientViewDto,pageNo,pageSize,appointmentList1.getTotalElements()+appointmentList2.getTotalElements(),appointmentList1.getTotalPages()+appointmentList2.getTotalPages(), appointmentList1.isLast() && appointmentList2.isLast());
+        var pageRecords=new PageRecords(patientViewDto,pageNo,pageSize,appointmentList1.getTotalElements()+appointmentList2.getTotalElements(),appointmentList1.getTotalPages()+appointmentList2.getTotalPages(), appointmentList1.isLast() && appointmentList2.isLast());
         log.info("exit: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
 
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , pageRecords),HttpStatus.OK);
     }
 
+
+    /**
+     * This function of service is for adding vitals of patients.
+     * @param attributesDto which contains fields bloodGroup,bodyTemp,notes and glucose level...
+     * @param appointmentId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto attributesDto, Long appointmentId) {
         log.info("inside: ReceptionistServiceImpl::addAppointmentVitals");
