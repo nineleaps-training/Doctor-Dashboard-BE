@@ -1,7 +1,5 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-
-
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.Patient;
 import lombok.AllArgsConstructor;
@@ -18,7 +16,6 @@ import java.time.LocalTime;
 @Getter
 @Setter
 public class AppointmentDto {
-    private Long appointId;
     @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
     private String category;
 
@@ -48,8 +45,8 @@ public class AppointmentDto {
 
     private Boolean isRead;
 
-    @NotNull
-    @NotEmpty(message = "Status can't be empty")
+    //    @NotNull
+//    @NotEmpty(message = "Status can't be empty")
     private String status;
 
     private Boolean isBookedAgain;
@@ -62,4 +59,3 @@ public class AppointmentDto {
     @NotNull(message = "doctor details can't be null")
     private DoctorDetails doctorDetails;
 }
-
