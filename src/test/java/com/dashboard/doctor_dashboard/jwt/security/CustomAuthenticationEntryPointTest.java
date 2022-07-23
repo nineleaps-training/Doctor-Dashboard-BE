@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
