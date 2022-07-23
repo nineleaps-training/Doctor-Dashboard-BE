@@ -1,16 +1,15 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Patient;
-
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 
 import com.dashboard.doctor_dashboard.repository.*;
-import com.dashboard.doctor_dashboard.services.patient_service.impl.PatientServiceImpl;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-
+import com.dashboard.doctor_dashboard.services.patient_service.PatientServiceImpl;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,7 @@ class PatientServiceImplTest {
     @Test
     void addPatientTest_Success() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
@@ -97,7 +96,7 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInDatabaseForAddDoctor() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
@@ -118,7 +117,7 @@ class PatientServiceImplTest {
         patient.setBloodGroup("A+");
         patient.setAlternateMobileNo("900011112");
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(loginId);
         Mockito.when(patientRepository.getPatientByLoginId(loginId)).thenReturn(patient);
@@ -285,7 +284,6 @@ class PatientServiceImplTest {
         Mockito.when(appointmentRepository.getBasicAppointmentDetails(appointmentId,patientId)).thenReturn(viewDto);
 
         ResponseEntity<GenericMessage> appointmentView = patientService.viewAppointment(appointmentId,patientId);
-        System.out.println(appointmentView.getBody().getData());
         assertThat(appointmentView).isNotNull();
         assertEquals(viewDto.toString(),appointmentView.getBody().getData().toString());
     }

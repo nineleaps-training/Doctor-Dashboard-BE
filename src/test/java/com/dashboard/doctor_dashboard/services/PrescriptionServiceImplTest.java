@@ -2,7 +2,6 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 
@@ -19,8 +18,9 @@ import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionServiceImpl;
 
 
-import com.dashboard.doctor_dashboard.util.wrappers.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.wrappers.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.MailServiceImpl;
+import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

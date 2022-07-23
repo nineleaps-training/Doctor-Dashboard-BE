@@ -1,10 +1,13 @@
 package com.dashboard.doctor_dashboard.services;
 
+
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
-import com.dashboard.doctor_dashboard.repository.PatientRepository;
-import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
+import com.dashboard.doctor_dashboard.services.file_service.FileStorageServiceImpl;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,15 +16,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +35,7 @@ class FileStorageServiceTest {
     private AppointmentRepository appointmentRepository;
 
     @InjectMocks
-    private FileStorageService fileStorageService;
+    private FileStorageServiceImpl fileStorageServiceImpl;
 
 
     @BeforeEach
@@ -52,7 +51,7 @@ class FileStorageServiceTest {
 
 
     @Test
-    void UploadFileWHenPatientIdPresentInDb() throws IOException {
+    void UploadFileWHenPatientIdPresentInDb() throws Exception {
 
 
         final Long id = 1L;
@@ -74,9 +73,12 @@ class FileStorageServiceTest {
         Mockito.when(fileDBRepository.save(Mockito.any(FileDB.class))).thenReturn(fileDB);
 
 
-        FileDB newFile = fileStorageService.store(file,id);
-        assertThat(newFile).isNotNull();
-        assertEquals(newFile,fileDB);
+        ResponseEntity<GenericMessage> response = fileStorageServiceImpl.store(file,id);
+
+        assertAll(
+                ()-> assertThat(response).isNotNull(),
+                ()-> assertEquals(Constants.FILE_UPLOADED+file.getOriginalFilename(),response.getBody().getData())
+        );
     }
 
     @Test
@@ -95,14 +97,18 @@ class FileStorageServiceTest {
         Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
         Mockito.when(file.getOriginalFilename()).thenReturn(null);
 
-        FileDB newFile = fileStorageService.store(file,id);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,()->{
+            fileStorageServiceImpl.store(file,id);
+        });
 
-        assertThat(newFile).isNull();
+        assertAll(
+                ()-> assertThat(exception).isNotNull(),
+                ()-> assertEquals(Constants.FILE_NAME_PRESENT,exception.getMessage())
+        );
     }
 
     @Test
-    void ThrowErrorWhenPatientIdNotPresentInDb() throws IOException {
-
+    void ThrowErrorWhenAppointmentIdNotPresentInDb(){
 
         final Long id = 1L;
         FileDB fileDB = new FileDB();
@@ -120,24 +126,41 @@ class FileStorageServiceTest {
         );
 
         Mockito.when(appointmentRepository.getId(id)).thenReturn(null);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,()->{
+            fileStorageServiceImpl.store(file,id);
+        });
 
-        FileDB newFile = fileStorageService.store(file,id);
-
-        assertThat(newFile).isNull();
-        verify(fileDBRepository,never()).save(Mockito.any(FileDB.class));
-
+        assertAll(
+                ()-> assertThat(exception).isNotNull(),
+                ()-> assertEquals(Constants.APPOINTMENT_NOT_FOUND,exception.getMessage())
+        );
     }
 
-    @Test
-    void getFile() {
 
-        final Long id = 1L;
-        FileDB fileDB = new FileDB();
-        fileDB.setDataReport(null);
-        fileDB.setId(id);
-        fileDB.setType(".png");
-        fileDB.setName("file1");
-        fileDB.setAppointmentId(id);
+//    @Test
+//    void throwsException() throws IOException {
+//        final Long id = 1L;
+//        InputStream in = mock(InputStream.)
+//
+//        MultipartFile file1 = new MockMultipartFile(
+//                "file"," j bjhbhj",
+//                String.valueOf(MediaType.TEXT_PLAIN),
+//                null
+//        );
+////        MockMultipartFile file = mock(MockMultipartFile.class);
+//        Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
+//       // Mockito.when(file.getBytes()).thenThrow(IOException.class);
+//        System.out.println("empty"+file1.getBytes());
+//        Exception exception = assertThrows(Exception.class,()->{
+//            fileStorageServiceImpl.store(file1,id);
+//        });
+//        System.out.println(exception);
+//
+//    }
+
+
+    @Test
+    void getFile() throws IOException {
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -146,12 +169,42 @@ class FileStorageServiceTest {
                 "Hello, World!".getBytes()
         );
 
+        final Long id = 1L;
+        FileDB fileDB = new FileDB();
+        fileDB.setDataReport(file.getBytes());
+        fileDB.setId(id);
+        fileDB.setType(".png");
+        fileDB.setName("file1");
+        fileDB.setAppointmentId(id);
+
+
         Mockito.when(fileDBRepository.findByAppointmentId(id)).thenReturn(fileDB);
 
-        FileDB newFile = fileStorageService.getFile(id);
+        ResponseEntity<byte[]> response = fileStorageServiceImpl.getFile(id);
 
-        assertThat(newFile).isNotNull();
-        assertEquals(newFile,fileDB);
+        assertAll(
+                ()->assertThat(response).isNotNull(),
+                ()->assertEquals(fileDB.getDataReport(),response.getBody())
+        );
+    }
+
+
+    @Test
+    void throwErrorWhenIdNotPresentInDbForReport() throws Exception {
+        final Long id = 1L;
+
+        Mockito.when(fileDBRepository.findByAppointmentId(id)).thenReturn(null);
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,()->{
+            fileStorageServiceImpl.getFile(id);
+        });
+
+        assertAll(
+                ()-> assertThat(exception).isNotNull(),
+                ()-> assertEquals(Constants.REPORT_NOT_FOUND,exception.getMessage())
+        );
+
+
     }
 
 }

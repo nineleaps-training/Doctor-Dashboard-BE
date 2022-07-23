@@ -1,12 +1,11 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-
-
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +54,7 @@ class TodoServiceImplTest {
 
     @Test
     void testAddList() {
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
         Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
 
 
@@ -71,31 +69,9 @@ class TodoServiceImplTest {
     }
 
 
-    @Test
-    void testGetListById() {
-        final Long id = 1L;
-        Todolist todolist = new Todolist(id,"hello",true,null,null,null);
 
-        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist));
 
-        ResponseEntity<GenericMessage> newTodo = todoService.getTodoById(id);
-        System.out.println(newTodo);
 
-        assertThat(newTodo).isNotNull();
-        assertEquals(todolist,newTodo.getBody().getData());
-    }
-
-    @Test
-    void checkIfIdNotPresentInDBForGetListById() {
-        final Long id = 1L;
-        Todolist todolist = new Todolist(id,"hello",true,null,null,null);
-
-        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
-
-        ResponseEntity<GenericMessage> newTodo = todoService.getTodoById(id);
-
-        assertThat(newTodo).isNull();
-    }
 
     @Test
     void getAllTodoByDoctorId() {
@@ -109,40 +85,16 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findByDoctorId(id)).thenReturn(list);
 
+
+
+
+
         ResponseEntity<GenericMessage> newList = todoService.getAllTodoByDoctorId(id);
 
         assertThat(newList).isNotNull();
         assertEquals(list,newList.getBody().getData());
     }
 
-    @Test
-    void updateList() {
-        final Long id = 1L;
-
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
-        Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
-
-        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist1));
-
-        todoService.updateTodo(id,todolist);
-        todoService.updateTodo(id,todolist);
-
-        verify(todoRepository,times(2)).findById(id);
-
-    }
-
-
-    @Test
-    void checkIfIdNotPresentInDBForUpdateList() {
-        final Long id = 1L;
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
-
-        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
-
-        ResponseEntity<GenericMessage> newTodo = todoService.updateTodo(id,todolist);
-
-        assertThat(newTodo).isNull();
-    }
 
     @Test
     void deleteListById() {

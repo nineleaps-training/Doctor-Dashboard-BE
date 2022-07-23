@@ -14,9 +14,10 @@ import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentServiceImpl;
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
-import com.dashboard.doctor_dashboard.util.wrappers.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.wrappers.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.MailServiceImpl;
+import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -127,7 +128,7 @@ class AppointmentServiceImplTest {
         Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,null,patient,doctorDetails);
 
 
@@ -163,7 +164,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 4L;
 
-        LocalDate localDate = LocalDate.now().plusDays(8);
+        LocalDate localDate =  LocalDate.now().plusDays(8);
         LocalDate localDate1 = LocalDate.of(2022,07,04);
 
         LocalTime localTime = LocalTime.of(10,30);
@@ -187,10 +188,10 @@ class AppointmentServiceImplTest {
         Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist",localDate ,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist", localDate,"fever","gokul","gok@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
-        AppointmentDto appointment2 = new AppointmentDto(1L,"dentist", localDate1,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment2 = new AppointmentDto("dentist", localDate1,"fever","ram","ram@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -230,7 +231,7 @@ class AppointmentServiceImplTest {
 
         Long loginId = 1L;
 
-        LocalDate localDate = LocalDate.of(2022,07,13);
+        LocalDate localDate = LocalDate.of(2022,07,12);
         LocalTime localTime = LocalTime.of(8,30);
 
         Map<String,String> expected = new HashMap<>();
@@ -252,7 +253,7 @@ class AppointmentServiceImplTest {
 //        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
 //                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -279,7 +280,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 4L;
 
-        LocalDate localDate = LocalDate.of(2022,07,13);
+        LocalDate localDate = LocalDate.of(2022,07,12);
         LocalTime localTime = LocalTime.of(8,30);
 
         Map<String,String> expected = new HashMap<>();
@@ -298,7 +299,7 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -322,7 +323,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 4L;
 
-        LocalDate localDate = LocalDate.of(2022,07,13);
+        LocalDate localDate = LocalDate.of(2022,07,12);
         LocalTime localTime = LocalTime.of(8,30);
 
         Map<String,String> expected = new HashMap<>();
@@ -341,7 +342,7 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -392,7 +393,7 @@ class AppointmentServiceImplTest {
         Appointment appointment1 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -428,6 +429,7 @@ class AppointmentServiceImplTest {
         expected.put("appointId","1");
         expected.put("message",Constants.APPOINTMENT_CREATED);
 
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(10,30);
 
 
@@ -443,10 +445,10 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -498,7 +500,7 @@ class AppointmentServiceImplTest {
         expected.put("appointId","1");
         expected.put("message",Constants.APPOINTMENT_CREATED);
 
-
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(12,00);
 
 
@@ -514,10 +516,10 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
 
 
@@ -562,6 +564,7 @@ class AppointmentServiceImplTest {
         expected.put("appointId","1");
         expected.put("message",Constants.APPOINTMENT_CREATED);
 
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(10,30);
 
 
@@ -577,10 +580,10 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,null,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -611,7 +614,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 12L;
 
-
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(10,30);
 
         Patient patient = new Patient();
@@ -625,10 +628,10 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -660,7 +663,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 12L;
 
-
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(10,30);
 
         Patient patient = new Patient();
@@ -674,10 +677,10 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,null,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -709,7 +712,7 @@ class AppointmentServiceImplTest {
         Long patientId = 1L;
         Long doctorId = 12L;
 
-
+        LocalDate localDate = LocalDate.of(2022,07,13);
         LocalTime localTime = LocalTime.of(10,30);
 
         Patient patient = new Patient();
@@ -733,13 +736,13 @@ class AppointmentServiceImplTest {
 
 
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto("dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
-        Appointment appointment2 = new Appointment(1L,"dentist", LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment2 = new Appointment(1L,"dentist",  LocalDate.now().plusDays(1),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient1,doctorDetails,null,null);
 
 
@@ -780,7 +783,7 @@ class AppointmentServiceImplTest {
 
 
 
-         LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
         LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
@@ -946,30 +949,37 @@ class AppointmentServiceImplTest {
     void getAllAppointmentByPatientId_SUCCESS() {
         final Long patientId = 1L;
         int pageNo = 2;
+        int pageSize=10;
 
         Pageable paging= PageRequest.of(pageNo, 10);
 
-        Map<String, List<PatientAppointmentListDto>> getAllAppointment =new HashMap<>();
+        Map<String, PageRecords> getAllAppointment =new HashMap<>();
         PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
-        Page<Appointment> list1=new PageImpl<>(list);
+//        Page<Appointment> list1=new PageImpl<>(list);
+        Page<Appointment> past=new PageImpl<>(list);
+        Page<Appointment> upcoming=new PageImpl<>(list);
+
+        Page<Appointment> today1=new PageImpl<>(list);
+        Page<Appointment> today2=new PageImpl<>(list);
 
         List<PatientAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
-        getAllAppointment.put("past",dto);
-        getAllAppointment.put("today",new ArrayList<>(Arrays.asList(dto1,dto1,dto1,dto1)));
-        getAllAppointment.put("upcoming",dto);
+        List<PatientAppointmentListDto> today = new ArrayList<>(Arrays.asList(dto1,dto1,dto1,dto1));
+        getAllAppointment.put("past",new PageRecords(dto,pageNo,pageSize,past.getTotalElements(),past.getTotalPages(),past.isLast()));
+        getAllAppointment.put("today",new PageRecords(today,pageNo,pageSize,today.size(),today1.getTotalPages(),today1.isLast()));
+        getAllAppointment.put("upcoming",new PageRecords(dto,pageNo,pageSize,upcoming.getTotalElements(),upcoming.getTotalPages(),upcoming.isLast()));
 
         Mockito.when(patientRepository.getId(Mockito.any(Long.class))).thenReturn(patientId);
-        Mockito.when(appointmentRepository.pastAppointment(patientId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.todayAppointment1(patientId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.todayAppointment2(patientId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.upcomingAppointment(patientId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.pastAppointment(patientId,paging)).thenReturn(past);
+        Mockito.when(appointmentRepository.todayAppointment1(patientId,paging)).thenReturn(today1);
+        Mockito.when(appointmentRepository.todayAppointment2(patientId,PageRequest.of(pageNo, pageSize - today1.getNumberOfElements()))).thenReturn(today2);
+        Mockito.when(appointmentRepository.upcomingAppointment(patientId,paging)).thenReturn(upcoming);
         Mockito.when(mapper.map(appointment,PatientAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
     }
@@ -978,10 +988,12 @@ class AppointmentServiceImplTest {
     void throwErrorIfIdNotFoundInPatientDbForAllAppointmentPatient(){
         final Long patientId = 1L;
         int pageNo = 2;
+        int pageSize=10;
+
         Mockito.when(patientRepository.getId(patientId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
+            appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize);
         });
         assertEquals(Constants.PATIENT_NOT_FOUND,resourceNotFoundException.getMessage());
 
@@ -992,32 +1004,39 @@ class AppointmentServiceImplTest {
 
         final Long doctorId = 1L;
         int pageNo = 2;
+        int pageSize=10;
+
 
         Pageable paging= PageRequest.of(pageNo, 10);
 
-        Map<String, List<DoctorAppointmentListDto>> getAllAppointment =new HashMap<>();
+        Map<String, PageRecords> getAllAppointment =new HashMap<>();
         DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
-
+        List<DoctorAppointmentListDto> today = new ArrayList<>();
+        today.addAll(dto);
+        today.addAll(dto);
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
-        Page<Appointment> list1=new PageImpl<>(list);
+        Page<Appointment> past=new PageImpl<>(list);
+        Page<Appointment> upcoming=new PageImpl<>(list);
+        Page<Appointment> today1=new PageImpl<>(list);
+        Page<Appointment> today2=new PageImpl<>(list);
 
 
-        getAllAppointment.put("past",dto);
-        getAllAppointment.put("today",new ArrayList<>(Arrays.asList(dto1,dto1,dto1,dto1)));
-        getAllAppointment.put("upcoming",dto);
+        getAllAppointment.put("past",new PageRecords(dto,pageNo,pageSize,past.getTotalElements(),past.getTotalPages(),past.isLast()));
+        getAllAppointment.put("today",new PageRecords(today,pageNo,pageSize, today.size(),today1.getTotalPages(),today1.isLast()));
+        getAllAppointment.put("upcoming",new PageRecords(dto,pageNo,pageSize,upcoming.getTotalElements(),upcoming.getTotalPages(),upcoming.isLast()));
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(doctorId);
-        Mockito.when(appointmentRepository.pastDoctorAppointment(doctorId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.todayDoctorAppointment1(doctorId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.todayDoctorAppointment2(doctorId,paging)).thenReturn(list1);
-        Mockito.when(appointmentRepository.upcomingDoctorAppointment(doctorId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.pastDoctorAppointment(doctorId,paging)).thenReturn(past);
+        Mockito.when(appointmentRepository.todayDoctorAppointment1(doctorId,paging)).thenReturn(today1);
+        Mockito.when(appointmentRepository.todayDoctorAppointment2(doctorId,paging)).thenReturn(today2);
+        Mockito.when(appointmentRepository.upcomingDoctorAppointment(doctorId,paging)).thenReturn(upcoming);
         Mockito.when(mapper.map(appointment,DoctorAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo,pageSize);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
 
@@ -1027,11 +1046,12 @@ class AppointmentServiceImplTest {
     void throwErrorIfIdNotFoundInDoctorDbForAllAppointmentDoctor(){
         final Long doctorId = 1L;
         int pageNo = 2;
+        int pageSize=10;
 
         Mockito.when(doctorRepository.isIdAvailable(doctorId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
+            appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo,pageSize);
         });
         assertEquals(Constants.DOCTOR_NOT_FOUND,resourceNotFoundException.getMessage());
 
@@ -1401,8 +1421,8 @@ class AppointmentServiceImplTest {
 
     @Test
     void checkSlots_SelectedDateIsUnderOneWeekRangeAndDoctorBookedSlotsIsNotEmpty(){
-        LocalDate localDate = LocalDate.of(2022,07,07);
-        LocalDate localDate1 = LocalDate.of(2022,07,11);
+        LocalDate localDate = LocalDate.now().plusDays(1);
+        LocalDate localDate1 = LocalDate.now().plusDays(4);
 
         Long doctorId = 1L;
 
@@ -1520,7 +1540,7 @@ class AppointmentServiceImplTest {
     @Test
     void checkSlots_ThrowErrorIfDateIsNotValid(){
         LocalDate localDate = LocalDate.of(2022,07,07);
-        LocalDate localDate1 = LocalDate.of(2022,07,16);
+        LocalDate localDate1 = LocalDate.of(2023,07,16);
         LocalDate localDate2 = LocalDate.of(2022,07,04);
 
 
@@ -1536,9 +1556,8 @@ class AppointmentServiceImplTest {
         Mockito.when(appointmentRepository.getTimesByIdAndDate(Mockito.any(LocalDate.class),Mockito.any(Long.class))).thenReturn(new ArrayList<>());
         Mockito.when(pdFGeneratorService.dateHandler(localDate)).thenReturn(true);
 
-        List<Boolean> response = appointmentService.checkSlots(localDate,doctorId);
+        appointmentService.checkSlots(localDate,doctorId);
 
-        System.out.println(response);
 
 
         InvalidDate invalidDate = assertThrows(InvalidDate.class,()->{
@@ -1548,6 +1567,7 @@ class AppointmentServiceImplTest {
         InvalidDate invalidDate1 = assertThrows(InvalidDate.class,()->{
             appointmentService.checkSlots(localDate2,doctorId);
         }) ;
+
         assertAll(
                 ()-> assertThat(invalidDate).isNotNull(),
                 ()-> assertThat(invalidDate1).isNotNull()
@@ -1564,7 +1584,7 @@ class AppointmentServiceImplTest {
     @Test
     void checkSlots_ThrowErrorIfSelectedDateIsNotUnderOneWeekRange(){
         LocalDate localDate = LocalDate.of(2022,07,04);
-        LocalDate localDate1 = LocalDate.of(2022,07,16);
+        LocalDate localDate1 = LocalDate.of(2023,07,16);
 
         Long doctorId = 7L;
 
@@ -1594,7 +1614,7 @@ class AppointmentServiceImplTest {
         );
 
         assertAll(
-                ()-> assertEquals(localDate.toString()+":"+ Constants.SELECT_SPECIFIED_DATES,invalidDate.getMessage()),
+                ()-> assertEquals(localDate.toString()+":"+Constants.SELECT_SPECIFIED_DATES,invalidDate.getMessage()),
                 ()-> assertEquals(localDate1.toString()+":"+Constants.SELECT_SPECIFIED_DATES,invalidDate1.getMessage())
         );
     }
