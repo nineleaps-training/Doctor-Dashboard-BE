@@ -1,10 +1,10 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
-
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,10 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 class ReceptionistControllerTest {
 
     @Mock
@@ -68,7 +66,7 @@ class ReceptionistControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/doctorNames/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/doctor-names/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -78,11 +76,11 @@ class ReceptionistControllerTest {
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
-        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/appointmentList/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/appointment-list/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -90,7 +88,7 @@ class ReceptionistControllerTest {
     void getAddVitalsTest() throws Exception {
         String message = "Vital Successfully updated";
 
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",new Appointment());
 
         Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(AttributesDto.class),Mockito.any(Long.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.CREATED));
@@ -98,7 +96,7 @@ class ReceptionistControllerTest {
         String content = objectMapper.writeValueAsString(attributes);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/receptionist/addVitals/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+                .post("/api/v1/receptionist/vitals/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
@@ -111,9 +109,9 @@ class ReceptionistControllerTest {
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2, dto3));
 
-        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/getAllAppointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/all-appointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

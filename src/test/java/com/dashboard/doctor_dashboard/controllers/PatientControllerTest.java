@@ -1,12 +1,10 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
 import com.dashboard.doctor_dashboard.entities.Patient;
-
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
-
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +62,7 @@ class PatientControllerTest {
     @Test
     void addPatientTest() throws Exception {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
@@ -78,7 +76,7 @@ class PatientControllerTest {
         String content = objectMapper.writeValueAsString(patientEntityDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/patient/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+                .post("/api/v1/patient/on-boarding/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
@@ -101,13 +99,13 @@ class PatientControllerTest {
     @Test
     void patientProfileTest() throws Exception {
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(patientService.getPatientDetailsById(Mockito.any(Long.class)))
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/patient/patientProfile/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/patient/patient-profile/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -124,7 +122,7 @@ class PatientControllerTest {
         String content = objectMapper.writeValueAsString(updateDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/patient/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+                .put("/api/v1/patient/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
 
     }
@@ -152,6 +150,6 @@ class PatientControllerTest {
         Mockito.when(patientService.getNotifications(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,notificationDto),HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/patient/1/getNotifications").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/patient/1/notifications").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }
