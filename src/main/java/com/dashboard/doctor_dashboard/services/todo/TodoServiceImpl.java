@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.todo_service;
+package com.dashboard.doctor_dashboard.services.todo;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
@@ -43,22 +43,6 @@ public class TodoServiceImpl implements TodoService {
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<GenericMessage> getTodoById(Long id) {
-        log.info("inside: TodoServiceImpl::getTodoById");
-
-        var genericMessage = new GenericMessage();
-
-        Optional<Todolist> value = todoRepository.findById(id);
-        if (value.isPresent()) {
-            genericMessage.setData(value.get());
-            genericMessage.setStatus(Constants.SUCCESS);
-            log.info("exit: TodoServiceImpl::getTodoById");
-
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        return null;
-    }
 
     @Override
     public ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId) {
@@ -73,26 +57,7 @@ public class TodoServiceImpl implements TodoService {
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<GenericMessage> updateTodo(Long id, TodoListDto todolist) {
-        log.info("inside: TodoServiceImpl::updateTodo");
 
-        var genericMessage = new GenericMessage();
-
-        Optional<Todolist> value1 = todoRepository.findById(id);
-        if (value1.isPresent()) {
-            Todolist value = value1.get();
-            value.setDescription(todolist.getDescription());
-            value.setStatus(todolist.getStatus());
-            genericMessage.setData(todoRepository.save(value));
-            genericMessage.setStatus(Constants.SUCCESS);
-            log.info("exit: TodoServiceImpl::updateTodo");
-
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        log.info("TodoServiceImpl::updateTodo");
-        throw new  ResourceNotFoundException("Todo not found.");
-    }
 
     @Override
     public ResponseEntity<GenericMessage> deleteTodoById(Long id) {

@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.todo_service;
+package com.dashboard.doctor_dashboard.services.todo;
 
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -13,11 +13,9 @@ public interface TodoService {
 
     ResponseEntity<GenericMessage> addTodo(TodoListDto todolist);
 
-    ResponseEntity<GenericMessage> getTodoById(Long id);
 
     ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId);
 
-    ResponseEntity<GenericMessage> updateTodo(Long id, TodoListDto todolist);
 
     ResponseEntity<GenericMessage> deleteTodoById(Long id);
 }

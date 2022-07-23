@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.login_service;
+package com.dashboard.doctor_dashboard.services.login;
 
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;

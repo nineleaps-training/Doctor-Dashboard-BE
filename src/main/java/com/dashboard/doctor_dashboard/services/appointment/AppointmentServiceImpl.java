@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment_service;
+package com.dashboard.doctor_dashboard.services.appointment;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;

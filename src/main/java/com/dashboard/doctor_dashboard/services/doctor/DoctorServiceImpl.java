@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.doctor_service;
+package com.dashboard.doctor_dashboard.services.doctor;
 
 
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
@@ -15,7 +15,6 @@ import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

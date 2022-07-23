@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.prescription_service;
+package com.dashboard.doctor_dashboard.services.prescription;
 
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
