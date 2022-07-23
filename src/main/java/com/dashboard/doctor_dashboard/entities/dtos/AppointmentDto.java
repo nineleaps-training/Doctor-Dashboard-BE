@@ -45,8 +45,8 @@ public class AppointmentDto {
 
     private Boolean isRead;
 
-    @NotNull
-    @NotEmpty(message = "Status can't be empty")
+//    @NotNull
+//    @NotEmpty(message = "Status can't be empty")
     private String status;
 
     private Boolean isBookedAgain;

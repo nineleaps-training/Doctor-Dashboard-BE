@@ -24,9 +24,7 @@ public class AttributesDto {
     @NotNull(message = "Body temperature can't be null")
     private Double bodyTemp;
 
-    @NotNull
-    @NotEmpty(message = "Notes can't be empty")
-    private String prescription;
+    private String notes;
 
     @NotNull(message = "Appointment details can't be empty")
     private Appointment appointment;

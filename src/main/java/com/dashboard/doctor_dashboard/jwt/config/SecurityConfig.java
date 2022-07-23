@@ -28,49 +28,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources/**",
-            "/swagger-ui.html",
+            "/swagger-ui/**",
             "/webjars/**",
             "/", "/csrf",
-            "/api/user/login",
-            "/api/patient/changeMessage/**",
+            "/api/v1/user/login",
+//            "/api/v1/patient/changeMessage/**",
             "/files/**",
-            "/api/receptionist/**"
-
+            "/api/v1/receptionist/**",
+            "/actuator/**"
 
     };
 
     private static final String[] DOCTOR_URL={
 
-            "/api/todolist/**",
-            "api/appointment/getAllAppointments/doctor/*",
-            "api/attribute/changeNotes/*",
-            "api/appointment/*/activePatient",
-            "/files/{id}",
+            "/api/v1/todolist/**",
+            "api/v1/appointment/getAllAppointments/doctor/*",
+            "api/v1/attribute/changeNotes/*",
+            "api/v1/appointment/*/activePatient",
+            "/v1/files/{id}",
     };
     private static final String[] PATIENT_URL={
 
-            "api/appointment/getAllAppointments/patient/*",
-            "api/appointment/patient",
-            "api/appointment/*/patient",
-            "/api/patient/upload/*",
-            "/api/patient/*",
+            "api/v1/appointment/getAllAppointments/patient/*",
+            "api/v1/appointment/patient",
+            "api/v1/appointment/*/patient",
+            "/api/v1/patient/upload/*",
+            "/api/v1/patient/*",
             "/files/{id}"
     };
 
 
-    @Bean
-    public Filter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
+
+
+
 
     private CustomUserDetailsService customUserDetailsService;
 
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     @Autowired
     public SecurityConfig(CustomUserDetailsService customUserDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -93,7 +94,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
+    @Bean
+    public Filter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService);   //NOSONAR

@@ -30,7 +30,7 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment < curdate()",nativeQuery = true)
     Page<Appointment> pastAppointment(Long patientId,Pageable pageable);
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now())",nativeQuery = true)
+    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now()) order by appointment_time ",nativeQuery = true)
     Page<Appointment> todayAppointment1(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)

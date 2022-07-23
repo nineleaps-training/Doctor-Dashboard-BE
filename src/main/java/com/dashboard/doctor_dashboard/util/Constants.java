@@ -10,7 +10,7 @@ public class Constants {
         public static final String APPOINTMENT = "Appointment";
         public static final String DOCTOR = "Doctor";
         public static final String LOGIN = "Login";
-
+        public static final String  DEFAULT_PAGE_SIZE="10";
 
 
         //Login

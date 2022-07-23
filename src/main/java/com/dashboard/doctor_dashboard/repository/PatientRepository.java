@@ -95,7 +95,7 @@ public interface PatientRepository extends PagingAndSortingRepository<Patient, L
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
 
 
-    @Query(value = "insert into patients (age,mobile_no,alternate_mobile_no,timestamp,gender,address,blood_group,login_id) values(:age,:mobileNo,:alternateMobileNo,now(),:gender,:address,:bloodGroup,:loginId)",nativeQuery = true)
+    @Query(value = "insert into patients (age,mobile_no,alternate_mobile_no,timestamp,gender,address,blood_group,created_at,login_id) values(:age,:mobileNo,:alternateMobileNo,now(),:gender,:address,:bloodGroup,now(),:loginId)",nativeQuery = true)
     @Transactional
     @Modifying
     void insertIntoPatient(int age,String mobileNo,String alternateMobileNo,String gender,String address,String bloodGroup,Long loginId);

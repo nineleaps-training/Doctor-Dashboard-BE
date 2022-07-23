@@ -5,6 +5,9 @@ import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -33,7 +36,7 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     List<DoctorDropdownDto> getDoctorDetails();
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
-    List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
+    Page<DoctorListDto> getAllDoctorsBySpeciality(String speciality, Pageable pageable);
 
     //
     @Query(value = "select id from doctor_details d where d.login_id=:id", nativeQuery = true)
@@ -46,7 +49,7 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
-    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
+    @Query(value = "insert into doctor_details (id,age,created_at,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,now(),:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
     @Transactional
     @Modifying
     void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId,short exp,String degree);
