@@ -5,7 +5,7 @@ import com.dashboard.doctor_dashboard.entities.Prescription;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
+import com.dashboard.doctor_dashboard.services.prescription.PrescriptionService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;

@@ -29,7 +29,6 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 class ReceptionistControllerTest {
 
     @Mock
@@ -67,7 +66,7 @@ class ReceptionistControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/doctorNames/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/doctor-names/").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -81,7 +80,7 @@ class ReceptionistControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/appointmentList/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/appointment-list/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -97,7 +96,7 @@ class ReceptionistControllerTest {
         String content = objectMapper.writeValueAsString(attributes);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/receptionist/addVitals/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+                .post("/api/v1/receptionist/vitals/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
@@ -113,6 +112,6 @@ class ReceptionistControllerTest {
         Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/receptionist/getAllAppointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/receptionist/all-appointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

@@ -12,7 +12,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionServiceImpl;
+import com.dashboard.doctor_dashboard.services.prescription.PrescriptionServiceImpl;
 import com.dashboard.doctor_dashboard.util.MailServiceImpl;
 import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;

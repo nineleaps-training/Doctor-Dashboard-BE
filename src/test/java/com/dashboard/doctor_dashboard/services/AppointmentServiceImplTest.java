@@ -14,7 +14,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentServiceImpl;
+import com.dashboard.doctor_dashboard.services.appointment.AppointmentServiceImpl;
 import com.dashboard.doctor_dashboard.util.MailServiceImpl;
 import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;

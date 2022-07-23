@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
+import com.dashboard.doctor_dashboard.services.todo.TodoService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,16 +81,6 @@ class TodoControllerTest {
                 .get("/api/v1/todolist/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
-    @Test
-    void getTodoById() throws Exception {
-        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
-        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
-
-        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-    }
 
     @Test
     void deleteTodo() throws Exception {
@@ -101,16 +91,5 @@ class TodoControllerTest {
                 .delete("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
-    @Test
-    void updateTodo() throws Exception {
-        TodoListDto todolist = new TodoListDto("hello",true,new DoctorDetails());
-        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
-        String content = objectMapper.writeValueAsString(todolist);
 
-        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
-
-    }
 }
