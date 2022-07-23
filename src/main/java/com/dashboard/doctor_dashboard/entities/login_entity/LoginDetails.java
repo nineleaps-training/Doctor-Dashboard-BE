@@ -15,7 +15,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "login_details")
+@Table(name = "login_details",
+        indexes = @Index(name = "index_email",columnList = "email_id"))
+
 public class LoginDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

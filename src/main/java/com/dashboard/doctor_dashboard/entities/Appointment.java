@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(
         name = "appointments",
-        indexes = @Index(name = "inedx_fn",columnList = "doctor_id,patient_id,dateOfAppointment")
+        indexes = @Index(name = "inedx_fn",columnList = "appointmentTime")
 )
 public class Appointment {
     @Id

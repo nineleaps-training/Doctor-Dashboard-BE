@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "patients"
+        name = "patients",indexes = @Index(name = "index_loginId",columnList = "login_id")
 )
 public class    Patient {
 
