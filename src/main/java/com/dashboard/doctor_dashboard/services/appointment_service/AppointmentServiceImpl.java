@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -197,25 +198,29 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo){
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo,int pageSize ){
         log.info("inside: appointment service::getAllAppointmentByPatientId");
         var genericMessage = new GenericMessage();
-        List<PatientAppointmentListDto> today = new ArrayList<>();
-        Map<String,List<PatientAppointmentListDto>> m = new HashMap<>();
-        Pageable paging= PageRequest.of(pageNo, 10);
+        Map<String,PageRecords> m = new HashMap<>();
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Long patientId=patientRepository.getId(loginId);
         if(patientId != null) {
-            List<PatientAppointmentListDto> past = mapToAppointList(appointmentRepository.pastAppointment(patientId,paging).toList());
-            List<PatientAppointmentListDto> upcoming = mapToAppointList(appointmentRepository.upcomingAppointment(patientId,paging).toList());
-            List<PatientAppointmentListDto> today1 = mapToAppointList(appointmentRepository.todayAppointment1(patientId,paging).toList());
-            List<PatientAppointmentListDto> today2 = mapToAppointList(appointmentRepository.todayAppointment2(patientId,paging).toList());
-            today.addAll(today1);
-            today.addAll(today2);
+            Page<Appointment> past=appointmentRepository.pastAppointment(patientId,paging);
+            Page<Appointment> upcoming=appointmentRepository.upcomingAppointment(patientId,paging);
+            Page<Appointment> today1=appointmentRepository.todayAppointment1(patientId,paging);
+            List<PatientAppointmentListDto> today = new ArrayList<>();
+            Page<Appointment> today2 = appointmentRepository.todayAppointment2(patientId, PageRequest.of(pageNo, pageSize - today1.getNumberOfElements())) ;
+            today.addAll(mapToAppointList(today1.toList()));
+            today.addAll(mapToAppointList(today2.toList()));
+            PageRecords pageRecordsPast = new PageRecords(mapToAppointList(past.toList()),pageNo,pageSize,past.getTotalElements(),past.getTotalPages(),past.isLast());
+            PageRecords pageRecordsUpcoming = new PageRecords(mapToAppointList(upcoming.toList()),pageNo,pageSize,upcoming.getTotalElements(),upcoming.getTotalPages(),upcoming.isLast());
+            PageRecords pageRecordsToday = new PageRecords(today,pageNo,pageSize,today.size(),today1.getTotalPages(),today1.isLast());
 
-            m.put("past",past);
-            m.put("today",today);
-            m.put("upcoming",upcoming);
+
+            m.put("past",pageRecordsPast);
+            m.put("today",pageRecordsToday);
+            m.put("upcoming",pageRecordsUpcoming);
 
             genericMessage.setData(m);
             genericMessage.setStatus(Constants.SUCCESS);
@@ -231,26 +236,42 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo){
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo,int pageSize ){
         log.info("inside: appointment service::getAllAppointmentByDoctorId");
         var genericMessage = new GenericMessage();
         List<DoctorAppointmentListDto> today = new ArrayList<>();
-        Map<String,List<DoctorAppointmentListDto>> m = new HashMap<>();
+        Map<String,PageRecords> m = new HashMap<>();
         Long doctorId = doctorRepository.isIdAvailable(loginId);
         Pageable paging= PageRequest.of(pageNo, 10);
 
 
         if(doctorId != null) {
-            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId,paging).toList());
-            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId,paging).toList());
-            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId,paging).toList());
-            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId,paging).toList());
-            today.addAll(today1);
-            today.addAll(today2);
 
-            m.put("past",past);
-            m.put("today",today);
-            m.put("upcoming",upcoming);
+//            Page<Appointment> past=appointmentRepository.pastAppointment(patientId,paging);
+//            Page<Appointment> upcoming=appointmentRepository.upcomingAppointment(patientId,paging);
+//            Page<Appointment> today1=appointmentRepository.todayAppointment1(patientId,paging);
+//            List<PatientAppointmentListDto> today = new ArrayList<>(mapToAppointList(today1.toList()));
+//            Page<Appointment> today2=appointmentRepository.todayAppointment2(patientId, PageRequest.of(pageNo, pageSize - today1.getNumberOfElements())); ;
+//            if(today1.isLast()) {
+//                today2 = appointmentRepository.todayAppointment2(patientId, PageRequest.of(pageNo, pageSize - today1.getNumberOfElements()));
+//                today.addAll(mapToAppointList(today2.toList()));
+//
+//            }
+
+            Page<Appointment> past = appointmentRepository.pastDoctorAppointment(doctorId,paging);
+            Page<Appointment> upcoming = appointmentRepository.upcomingDoctorAppointment(doctorId,paging);
+            Page<Appointment> today1 = appointmentRepository.todayDoctorAppointment1(doctorId,paging);
+            Page<Appointment> today2 = appointmentRepository.todayDoctorAppointment2(doctorId,paging);
+            today.addAll(mapToAppointDoctorList(today1.toList()));
+            today.addAll(mapToAppointDoctorList(today2.toList()));
+            PageRecords pageRecordsPast = new PageRecords(mapToAppointDoctorList(past.toList()),pageNo,pageSize,past.getTotalElements(),past.getTotalPages(),past.isLast());
+            PageRecords pageRecordsUpcoming = new PageRecords(mapToAppointDoctorList(upcoming.toList()),pageNo,pageSize,upcoming.getTotalElements(),upcoming.getTotalPages(),upcoming.isLast());
+            PageRecords pageRecordsToday = new PageRecords(today,pageNo,pageSize,today.size(),today1.getTotalPages(),today1.isLast());
+
+
+            m.put("past",pageRecordsPast);
+            m.put("today",pageRecordsToday);
+            m.put("upcoming",pageRecordsUpcoming);
 
             genericMessage.setData(m);
             genericMessage.setStatus(Constants.SUCCESS);

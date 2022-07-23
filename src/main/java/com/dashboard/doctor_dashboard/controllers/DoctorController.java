@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,10 +96,10 @@ public class DoctorController {
      * @return It returns List<DoctorListDto> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
     @GetMapping("/get-all-doctor/{speciality}")
-    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(@PathVariable("speciality") String speciality) {
+    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(@PathVariable("speciality") String speciality,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("DoctorController:: getAllDoctorsBySpeciality");
 
-        return doctorService.getAllDoctorsBySpeciality(speciality);
+        return doctorService.getAllDoctorsBySpeciality(speciality,pageNo,pageSize);
     }
 
     /**

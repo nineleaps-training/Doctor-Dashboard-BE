@@ -70,9 +70,9 @@ public class AppointmentController {
      * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
     @GetMapping("/getAllAppointments/patient/{patientId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("AppointmentController:: getAllAppointmentByPatientId");
-        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo) ;
+        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize) ;
     }
 
     /**
@@ -82,10 +82,9 @@ public class AppointmentController {
      * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
     @GetMapping("/getAllAppointments/doctor/{loginId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("loginId") Long loginId,@RequestParam("pageNo") int pageNo) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("loginId") Long loginId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("AppointmentController:: getAllAppointmentByDoctorId");
-
-        return appointmentService.getAllAppointmentByDoctorId(loginId, pageNo);
+        return appointmentService.getAllAppointmentByDoctorId(loginId, pageNo,pageSize );
     }
 
 

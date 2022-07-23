@@ -24,7 +24,7 @@ public interface DoctorService {
 
     ResponseEntity<GenericMessage> deleteDoctor(long id);
 
-    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality);
+    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality,int pageNo,int pageSize);
 
     ResponseEntity<GenericMessage> genderChart(Long doctorId);
 

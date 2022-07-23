@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.services.doctor_service;
 
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.PageRecords;
 import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -13,6 +14,10 @@ import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -166,14 +171,19 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality){
+    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality,int pageNo,int pageSize){
                 log.info("inside: DoctorServiceImpl::getAllDoctorsBySpeciality");
 
         var genericMessage = new GenericMessage();
-
+        Pageable pageable= PageRequest.of(pageNo,pageSize);
         if (doctorRepository.isSpecialityAvailable(speciality) != null) {
-            List<DoctorListDto> list = doctorRepository.getAllDoctorsBySpeciality(speciality);
-            genericMessage.setData(list);
+            System.out.println("1"+pageable);
+            Page list = doctorRepository.getAllDoctorsBySpeciality(speciality,pageable);
+//            PageImpl page= new PageImpl(list);
+            System.out.println("page"+list);
+            System.out.println("2"+pageable);
+
+            genericMessage.setData(new PageRecords(list.toList(),pageNo,pageSize,list.getTotalElements(),list.getTotalPages(),list.isLast()));
             genericMessage.setStatus(Constants.SUCCESS);
                                             log.info("exit: DoctorServiceImpl::getAllDoctorsBySpeciality");
 
