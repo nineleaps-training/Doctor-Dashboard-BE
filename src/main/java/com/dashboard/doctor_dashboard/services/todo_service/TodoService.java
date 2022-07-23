@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * interface for File Storage service layer.
  */
-public interface FileStorageService {
+public interface FileStorage {
     ResponseEntity<GenericMessage> store(MultipartFile file, Long id);
     ResponseEntity<byte[]> getFile(Long id);
 }

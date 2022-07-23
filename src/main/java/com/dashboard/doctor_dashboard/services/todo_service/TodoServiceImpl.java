@@ -2,13 +2,13 @@ package com.dashboard.doctor_dashboard.services.todo_service;
 
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,8 @@ import java.util.List;
  */
 @Service
 public interface AppointmentService {
-    ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
-    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId,int pageNo);
-    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo);
+    ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId, int pageNo, int pageSize);
+    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo,int pageSize );
     ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
 
 

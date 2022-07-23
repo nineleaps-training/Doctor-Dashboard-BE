@@ -2,7 +2,6 @@ package com.dashboard.doctor_dashboard.services.prescription_service;
 
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -13,10 +12,11 @@ import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
 
 
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 
-import com.dashboard.doctor_dashboard.util.wrappers.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.wrappers.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.MailServiceImpl;
+import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;

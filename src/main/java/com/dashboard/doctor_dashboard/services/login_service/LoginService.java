@@ -3,7 +3,7 @@ package com.dashboard.doctor_dashboard.services.login_service;
 
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;

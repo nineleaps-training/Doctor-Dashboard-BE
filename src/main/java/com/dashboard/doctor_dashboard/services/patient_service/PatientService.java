@@ -1,10 +1,10 @@
-package com.dashboard.doctor_dashboard.services.patient_service.impl;
+package com.dashboard.doctor_dashboard.services.patient_service;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

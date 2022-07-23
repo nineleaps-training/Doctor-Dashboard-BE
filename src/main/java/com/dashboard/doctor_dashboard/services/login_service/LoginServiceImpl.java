@@ -1,15 +1,15 @@
 package com.dashboard.doctor_dashboard.services.login_service;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -119,10 +119,9 @@ public class LoginServiceImpl implements LoginService {
 
         }
         log.debug(Constants.LOGIN+"::takingInfoFromToken"+": login failed due to Invalid ID token.");
-//        return  jwt.setIdtoken( takingInfoFromToken(idToken));
+
 
         throw new GoogleLoginException("Invalid ID token.");
-//        return "Invalid ID token.";
     }
 
 

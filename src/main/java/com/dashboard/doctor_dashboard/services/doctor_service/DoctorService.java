@@ -1,9 +1,8 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
-
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public interface DoctorService {
 
     ResponseEntity<GenericMessage> deleteDoctor(long id);
 
-    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality);
+    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality,int pageNo,int pageSize);
 
     ResponseEntity<GenericMessage> genderChart(Long doctorId);
 
