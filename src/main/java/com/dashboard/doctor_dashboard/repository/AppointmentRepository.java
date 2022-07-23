@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
 import com.dashboard.doctor_dashboard.entities.dtos.NotificationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -13,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -30,30 +28,30 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
 
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment < curdate()",nativeQuery = true)
-    Page<Appointment> pastAppointment(Long patientId,Pageable paging);
+    Page<Appointment> pastAppointment(Long patientId,Pageable pageable);
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now())",nativeQuery = true)
-    Page<Appointment> todayAppointment1(Long patientId,Pageable paging);
+    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now()) order by appointment_time ",nativeQuery = true)
+    Page<Appointment> todayAppointment1(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
-    Page<Appointment> todayAppointment2(Long patientId,Pageable paging);
+    Page<Appointment> todayAppointment2(Long patientId,Pageable pageable);
 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
-    Page<Appointment> upcomingAppointment(Long patientId,Pageable paging);
+    Page<Appointment> upcomingAppointment(Long patientId,Pageable pageable);
 
 
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
-    Page<Appointment> pastDoctorAppointment(Long doctorId,Pageable paging);
+    Page<Appointment> pastDoctorAppointment(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
-    Page<Appointment> todayDoctorAppointment1(Long doctorId,Pageable paging);
+    Page<Appointment> todayDoctorAppointment1(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and (status='Completed' or status='Follow Up') ",nativeQuery = true)
-    Page<Appointment> todayDoctorAppointment2(Long doctorId,Pageable paging);
+    Page<Appointment> todayDoctorAppointment2(Long doctorId,Pageable pageable);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
-    Page<Appointment> upcomingDoctorAppointment(Long doctorId,Pageable paging);
+    Page<Appointment> upcomingDoctorAppointment(Long doctorId,Pageable pageable);
 
 
     @Query(value = "select count(*) from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
@@ -99,7 +97,7 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and status='To be attended'",nativeQuery = true)
-    Page<Appointment> receptionistDoctorAppointment(Long doctorId,Pageable pageable);
+    Page<Appointment> receptionistDoctorAppointment(Long doctorId, Pageable pageNo);
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
