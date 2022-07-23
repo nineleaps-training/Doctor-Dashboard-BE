@@ -1,7 +1,9 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
 import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.ErrorDetails;
+import com.dashboard.doctor_dashboard.util.wrappers.ValidationsSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
