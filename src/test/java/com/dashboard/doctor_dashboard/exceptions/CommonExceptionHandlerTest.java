@@ -1,9 +1,7 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-
 import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
-
-
+import com.dashboard.doctor_dashboard.util.wrappers.ErrorDetails;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.*;
@@ -64,7 +61,7 @@ class CommonExceptionHandlerTest {
 //        WebRequest request = mock(WebRequest.class);
 //        List<String> message = new ArrayList<>(Arrays.asList("errorMessage1", "errorMessage2", "errorMessage3"));
 //        ValidationsSchema schema = new ValidationsSchema(new Date(), message, request.getDescription(false));
-//        ResponseEntity<ErrorMessage> response = globalExceptionHandler.processException(new MethodArgumentNotValidException(message), request);
+//        ResponseEntity<ErrorMessage> response = globalExceptionHandler.processException(new ValidationsException(message), request);
 //        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
 //        Assertions.assertEquals(schema.getClass(), Objects.requireNonNull(response.getBody()).getErrorData().getClass());
 //    }
