@@ -1,13 +1,15 @@
-package com.dashboard.doctor_dashboard.util.wrappers;
+package com.dashboard.doctor_dashboard.util;
 
 import java.util.List;
-@SuppressWarnings("squid:S6126")
+
 public class Constants {
     public static final String SUCCESS = "success";
     public static final String FAIL = "fail";
     public static final String PATIENT = "Patient";
-
-    public static final String LOGIN ="Login";
+    public static final String APPOINTMENT = "Appointment";
+    public static final String DOCTOR = "Doctor";
+    public static final String LOGIN = "Login";
+    public static final String  DEFAULT_PAGE_SIZE="10";
 
 
     //Login
@@ -37,9 +39,14 @@ public class Constants {
     public static final String INVALID_PATIENT_EMAIL = "invalid patient email";
     public static final String INVALID_DOCTOR_NAME = "invalid doctor name";
 
-    public static final String MAIL_ERROR = "mail error!!! cant connect with the host server";
+    public static final String MAIL_ERROR = "mail error!!! can't connect with the host server";
 
     public static final String PRESCRIPTION_CREATED = "prescription added";
+
+
+
+
+
 
     public static final String MAIL_PRESCRIPTION =  "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
             + "</style></head>"
@@ -77,11 +84,10 @@ public class Constants {
             + " </div>";
 
     public static final List<String> ages = List.of("0-2","3-14","15-25","26-64","65+");
-    public static final String DETAILS_MISMATCH = "details mismached" ;
-    public static final String FILE_NAME_PRESENT = "file name is empty";
-    public static final String FILE_UPLOADED = "Uploaded the file successfully: ";
-    public static final String REPORT_NOT_FOUND ="No Report Found!! " ;
-    public static final String DEFAULT_PAGE_SIZE = "10";
+    public static final String DETAILS_MISMATCH = "provided details are incorrect.";
+    public static final String FILE_NAME_PRESENT = "File name not present.";
+    public static final String FILE_UPLOADED = "File uploaded successfully.";
+    public static final String REPORT_NOT_FOUND = "Report not found.";
 
     private Constants() {
         throw new IllegalArgumentException();

@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.util.wrappers;
+package com.dashboard.doctor_dashboard.util;
 
 import com.dashboard.doctor_dashboard.entities.Prescription;
 
