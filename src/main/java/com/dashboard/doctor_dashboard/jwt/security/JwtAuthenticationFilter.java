@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 
-import com.dashboard.doctor_dashboard.util.wrappers.Constants;
+import com.dashboard.doctor_dashboard.util.Constants;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,17 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @NoArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private  JwtTokenProvider tokenProvider;
-    private  CustomUserDetailsService customUserDetailsService;
+public class    JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
-        this.tokenProvider = tokenProvider;
-        this.customUserDetailsService = customUserDetailsService;
-    }
-
+    private JwtTokenProvider tokenProvider;
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
 
     String status = Constants.FAIL;
 

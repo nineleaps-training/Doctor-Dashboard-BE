@@ -28,39 +28,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources/**",
-            "/swagger-ui.html",
+            "/swagger-ui/**",
             "/webjars/**",
             "/", "/csrf",
-            "/api/user/login",
-            "/api/patient/changeMessage/**",
+            "/api/v1/user/login",
+//            "/api/v1/patient/changeMessage/**",
             "/files/**",
-            "/api/receptionist/**"
-
+            "/api/v1/receptionist/**",
+            "/actuator/**"
 
     };
 
     private static final String[] DOCTOR_URL={
 
-            "/api/todolist/**",
-            "api/appointment/getAllAppointments/doctor/*",
-            "api/attribute/changeNotes/*",
-            "api/appointment/*/activePatient",
-            "/files/{id}",
+            "/api/v1/todolist/**",
+            "api/v1/appointment/getAllAppointments/doctor/*",
+            "api/v1/attribute/changeNotes/*",
+            "api/v1/appointment/*/activePatient",
+            "/v1/files/{id}",
     };
     private static final String[] PATIENT_URL={
 
-            "api/appointment/getAllAppointments/patient/*",
-            "api/appointment/patient",
-            "api/appointment/*/patient",
-            "/api/patient/upload/*",
-            "/api/patient/*",
+            "api/v1/appointment/getAllAppointments/patient/*",
+            "api/v1/appointment/patient",
+            "api/v1/appointment/*/patient",
+            "/api/v1/patient/upload/*",
+            "/api/v1/patient/*",
             "/files/{id}"
     };
 
-    @Bean
-    public Filter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
+
+
+
 
     private CustomUserDetailsService customUserDetailsService;
 
@@ -85,16 +84,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(ALLOWED_URL).permitAll()
-                .antMatchers(DOCTOR_URL).hasAuthority("DOCTOR")
-                .antMatchers(PATIENT_URL).hasAuthority("PATIENT")
+                .mvcMatchers(ALLOWED_URL).permitAll()
+                .mvcMatchers(DOCTOR_URL).hasAuthority("DOCTOR")
+                .mvcMatchers(PATIENT_URL).hasAuthority("PATIENT")
                 .anyRequest()
                 .authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
-
+    @Bean
+    public Filter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService);   //NOSONAR
@@ -110,8 +112,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
-
-
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
