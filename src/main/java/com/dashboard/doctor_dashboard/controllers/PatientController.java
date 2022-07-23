@@ -33,9 +33,9 @@ public class PatientController {
      * @return patient added successfully after successful api call with status code 201
      * This endpoint is used for patient on-boarding.
      */
-    @PostMapping("/{loginId}")
-    public ResponseEntity<GenericMessage> addPatientDetails(@Valid @RequestBody PatientEntityDto patient, @PathVariable("loginId") Long loginId) {
-        log.info("PatientController:: addPatientDetails");
+    @PostMapping("/on-boarding/{loginId}")
+    public ResponseEntity<GenericMessage> onBoarding(@Valid @RequestBody PatientEntityDto patient, @PathVariable("loginId") Long loginId) {
+        log.info("PatientController:: patientOnBoarding");
 
         return patientService.addPatient(patient,loginId);
     }
@@ -49,7 +49,7 @@ public class PatientController {
      */
     @GetMapping("/{patientId}/appointment/{appointmentId}")
     public ResponseEntity<GenericMessage> AppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
-        log.info("PatientController:: getAppointmentViewByAppointmentId");
+        log.info("PatientController:: appointmentViewByAppointmentId");
 
         return patientService.viewAppointment(appointmentId,patientId);
     }
@@ -59,7 +59,7 @@ public class PatientController {
      * @return patient details from patient database with status code 200
      * This endpoint for viewing the patient profile.
      */
-    @GetMapping("/patientProfile/{loginId}")
+    @GetMapping("/patient-profile/{loginId}")
     public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId) {
         log.info("PatientController:: patientProfile");
 
@@ -72,9 +72,9 @@ public class PatientController {
      * @return patient updated successfully after successful api call with status code 200
      * This endpoint is used for updating patient profile.
      */
-    @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage> updatePatientDetails( @Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto,@PathVariable("id") Long id) {
-        log.info("PatientController:: updatePatientDetails");
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericMessage> editPatientDetails( @Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto,@PathVariable("id") Long id) {
+        log.info("PatientController:: editPatientDetails");
 
         return patientService.updatePatientDetails(id, userDetailsUpdateDto);
     }
@@ -95,9 +95,9 @@ public class PatientController {
      * @return list of notifications for the patient with status code 200
      * This endpoint is used for getting patient notifications.
      */
-    @GetMapping("/{patientId}/getNotifications")
-    public ResponseEntity<GenericMessage> getNotifications(@PathVariable("patientId") Long patientId) {
-        log.info("PatientController:: getNotifications");
+    @GetMapping("/{patientId}/notifications")
+    public ResponseEntity<GenericMessage> notifications(@PathVariable("patientId") Long patientId) {
+        log.info("PatientController:: notifications");
         return patientService.getNotifications(patientId);
     }
 

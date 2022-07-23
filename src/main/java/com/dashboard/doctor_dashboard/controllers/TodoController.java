@@ -29,7 +29,7 @@ public class TodoController {
      * This endpoint is used for adding new todos.
      */
     @PostMapping()
-    public ResponseEntity<GenericMessage> addTodo(@Valid @RequestBody TodoListDto todolist, HttpServletRequest request  ) {
+    public ResponseEntity<GenericMessage> addTodo(@Valid @RequestBody TodoListDto todolist  ) {
         log.info("TodoController:: addTodo");
         return todoService.addTodo(todolist);
     }
@@ -40,8 +40,8 @@ public class TodoController {
      * This endpoint is used for getting all todos of the doctor.
      */
     @GetMapping("doctor/{doctorId}")
-        public ResponseEntity<GenericMessage> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        log.info("TodoController:: getAllTodoByDoctorId");
+        public ResponseEntity<GenericMessage> allTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
+        log.info("TodoController:: allTodoByDoctorId");
         return todoService.getAllTodoByDoctorId(doctorId);
     }
 

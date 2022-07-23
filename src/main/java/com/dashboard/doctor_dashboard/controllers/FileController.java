@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("api/v1/files/")
 @Slf4j
 public class FileController {
 
@@ -27,7 +28,7 @@ public class FileController {
      * @return A success message wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
      */
     @ResponseBody
-    @PostMapping("/api/v1/patient/upload/{id}")
+    @PostMapping("patient/{id}/upload")
     public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id){
         log.info("FileController::uploadFile");
         return storageService.store(file,id);
@@ -38,7 +39,7 @@ public class FileController {
      * @param id this variable contains id.
      * @return A file wrapped under ResponseEntity<byte[]> with HTTP status code 200.
      */
-    @GetMapping("/v1/files/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id){
         log.info("FileController::getFile");
         return storageService.getFile(id);

@@ -28,7 +28,7 @@ public class ReceptionistController {
      * @return All the doctor names present in the database are returned with status code 200.
      * This endpoint is used for getting all doctor names.
      */
-    @GetMapping("/doctorNames/")
+    @GetMapping("/doctor-names/")
     public ResponseEntity<GenericMessage> doctorNames(){
                 log.info("ReceptionistController:: doctorNames");
 
@@ -41,7 +41,7 @@ public class ReceptionistController {
      * @return list of the today's appointments of the doctor with status code 200
      * This endpoint is used for getting the today's appointments of the doctor.
      */
-    @GetMapping("/appointmentList/{doctorId}")
+    @GetMapping("/appointment-list/{doctorId}")
     public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
                 log.info("ReceptionistController:: appointmentList");
 
@@ -55,7 +55,7 @@ public class ReceptionistController {
      * This endpoint is used for adding patient vitals.
      */
 
-    @PostMapping("/addVitals/{appointmentId}")
+    @PostMapping("/vitals/{appointmentId}")
     public ResponseEntity<GenericMessage> addVitals(@Valid @RequestBody AttributesDto attributesDto,@PathVariable("appointmentId") Long appointmentId){
                 log.info("ReceptionistController:: addVitals");
 
@@ -68,7 +68,7 @@ public class ReceptionistController {
      * @return All the today's appointments are returned with status code 200.
      * This endpoint is used for getting today's appointments of all the doctors.
      */
-    @GetMapping("/getAllAppointments")
+    @GetMapping("/all-appointments")
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
                 log.info("ReceptionistController:: todayAllAppointmentForClinicStaff");
 

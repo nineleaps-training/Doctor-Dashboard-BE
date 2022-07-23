@@ -56,7 +56,7 @@ public class AppointmentController {
      * @param loginId this variable contains loginId.
      * @return It returns a List<Boolean> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-       @GetMapping("/availableSlots/{loginId}/{date}")
+       @GetMapping("/available-slots/{loginId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable("date") String  date,@PathVariable("loginId") Long loginId) {
            log.info("AppointmentController:: showAvailableSlots");
          return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),loginId)),HttpStatus.OK);
@@ -69,7 +69,7 @@ public class AppointmentController {
      * @param pageNo this variable contains pageNo.
      * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/allAppointments/patient/{patientId}")
+    @GetMapping("/all-appointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> allAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("AppointmentController:: allAppointmentByPatientId");
         return appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize) ;
@@ -81,7 +81,7 @@ public class AppointmentController {
      * @param pageNo this variable contains pageNo.
      * @return It returns a Map<String,List<PatientAppointmentListDto>> with values past,today,upcoming wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/allAppointments/doctor/{loginId}")
+    @GetMapping("/all-appointments/doctor/{loginId}")
     public ResponseEntity<GenericMessage> allAppointmentByDoctorId(@PathVariable("loginId") Long loginId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("AppointmentController:: allAppointmentByDoctorId");
         return appointmentService.getAllAppointmentByDoctorId(loginId, pageNo,pageSize );
@@ -107,7 +107,7 @@ public class AppointmentController {
      * @param loginId this variable contains loginId.
      * @return It returns a ArrayList<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("chart/{loginId}/weeklyGraphDoctor")
+    @GetMapping("chart/{loginId}/weekly-graph-doctor")
     public ResponseEntity<GenericMessage> weeklyDoctorCountChart(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: weeklyDoctorCountChart");
 
@@ -120,7 +120,7 @@ public class AppointmentController {
      * @param patientId this variable contains patientId.
      * @return It returns a ArrayList<String> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("chart/{patientId}/weeklyGraphPatient")
+    @GetMapping("chart/{patientId}/weekly-graph-patient")
     public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("patientId") Long patientId) {
         log.info("AppointmentController:: weeklyPatientCountChart");
 
@@ -134,7 +134,7 @@ public class AppointmentController {
      * @param loginId loginId this variable contains loginId.
      * @return It returns a List<DoctorAppointmentListDto> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/recentAdded/doctor/{loginId}")
+    @GetMapping("/recent-added/doctor/{loginId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: recentAppointment");
 
@@ -147,7 +147,7 @@ public class AppointmentController {
      * @param loginId loginId this variable contains loginId.
      * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/chart/{loginId}/totalPatient")
+    @GetMapping("/chart/{loginId}/total-patient")
     public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: totalNoOfAppointment");
 
@@ -159,7 +159,7 @@ public class AppointmentController {
      * @param loginId loginId this variable contains loginId.
      * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/chart/{loginId}/todayAppointments")
+    @GetMapping("/chart/{loginId}/today-appointments")
     public ResponseEntity<GenericMessage> todayAppointments(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: todayAppointments");
 
@@ -171,8 +171,8 @@ public class AppointmentController {
      * @param loginId loginId this variable contains loginId.
      * @return It returns an int wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/chart/{loginId}/totalActivePatient")
-    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("loginId") Long loginId) {
+    @GetMapping("/chart/{loginId}/appointments-this-week")
+    public ResponseEntity<GenericMessage> appointmentsAddedThisWeek(@PathVariable("loginId") Long loginId) {
         log.info("AppointmentController:: totalNoOfAppointmentAddedThisWeek");
 
         return appointmentService.totalNoOfAppointmentAddedThisWeek(loginId);

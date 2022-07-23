@@ -47,8 +47,8 @@ public class PrescriptionController {
      * This endpoint is used for getting all prescriptions of the patient.
      */
     @GetMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> getALlPrescription(@PathVariable("appointId") Long appointId) {
-                log.info("PrescriptionController:: getALlPrescription");
+    public ResponseEntity<GenericMessage> allPrescriptions(@PathVariable("appointId") Long appointId) {
+                log.info("PrescriptionController:: allPrescriptions");
 
         return prescriptionService.getAllPrescriptionByAppointment(appointId);
     }

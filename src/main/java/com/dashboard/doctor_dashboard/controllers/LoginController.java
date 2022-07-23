@@ -59,7 +59,7 @@ public class LoginController {
      * @param id is used as path variable
      * @return Successfully deleted message after deleting user details.
      */
-    @DeleteMapping(value = "/doctor/login/delete/{id}")
+    @DeleteMapping(value = "/doctor/login/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
         log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);

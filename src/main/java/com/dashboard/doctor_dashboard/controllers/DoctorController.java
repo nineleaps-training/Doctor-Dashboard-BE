@@ -43,8 +43,8 @@ public class DoctorController {
      * @return It returns a DoctorBasicDetailsDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
     @GetMapping("/id/{loginId}")
-    public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("loginId") long loginId) {
-        log.info("DoctorController:: getDoctorById");
+    public ResponseEntity<GenericMessage> doctorById(@PathVariable("loginId") long loginId) {
+        log.info("DoctorController:: doctorById");
 
         return doctorService.getDoctorById(loginId);
     }
@@ -71,8 +71,8 @@ public class DoctorController {
      * @param request this object contains information related to user HTTP request.
      * @return It returns updated doctor fields wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage>  updateDoctorDetails( @Valid @RequestBody UserDetailsUpdateDto details,@PathVariable("id") long id, HttpServletRequest request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericMessage>  editDoctorDetails( @Valid @RequestBody UserDetailsUpdateDto details,@PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: updateDoctorDetails");
 
         return doctorService.updateDoctor(details,id,request);
@@ -95,9 +95,9 @@ public class DoctorController {
      * @param speciality this variable contains speciality.
      * @return It returns List<DoctorListDto> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/get-all-doctor/{speciality}")
-    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(@PathVariable("speciality") String speciality,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
-        log.info("DoctorController:: getAllDoctorsBySpeciality");
+    @GetMapping("/all-doctors/{speciality}")
+    public ResponseEntity<GenericMessage> allDoctorsBySpeciality(@PathVariable("speciality") String speciality,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info("DoctorController:: allDoctorsBySpeciality");
 
         return doctorService.getAllDoctorsBySpeciality(speciality,pageNo,pageSize);
     }
@@ -119,7 +119,7 @@ public class DoctorController {
      * @param doctorId this variable contains doctorId.
      * @return It returns Map<String,Integer> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/{doctorId}/bloodGroup")
+    @GetMapping("/{doctorId}/blood-group")
     public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController:: bloodGroup");
 
@@ -131,7 +131,7 @@ public class DoctorController {
      * @param doctorId this variable contains doctorId.
      * @return It returns Map<String,Integer> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @GetMapping("/{doctorId}/ageGroup")
+    @GetMapping("/{doctorId}/age-group")
     public ResponseEntity<GenericMessage> ageGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController:: ageGroup");
 
