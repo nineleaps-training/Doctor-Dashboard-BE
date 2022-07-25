@@ -27,14 +27,6 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-//    @GetMapping("/get-all/doctor/{doctorId}")
-//    public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id){
-//
-//        ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
-//        if (details != null)
-//            return details;
-//        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
-//    }
 
 
     /**

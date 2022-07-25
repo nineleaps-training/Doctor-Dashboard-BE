@@ -26,7 +26,7 @@ public class LoginDetails {
     @Column(name = "name", nullable = false,columnDefinition = "varchar(50)")
     private String name;
 
-    @Column(name = "emailId", nullable = false, unique = true,columnDefinition = "varchar(80)")
+    @Column(name = "email_id", nullable = false, unique = true,columnDefinition = "varchar(80)")
     private String emailId;
     @Column(name = "domain", nullable = false,columnDefinition = "varchar(30)")
     private String domain;

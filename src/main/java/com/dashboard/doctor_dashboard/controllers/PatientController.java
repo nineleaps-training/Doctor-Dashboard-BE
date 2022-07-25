@@ -26,7 +26,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    //CRUD operation for patient
     /**
      * @param patient consists field mobileNo,gender,age,bloodGroup,address and alternative mobile no
      * @param loginId is used as a path variable
@@ -48,7 +47,7 @@ public class PatientController {
      * This endpoint is used for viewing the appointment for patient
      */
     @GetMapping("/{patientId}/appointment/{appointmentId}")
-    public ResponseEntity<GenericMessage> AppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
+    public ResponseEntity<GenericMessage> appointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
         log.info("PatientController:: appointmentViewByAppointmentId");
 
         return patientService.viewAppointment(appointmentId,patientId);
