@@ -2,8 +2,11 @@ package com.dashboard.doctor_dashboard.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @NoArgsConstructor
 @Entity
@@ -19,6 +22,13 @@ public class Attributes {
     private String  bloodPressure;
     private Long glucoseLevel;
     private Double bodyTemp;
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
     @Column(columnDefinition = "varchar(100)")
     private String prescription;
 

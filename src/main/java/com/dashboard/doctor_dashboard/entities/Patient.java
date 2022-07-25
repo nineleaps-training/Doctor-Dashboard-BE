@@ -4,6 +4,8 @@ import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,7 +21,7 @@ import java.util.List;
 @Table(
         name = "patients"
 )
-public class Patient {
+public class    Patient {
 
     @Id
     @Column(name = "id")
@@ -48,7 +50,6 @@ public class Patient {
     @Column(columnDefinition = "varchar(3)")
     private String bloodGroup;
 
-
     private String address;
 
     @Column(columnDefinition = "varchar(10)")
@@ -59,6 +60,13 @@ public class Patient {
     @Column(nullable = false)
     private Date timestamp;
 
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @PrePersist
     @PreUpdate

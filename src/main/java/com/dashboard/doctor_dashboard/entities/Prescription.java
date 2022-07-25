@@ -23,13 +23,12 @@ public class Prescription {
     @Column(columnDefinition = "varchar(50)")
     private String drugName;
     private Long quantity;
-
     @Column(columnDefinition = "varchar(10)")
     private String type;
     private Long days;
-
     @Column(columnDefinition = "varchar(10)")
     private String time;
+
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)
     private Date createdAt;
@@ -38,12 +37,10 @@ public class Prescription {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-
     @JsonBackReference("prescription")
     @ManyToOne()
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
-
 
 
     public Prescription(String drugName, Long quantity, String type, Long days, String time) {
