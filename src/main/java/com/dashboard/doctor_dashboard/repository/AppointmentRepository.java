@@ -20,104 +20,104 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends PagingAndSortingRepository<Appointment, Long> {
-    @Query(value = "select appoint_id from appointments where appoint_id=:appointmentId ", nativeQuery = true)
+    @Query(value = "select appoint_id from appointment_details where appoint_id=:appointmentId ", nativeQuery = true)
     Long getId(Long appointmentId);
 
-    @Query(value = "select * from appointments where patient_id = :patientId",nativeQuery = true)
+    @Query(value = "select * from appointment_details where patient_id = :patientId",nativeQuery = true)
     List<Appointment> getAllAppointmentByPatientId(Long patientId);
 
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment < curdate()",nativeQuery = true)
+    @Query(value = "select * from appointment_details where patient_id = :patientId and date_of_appointment < curdate()",nativeQuery = true)
     Page<Appointment> pastAppointment(Long patientId,Pageable pageable);
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now()) order by appointment_time ",nativeQuery = true)
+    @Query(value = "select * from appointment_details where patient_id = :patientId and date_of_appointment = curdate() and appointment_time >= time(now()) order by appointment_time ",nativeQuery = true)
     Page<Appointment> todayAppointment1(Long patientId,Pageable pageable);
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
+    @Query(value = "select * from appointment_details where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
     Page<Appointment> todayAppointment2(Long patientId,Pageable pageable);
 
-    @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
+    @Query(value = "select * from appointment_details where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
     Page<Appointment> upcomingAppointment(Long patientId,Pageable pageable);
 
 
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
     Page<Appointment> pastDoctorAppointment(Long doctorId,Pageable pageable);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
     Page<Appointment> todayDoctorAppointment1(Long doctorId,Pageable pageable);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and (status='Completed' or status='Follow Up') ",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment = curdate() and (status='Completed' or status='Follow Up') ",nativeQuery = true)
     Page<Appointment> todayDoctorAppointment2(Long doctorId,Pageable pageable);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
     Page<Appointment> upcomingDoctorAppointment(Long doctorId,Pageable pageable);
 
 
-    @Query(value = "select count(*) from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
+    @Query(value = "select count(*) from appointment_details where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
     int todayAppointments(Long doctorId);
 
 
 
 
 
-    @Query(value = "update appointments set status =:status, is_read=1 where appoint_id=:appointId ", nativeQuery = true)
+    @Query(value = "update appointment_details set status =:status, is_read=1 where appoint_id=:appointId ", nativeQuery = true)
     @Modifying
     @Transactional
     void changeAppointmentStatus(Long appointId, String status);
 
-    @Query(value = "update appointments set is_booked_again =true where appoint_id=:appointId ", nativeQuery = true)
+    @Query(value = "update appointment_details set is_booked_again =true where appoint_id=:appointId ", nativeQuery = true)
     @Modifying
     @Transactional
     void changeFollowUpStatus(Long appointId);
 
 
-    @Query(value = "select appointment_time from appointments where doctor_id=:doctorId and date_of_appointment=:date",nativeQuery = true)
+    @Query(value = "select appointment_time from appointment_details where doctor_id=:doctorId and date_of_appointment=:date",nativeQuery = true)
     List<Time>getTimesByIdAndDate(LocalDate date, Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId",nativeQuery = true)
     List<Appointment> getAllAppointmentByDoctorId(Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated' limit 3", nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated' limit 3", nativeQuery = true)
     List<Appointment> recentAppointment(Long doctorId);
 
-    @Query(value = "select * from appointments where appoint_id = :appointId",nativeQuery = true)
+    @Query(value = "select * from appointment_details where appoint_id = :appointId",nativeQuery = true)
     Appointment getAppointmentById(Long appointId);
 
-    @Query(value = "Select date_of_appointment from appointments where doctor_id =:doctorId", nativeQuery = true)
+    @Query(value = "Select date_of_appointment from appointment_details where doctor_id =:doctorId", nativeQuery = true)
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select date_of_appointment from appointments where patient_id =:patientId", nativeQuery = true)
+    @Query(value = "Select date_of_appointment from appointment_details where patient_id =:patientId", nativeQuery = true)
     ArrayList<Date> getAllDatesByPatientId(@Param(value = "patientId") Long patientId);
 
-    @Query(value = "Select COUNT(appoint_id) from appointments where doctor_id =:doctorId", nativeQuery = true)
+    @Query(value = "Select COUNT(appoint_id) from appointment_details where doctor_id =:doctorId", nativeQuery = true)
     int totalNoOfAppointment(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "select count(appoint_id) from appointments where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
+    @Query(value = "select count(appoint_id) from appointment_details where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and status='To be attended'",nativeQuery = true)
+    @Query(value = "select * from appointment_details where doctor_id = :doctorId and date_of_appointment = curdate() and status='To be attended'",nativeQuery = true)
     Page<Appointment> receptionistDoctorAppointment(Long doctorId, Pageable pageNo);
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
     AppointmentViewDto getBasicAppointmentDetails(long appointmentId,long patientId);
 
-    @Query(value = "update appointments set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
+    @Query(value = "update appointment_details set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
     @Modifying
     @Transactional
     void setStatus(String status,Long appointmentId);
 
 
 
-    @Query(value = "select category,count(category) from appointments where patient_id =:patientId group by category", nativeQuery = true)
+    @Query(value = "select category,count(category) from appointment_details where patient_id =:patientId group by category", nativeQuery = true)
     ArrayList<String> patientCategoryGraph(@Param(value = "patientId") Long patientId);
 
 
-    @Query(value = "select * from appointments where appoint_id=:appointId",nativeQuery = true)
+    @Query(value = "select * from appointment_details where appoint_id=:appointId",nativeQuery = true)
     Appointment getFollowUpData(Long appointId);
 
-    @Query(value = "select doctor_id from appointments where appoint_id=:appointmentId ", nativeQuery = true)
+    @Query(value = "select doctor_id from appointment_details where appoint_id=:appointmentId ", nativeQuery = true)
     Long getDoctorId(Long appointmentId);
 
     @Query(value = "select gender from doctor_details where id=:doctorId",nativeQuery = true)
@@ -128,12 +128,12 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
         @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
     List<NotificationDto> getNotifications(Long patientId);
 
-    @Query(value = "select * from appointments where date_of_appointment = curdate() and status ='To be attended' order by appointment_time",nativeQuery = true)
+    @Query(value = "select * from appointment_details where date_of_appointment = curdate() and status ='To be attended' order by appointment_time",nativeQuery = true)
     Page<Appointment> todayAllAppointmentForClinicStaff1(Pageable pageable);
 
-    @Query(value = "select * from appointments where date_of_appointment = curdate() and status !='To be attended' order by appointment_time",nativeQuery = true)
+    @Query(value = "select * from appointment_details where date_of_appointment = curdate() and status !='To be attended' order by appointment_time",nativeQuery = true)
     Page<Appointment> todayAllAppointmentForClinicStaff2(Pageable pageable);
 
-    @Query(value = "select status from appointments where appoint_id =:appointId",nativeQuery = true)
+    @Query(value = "select status from appointment_details where appoint_id =:appointId",nativeQuery = true)
     String checkStatus(Long appointId);
 }

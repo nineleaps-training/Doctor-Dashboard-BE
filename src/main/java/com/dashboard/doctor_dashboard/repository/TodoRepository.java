@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TodoRepository extends PagingAndSortingRepository<Todolist, Long> {
 
-    @Query(value = "select * from todolist where doctor_id = :doctorId", nativeQuery = true)
+    @Query(value = "select * from doctors_todolist where doctor_id = :doctorId", nativeQuery = true)
     public List<Todolist> findByDoctorId(@Param(value = "doctorId") long doctorId);
 
 }

@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PrescriptionRepository extends PagingAndSortingRepository<Prescription,Long> {
 
-    @Query(value = "select * from prescriptions where appointment_id = :appointId",nativeQuery = true)
+    @Query(value = "select * from patient_prescriptions where appointment_id = :appointId",nativeQuery = true)
     List<Prescription> getAllPrescriptionByAppointment(Long appointId);
 }
