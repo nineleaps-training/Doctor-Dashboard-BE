@@ -28,8 +28,6 @@ public class DoctorController {
     }
 
 //    @GetMapping("/get-all/doctor/{doctorId}")
-//    public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id){
-
 
     /**
      * This endpoint returns DoctorBasicDetailsDto which contains details  of the doctor.

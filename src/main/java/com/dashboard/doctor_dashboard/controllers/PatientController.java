@@ -48,7 +48,7 @@ public class PatientController {
      * This endpoint is used for viewing the appointment for patient
      */
     @GetMapping("/{patientId}/appointment/{appointmentId}")
-    public ResponseEntity<GenericMessage> AppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
+    public ResponseEntity<GenericMessage> appointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
         log.info("PatientController:: appointmentViewByAppointmentId");
 
         return patientService.viewAppointment(appointmentId,patientId);
