@@ -81,17 +81,17 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                     log.info("exit: PrescriptionServiceImpl::addPrescription");
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,Constants.PRESCRIPTION_CREATED),HttpStatus.CREATED);
                 }
-                log.info("PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
+                log.info(" PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
 
                 throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
             }
             else {
-                log.info("PatientServiceImpl::addPrescription");
+                log.info("PatientServiceImpl::addPrescription  ");
                 throw new APIException("Prescription cannot be added for other status like completed,follow Up, and to be attended");
 
             }
         }
-        log.info("PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
+        log.info("  PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
     /**

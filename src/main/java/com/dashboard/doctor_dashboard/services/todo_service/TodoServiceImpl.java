@@ -1,11 +1,8 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
-
 import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
-
 import com.dashboard.doctor_dashboard.util.Constants;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 /**
  * implementation of TodoService interface
@@ -49,27 +45,7 @@ public class TodoServiceImpl implements TodoService {
 
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
-    /**
-     * This function of service is for getting task of the doctor by id
-     * @param id
-     * @return ResponseEntity<GenericMessage> with status code 200 and task.
-     */
-    @Override
-    public ResponseEntity<GenericMessage> getTodoById(Long id) {
-        log.info("inside: TodoServiceImpl::getTodoById");
 
-        var genericMessage = new GenericMessage();
-
-        Optional<Todolist> value = todoRepository.findById(id);
-        if (value.isPresent()) {
-            genericMessage.setData(value.get());
-            genericMessage.setStatus(Constants.SUCCESS);
-            log.info("exit: TodoServiceImpl::getTodoById");
-
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        return null;
-    }
     /**
      * This function of service is for getting all todos of the doctor by id
      * @param doctorId
@@ -87,32 +63,7 @@ public class TodoServiceImpl implements TodoService {
 
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
-    /**
-     * This function of service is for updating todos
-     * @param id
-     * @param todolist which contains fields description,status and doctor details
-     * @return ResponseEntity<GenericMessage> with status code 200 and message successfully updated.
-     */
-    @Override
-    public ResponseEntity<GenericMessage> updateTodo(Long id, TodoListDto todolist) {
-        log.info("inside: TodoServiceImpl::updateTodo");
 
-        var genericMessage = new GenericMessage();
-
-        Optional<Todolist> value1 = todoRepository.findById(id);
-        if (value1.isPresent()) {
-            Todolist value = value1.get();
-            value.setDescription(todolist.getDescription());
-            value.setStatus(todolist.getStatus());
-            genericMessage.setData(todoRepository.save(value));
-            genericMessage.setStatus(Constants.SUCCESS);
-            log.info("exit: TodoServiceImpl::updateTodo");
-
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        log.info("TodoServiceImpl::updateTodo");
-        throw new  ResourceNotFoundException("Todo not found.");
-    }
     /**
      * This function of service is for deleting todos/task by id
      * @param id

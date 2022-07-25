@@ -90,7 +90,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      */
     @Override
     public ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
-        log.info("inside: appointment service::addAppointment");
+        log.info("inside: appointment service::addAppointment ");
         Map<String,String> m = new HashMap<>();
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) { //checking if the patient exists database.
@@ -107,7 +107,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointment.setStatus("To be attended");
                     var appointment1 = appointmentRepository.save(mapper.map(appointment,Appointment.class));
 
-                    log.debug("appointment service::addAppointment"+ Constants.APPOINTMENT_CREATED);
+                    log.debug(" appointment service::addAppointment"+ Constants.APPOINTMENT_CREATED);
 
                     m.put("appointId",appointment1.getAppointId().toString());
                     m.put("message",Constants.APPOINTMENT_CREATED);
@@ -115,20 +115,20 @@ public class AppointmentServiceImpl implements AppointmentService {
                     log.info("exit: appointment service::addAppointment");
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m),HttpStatus.CREATED);
                 }
-                log.info("appointment service::addAppointment"+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
+                log.info(" appointment service::addAppointment "+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
                 throw new InvalidDate(appDate+":"+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
             }
             else if(patientId == null){
 
-                log.info("appointment service::addAppointment"+Constants.PATIENT_NOT_FOUND);
+                log.info("appointment service ::addAppointment"+Constants.PATIENT_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
             }
             else {
-                log.info("appointment service::addAppointment"+Constants.DOCTOR_NOT_FOUND);
+                log.info("appointment   service::addAppointment"+Constants.DOCTOR_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
             }
         }
-        log.info("appointment service::addAppointment"+Constants.LOGIN_DETAILS_NOT_FOUND);
+        log.info("appointment service::addAppointment  "+Constants.LOGIN_DETAILS_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
     }
 
@@ -196,19 +196,19 @@ public class AppointmentServiceImpl implements AppointmentService {
             var doctorLoginDetails = doctorDetails.get();
 
             if (!patientLoginDetails.getEmailId().equals(appointment.getPatientEmail())) {
-                log.info("appointment service::checkSanityOfAppointment"+Constants.INVALID_PATIENT_EMAIL);
+                log.info("appointment service::checkSanityOfAppointment "+Constants.INVALID_PATIENT_EMAIL);
                 log.info(new ArrayList<>(List.of(Constants.INVALID_PATIENT_EMAIL)).toString());
                 throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_PATIENT_EMAIL)));
             }
             if (!patientLoginDetails.getName().equals(appointment.getPatientName())) {
 
-                log.info("appointment service::checkSanityOfAppointment"+Constants.INVALID_PATIENT_NAME);
+                log.info("  appointment service::checkSanityOfAppointment"+Constants.INVALID_PATIENT_NAME);
                 log.info(new ArrayList<>(List.of(Constants.INVALID_PATIENT_NAME)).toString());
                 throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_PATIENT_NAME)));
             }
 
             if (!doctorLoginDetails.getName().equals(appointment.getDoctorName())) {
-                log.info("appointment service::checkSanityOfAppointment"+Constants.INVALID_DOCTOR_NAME);
+                log.info("appointment service::checkSanityOfAppointment  "+Constants.INVALID_DOCTOR_NAME);
                 throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_DOCTOR_NAME)));
             }
         }
@@ -275,13 +275,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         if(doctorId != null) {
-//            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId,paging).toList());
-//            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId,paging).toList());
-//            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId,paging).toList());
-//            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId,paging).toList());
-//            today.addAll(today1);
-//            today.addAll(today2);
-//        }
+
             Page<Appointment> past = appointmentRepository.pastDoctorAppointment(doctorId,paging);
             Page<Appointment> upcoming = appointmentRepository.upcomingDoctorAppointment(doctorId,paging);
             Page<Appointment> today1 = appointmentRepository.todayDoctorAppointment1(doctorId,paging);

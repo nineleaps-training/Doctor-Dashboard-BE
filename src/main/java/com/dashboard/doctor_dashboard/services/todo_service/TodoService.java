@@ -13,11 +13,8 @@ public interface TodoService {
 
     ResponseEntity<GenericMessage> addTodo(TodoListDto todolist);
 
-    ResponseEntity<GenericMessage> getTodoById(Long id);
-
     ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId);
 
-    ResponseEntity<GenericMessage> updateTodo(Long id, TodoListDto todolist);
 
     ResponseEntity<GenericMessage> deleteTodoById(Long id);
 }

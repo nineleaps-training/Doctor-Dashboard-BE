@@ -203,11 +203,8 @@ public class DoctorServiceImpl implements DoctorService {
         var genericMessage = new GenericMessage();
         Pageable pageable= PageRequest.of(pageNo,pageSize);
         if (doctorRepository.isSpecialityAvailable(speciality) != null) {
-            System.out.println("1"+pageable);
             Page list = doctorRepository.getAllDoctorsBySpeciality(speciality,pageable);
-//            PageImpl page= new PageImpl(list);
-            System.out.println("page"+list);
-            System.out.println("2"+pageable);
+
 
             genericMessage.setData(new PageRecords(list.toList(),pageNo,pageSize,list.getTotalElements(),list.getTotalPages(),list.isLast()));
             genericMessage.setStatus(Constants.SUCCESS);
