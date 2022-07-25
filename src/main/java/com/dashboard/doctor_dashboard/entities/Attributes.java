@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "attributes",indexes = @Index(name = "index_appointment",columnList = "appointment_id")
+        name = "patient_attributes",indexes = @Index(name = "index_appointment",columnList = "appointment_id")
 )
 public class Attributes {
 

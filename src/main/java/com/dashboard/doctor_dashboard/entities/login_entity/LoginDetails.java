@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,7 +19,8 @@ import java.util.Date;
 @Entity
 @Table(name = "login_details",
         indexes = @Index(name = "index_email",columnList = "email_id"))
-
+@SQLDelete(sql = "UPDATE login_details SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class LoginDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +38,7 @@ public class LoginDetails {
     @Column(name="role",nullable = false,columnDefinition = "varchar(8)")
     private String role;
 
+    private boolean deleted = Boolean.FALSE;
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)
     private Date createdAt;

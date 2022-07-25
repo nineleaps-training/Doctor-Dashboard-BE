@@ -4,7 +4,7 @@ package com.dashboard.doctor_dashboard.entities.report;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "files")
+@Table(name = "patient_files")
 public class FileDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

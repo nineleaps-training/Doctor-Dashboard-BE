@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "appointments",
+        name = "appointment_details",
         indexes = @Index(name = "inedx_fn",columnList = "appointmentTime")
 )
 public class Appointment {
