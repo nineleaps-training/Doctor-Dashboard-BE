@@ -171,7 +171,6 @@ class ReceptionistServiceImplTest {
         Page<Appointment> appointmentList2=new PageImpl<>(List.of(appointment),paging,12);
         Mockito.when(appointmentRepository.todayAllAppointmentForClinicStaff1(paging)).thenReturn(appointmentList1);
         Mockito.when(appointmentRepository.todayAllAppointmentForClinicStaff2(paging)).thenReturn(appointmentList2);
-        System.out.println(appointmentList1.isLast()+","+appointmentList2.isLast());
         Mockito.when(mapper.map(appointment,PatientViewDto.class)).thenReturn(dto1);
         ResponseEntity<GenericMessage> newList = receptionistService.todayAllAppointmentForClinicStaff(pageNo,pageSize);
         assertThat(newList).isNotNull();
