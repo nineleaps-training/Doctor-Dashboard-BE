@@ -19,33 +19,33 @@ import java.util.List;
 public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetails, Long> {
 
 
-    @Query(value = "update DoctorDetails set phoneNo=:phoneNo where id=:id")
+    @Query(value = "update DoctorDetails set phoneNo=:phoneNo where deleted = false and id=:id")
     @Transactional
     @Modifying
     void updateDoctorDb(String phoneNo);
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where deleted = false and id=:id")
     DoctorFormDto getDoctorById(Long id);
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on deleted = false and  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
 
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on deleted = false and  dd.loginId=ld.id")
     List<DoctorDropdownDto> getDoctorDetails();
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on deleted = false and  dd.loginId=ld.id and speciality=:speciality")
     Page<DoctorListDto> getAllDoctorsBySpeciality(String speciality, Pageable pageable);
 
     //
-    @Query(value = "select id from doctor_details d where d.login_id=:id", nativeQuery = true)
+    @Query(value = "select id from doctor_details d where deleted = false and d.login_id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
 
-    @Query(value = "select distinct(speciality) from doctor_details d where d.speciality=:speciality", nativeQuery = true)
+    @Query(value = "select distinct(speciality) from doctor_details d where deleted = false and d.speciality=:speciality", nativeQuery = true)
     String isSpecialityAvailable(String speciality);
 
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on deleted = false and dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
     @Query(value = "insert into doctor_details (id,age,created_at,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,now(),:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
@@ -54,13 +54,13 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId,short exp,String degree);
 
 
-    @Query(value = "select p.gender from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    @Query(value = "select p.gender from patients p join appointments a where deleted = false and a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
     List<String> genderChart(Long doctorId);
 
-    @Query(value = "select p.blood_group from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    @Query(value = "select p.blood_group from patients p join appointments a where deleted = false and a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
     List<String> bloodGroupChart(Long doctorId);
 
-    @Query(value = "select p.age from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    @Query(value = "select p.age from patients p join appointments a where deleted = false and a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
     List<Long> ageGroupChart(Long doctorId);
 
 

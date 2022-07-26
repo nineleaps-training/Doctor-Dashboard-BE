@@ -120,8 +120,6 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
     @Query(value = "select doctor_id from appointment_details where appoint_id=:appointmentId ", nativeQuery = true)
     Long getDoctorId(Long appointmentId);
 
-    @Query(value = "select gender from doctor_details where id=:doctorId",nativeQuery = true)
-    String getGenderById(Long doctorId);
     @Query(value = "select email_id from login_details where id=:loginId",nativeQuery = true)
     String getEmailById(Long loginId);
 
