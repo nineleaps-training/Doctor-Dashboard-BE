@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "Todolist"
+        name = "doctors_todolist",indexes = @Index(name = "index_doctorId",columnList = "doctor_id")
 )
 
 public class Todolist {

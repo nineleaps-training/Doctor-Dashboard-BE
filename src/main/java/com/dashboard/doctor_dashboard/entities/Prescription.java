@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "prescriptions"
+        name = "patient_prescriptions",indexes = @Index(name = "index_appointId",columnList = "appointment_id")
 )
 public class Prescription {
     @Id

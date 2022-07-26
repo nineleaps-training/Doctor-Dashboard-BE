@@ -19,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "appointments",
-        indexes = @Index(name = "inedx_fn",columnList = "doctor_id,patient_id,dateOfAppointment")
+        name = "appointment_details",
+        indexes = @Index(name = "inedx_fn",columnList = "appointmentTime")
 )
 public class Appointment {
     @Id

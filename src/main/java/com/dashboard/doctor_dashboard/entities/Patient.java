@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,8 +21,10 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "patients"
+        name = "patient_details",indexes = @Index(name = "index_loginId",columnList = "login_id")
 )
+@SQLDelete(sql = "UPDATE login_details SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class    Patient {
 
     @Id
@@ -55,10 +59,7 @@ public class    Patient {
     @Column(columnDefinition = "varchar(10)")
     private String alternateMobileNo;
 
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date timestamp;
+    private boolean deleted = Boolean.FALSE;
 
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)
@@ -67,13 +68,6 @@ public class    Patient {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
-
-    @PrePersist
-    @PreUpdate
-    public void onCreate() {
-        timestamp = new Date();
-    }
-
 
     @JsonManagedReference
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
