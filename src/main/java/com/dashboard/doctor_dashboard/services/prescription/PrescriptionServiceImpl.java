@@ -2,8 +2,8 @@ package com.dashboard.doctor_dashboard.services.prescription_service;
 
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;

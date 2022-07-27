@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.services.prescription_service;
 
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;

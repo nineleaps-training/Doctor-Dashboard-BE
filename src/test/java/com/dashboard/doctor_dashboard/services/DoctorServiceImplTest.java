@@ -1,18 +1,21 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorServiceImpl;
+import com.dashboard.doctor_dashboard.services.doctor.DoctorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

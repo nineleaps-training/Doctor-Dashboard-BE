@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
-
-import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
-import com.dashboard.doctor_dashboard.services.file_service.FileStorageServiceImpl;
+import com.dashboard.doctor_dashboard.services.file.FileStorageServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
@@ -24,7 +23,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 class FileStorageServiceTest {
 

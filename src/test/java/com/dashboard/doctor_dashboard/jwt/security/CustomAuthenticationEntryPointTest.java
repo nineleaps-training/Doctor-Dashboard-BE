@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,11 +13,10 @@ import org.springframework.security.access.AccessDeniedException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 class CustomAuthenticationEntryPointTest {
 

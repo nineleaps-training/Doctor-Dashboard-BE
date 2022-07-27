@@ -1,8 +1,11 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.NotificationDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.services.patient.PatientService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +28,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -137,7 +139,7 @@ class PatientControllerTest {
         verify(patientService,times(2)).deletePatientById(id);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/patient/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/patient/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }

@@ -1,6 +1,7 @@
-package com.dashboard.doctor_dashboard.util;
+package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
+import com.dashboard.doctor_dashboard.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -16,15 +17,15 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 public class MailServiceImpl {
 
+
+    private final JavaMailSender mailSender;
+
     @Autowired
     public MailServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
-
-    private JavaMailSender mailSender;
-
-    public void mailServiceHandler(String fromEmail,String toEmail, String senderName, String subject , String content) throws MessagingException, JSONException, UnsupportedEncodingException {
+    public void mailServiceHandler(String fromEmail, String toEmail, String senderName, String subject , String content) throws MessagingException, JSONException, UnsupportedEncodingException {
         var obj = new JSONObject();
         obj.put("fromEmail", fromEmail);
         obj.put("toEmail", toEmail);

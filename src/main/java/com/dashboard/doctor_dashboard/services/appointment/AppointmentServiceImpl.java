@@ -1,9 +1,8 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
-
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
@@ -12,11 +11,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
-
-
-
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import com.dashboard.doctor_dashboard.util.MailServiceImpl;
 import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -47,18 +42,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AppointmentServiceImpl implements AppointmentService {
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
-    private LoginRepo loginRepo;
-    private PdFGeneratorServiceImpl pdFGeneratorService;
+    private final LoginRepo loginRepo;
+    private final PdFGeneratorServiceImpl pdFGeneratorService;
 
-    private JwtTokenProvider jwtTokenProvider;
-    private MailServiceImpl mailService;
-    private ModelMapper mapper;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MailServiceImpl mailService;
+    private final ModelMapper mapper;
 
 
     @Autowired
@@ -80,18 +75,23 @@ public class AppointmentServiceImpl implements AppointmentService {
     List<String> times=Arrays.asList("10:00","10:30","11:00","11:30","12:00","12:30","14:00","14:30","15:00","15:30","16:00","16:30");
 
 
+
+
+
     /**
+     * This function of service  is for adding appointment details
      * @param appointment  this variable contains appointment details.
      * @param request  this variable contains request.
      * @return It returns a ResponseEntity<GenericMessage> with status code 201.
      * @throws MessagingException
      * @throws JSONException
      * @throws UnsupportedEncodingException
+     * This function is used for booking appointments.
      */
     @Override
     public ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
-        log.info("inside: appointment service::addAppointment ");
-        Map<String,String> m = new HashMap<>();
+        log.info("inside: appointment service::addAppointment");
+        Map<String,String> response = new HashMap<>();
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) { //checking if the patient exists database.
             Long patientId=patientRepository.getId(appointment.getPatient().getPID());
@@ -107,34 +107,33 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointment.setStatus("To be attended");
                     var appointment1 = appointmentRepository.save(mapper.map(appointment,Appointment.class));
 
-                    log.debug(" appointment service::addAppointment"+ Constants.APPOINTMENT_CREATED);
+                    log.debug("appointment service::addAppointment "+ Constants.APPOINTMENT_CREATED);
 
-                    m.put("appointId",appointment1.getAppointId().toString());
-                    m.put("message",Constants.APPOINTMENT_CREATED);
+                    response.put("appointId",appointment1.getAppointId().toString());
+                    response.put("message",Constants.APPOINTMENT_CREATED);
                     sendEmailToUser(mapper.map(appointment,Appointment.class)); //sending mail to user on successful appointment booking.
                     log.info("exit: appointment service::addAppointment");
-                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m),HttpStatus.CREATED);
+                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,response),HttpStatus.CREATED);
                 }
-                log.info(" appointment service::addAppointment "+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
+                log.info("appointment service::addAppointment "+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
                 throw new InvalidDate(appDate+":"+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
             }
             else if(patientId == null){
 
-                log.info("appointment service ::addAppointment"+Constants.PATIENT_NOT_FOUND);
+                log.info("appointment service:: addAppointment"+Constants.PATIENT_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
             }
             else {
-                log.info("appointment   service::addAppointment"+Constants.DOCTOR_NOT_FOUND);
+                log.info("appointment service::addAppointment"+Constants.DOCTOR_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
             }
         }
-        log.info("appointment service::addAppointment  "+Constants.LOGIN_DETAILS_NOT_FOUND);
+        log.info("appointment service::addAppointment"+Constants.LOGIN_DETAILS_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
     }
 
-
-
     /**
+     * This function of service is for checking of previous appointment for follow-up appointment
      * @param appointment this variable contains appointment details.
      */
     private void bookAgainHandler(Appointment appointment){ // checking if a previous appointment exist for the follow-up appointment.
@@ -154,8 +153,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
         }
     }
-
     /**
+     * This function of service is for checking appointment time valid or not
      * @param appointment this variable contains appointment details.
      */
     private void isAppointmentTimeValid(Appointment appointment){ //checking if the selected appointment time is valid and is the slot empty.
@@ -176,8 +175,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         log.info("exit: appointment service::isAppointmentTimeValid");
 
     }
-
     /**
+     * This function of service is for checking data inside database
      * @param appointment this variable contains appointment details.
      */
     public void checkSanityOfAppointment(Appointment appointment){ //cross-checking the values inside the object with the database.
@@ -202,20 +201,20 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
             if (!patientLoginDetails.getName().equals(appointment.getPatientName())) {
 
-                log.info("  appointment service::checkSanityOfAppointment"+Constants.INVALID_PATIENT_NAME);
+                log.info("appointment service::checkSanityOfAppointment"+Constants.INVALID_PATIENT_NAME);
                 log.info(new ArrayList<>(List.of(Constants.INVALID_PATIENT_NAME)).toString());
                 throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_PATIENT_NAME)));
             }
 
             if (!doctorLoginDetails.getName().equals(appointment.getDoctorName())) {
-                log.info("appointment service::checkSanityOfAppointment  "+Constants.INVALID_DOCTOR_NAME);
+                log.info("appointment service:: checkSanityOfAppointment"+Constants.INVALID_DOCTOR_NAME);
                 throw new ValidationsException(new ArrayList<>(List.of(Constants.INVALID_DOCTOR_NAME)));
             }
         }
         log.info("exit: appointment service::checkSanityOfAppointment");
     }
-
     /**
+     * This function of service of getting all appointment by patient
      * @param loginId this variable contains login id.
      * @param pageNo this variable contains Page no.
      * @return It returns a ResponseEntity<GenericMessage> with status code 201.
@@ -224,7 +223,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo,int pageSize ){
         log.info("inside: appointment service::getAllAppointmentByPatientId");
         var genericMessage = new GenericMessage();
-        Map<String,PageRecords> m = new HashMap<>();
+        Map<String, PageRecords> m = new HashMap<>();
         Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Long patientId=patientRepository.getId(loginId);
@@ -258,8 +257,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
     }
 
-
     /**
+     * This function of service of getting all appointment by doctor
      * @param loginId this variable contains login id.
      * @param pageNo this variable contains Page no.
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
@@ -275,6 +274,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         if(doctorId != null) {
+
+
 
             Page<Appointment> past = appointmentRepository.pastDoctorAppointment(doctorId,paging);
             Page<Appointment> upcoming = appointmentRepository.upcomingDoctorAppointment(doctorId,paging);
@@ -303,8 +304,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
-
     /**
+     * This function is used for getting follow-up details for book again appointment.
      * @param appointId this variable contains appointment details.
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -315,13 +316,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(appointmentRepository.getId(appointId) != null && appointId.equals(appointmentRepository.getId(appointId))){
             log.info("exit: appointment service::getFollowDetails");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class)),HttpStatus.OK);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId), FollowUpDto.class)),HttpStatus.OK);
         }
         log.info("appointment service::getFollowDetails"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
 
     /**
+     * This function is used for getting appointment details based on the appointment id.
      * @param appointId this variable contains appointment details.
      * @return It returns a  ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -332,14 +334,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             var appointment = appointmentRepository.getAppointmentById(appointId);
             log.info("exit: appointment service::getAppointmentById");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointment,PatientProfileDto.class)),HttpStatus.OK);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointment, PatientProfileDto.class)),HttpStatus.OK);
         }
         log.info("appointment service::getAppointmentById"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
-
     /**
+     * This function is used for getting weekly visits to the doctor in a month.
      * @param doctorId this variable contains appointment details.
      * @return  It returns a  ResponseEntity<GenericMessage> for weeklyDoctorCountChart.
      */
@@ -357,6 +359,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
+     * This function is used for getting weekly visits of the patient to the doctors in a month.
      * @param patientId this variable contains patient Id.
      * @return  It returns a  ResponseEntity<GenericMessage> for  weeklyPatientCountChart
      */
@@ -374,9 +377,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
     }
 
-
-
     /**
+     * This function is used for getting upcoming appointments of the doctor in the current day.
      * @param doctorId this variable contains doctor Id.
      * @return It returns ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -396,11 +398,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
-
     /**
+     * This function used for getting sum of total appointments till date.
      * @param doctorId this variable contains doctor Id.
      * @return It returns ResponseEntity<GenericMessage> with status code 200.
      */
+
     @Override
     public ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId){
         log.info("inside: appointment service::totalNoOfAppointment");
@@ -415,6 +418,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
+     * This function used for getting total number of current day appointments.
      * @param doctorId this variable contains doctor Id.
      * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -432,6 +436,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
+     * This function used for getting total number of appointments added in current week.
      * @param doctorId  this variable contains doctor Id.
      * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -449,6 +454,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
+     * This function used for getting the sum of different categories the patient visited till date.
      * @param loginId this variable contains login Id.
      * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -467,8 +473,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     }
 
-
     /**
+     * This function used for getting the available slots of doctor
      * @param date this variable contains date.
      * @param doctorId this variable contains doctor Id.
      * @return It returns Map<Long,Map<LocalDate,List<Boolean>>> for  checkSlotsAvail
@@ -527,13 +533,13 @@ public class AppointmentServiceImpl implements AppointmentService {
             if(slots.get(doctorId) != null) { //checking if the doctorId available in the map.
                 log.info("exit1: appointment service::checkSlots");
 
-                return mainIfFunction(date, doctorId);
+                return doctorIdPresentInSlots(date, doctorId);
             }
 
             else {
                 log.info("exit2: appointment service::checkSlots");
 
-                return mainElseFunction(date, doctorId);
+                return doctorIdNotPresentInSlots(date, doctorId);
             }
 
         }
@@ -544,57 +550,63 @@ public class AppointmentServiceImpl implements AppointmentService {
     /**
      * @param date this variable contains date.
      * @param doctorId this variable contains doctor Id.
-     * @return  It returns List<Boolean> for mainIfFunction.
+     * @return  It returns List<Boolean> for doctorIdPresentInSlots.
      */
-    List<Boolean> mainIfFunction(LocalDate date, Long doctorId){
-        log.info("inside: appointment service::mainIfFunction");
+    List<Boolean> doctorIdPresentInSlots(LocalDate date, Long doctorId){
+        log.info("inside: appointment service::doctorIdPresentInSlots");
 
         if (Boolean.TRUE.equals(pdFGeneratorService.dateHandler(date))) {
             if (slots.get(doctorId).get(date) != null) { //checking if the doctor slot details available in the map.
-                log.info("exit1: appointment service::mainIfFunction");
+                log.info("exit1: appointment service::doctorIdPresentInSlots");
 
                 return slots.get(doctorId).get(date);
             } else {
-                log.info("exit2: appointment service::mainIfFunction");
+                log.info("exit2: appointment service::doctorIdPresentInSlots");
 
                 return checkSlotsAvail(date, doctorId).get(doctorId).get(date); //checking if the slots of  doctor in the DB and adding to Map.
             }
         }else {
-            log.info("appointment service::mainIfFunction"+Constants.SELECT_SPECIFIED_DATES);
+            log.info("appointment service::doctorIdPresentInSlots"+Constants.SELECT_SPECIFIED_DATES);
             throw new InvalidDate(date+":"+Constants.SELECT_SPECIFIED_DATES);
         }
 
     }
 
     /**
-     * @param date  this variable contains date.
-     * @param doctorId doctorId this variable contains doctor Id.
-     * @return It returns List<Boolean> for mainElseFunction.
+     * @param date this variable contains date.
+     * @param doctorId this variable contains doctor Id.
+     * @return  It returns List<Boolean> for doctorIdNotPresentInSlots.
      */
-    List<Boolean> mainElseFunction(LocalDate date, Long doctorId){
-        log.info("inside: appointment service::mainElseFunction");
+    List<Boolean> doctorIdNotPresentInSlots(LocalDate date, Long doctorId){
+        log.info("inside: appointment service::doctorIdNotPresentInSlots");
 
         if (Boolean.TRUE.equals(pdFGeneratorService.dateHandler(date))){
-            log.info("exit: appointment service::mainElseFunction");
+            log.info("exit: appointment service::doctorIdNotPresentInSlots");
 
             return checkSlotsAvail(date, doctorId).get(doctorId).get(date);
         }
         else {
-            log.info("appointment service::mainElseFunction"+Constants.SELECT_SPECIFIED_DATES);
+            log.info("appointment service::doctorIdNotPresentInSlots"+Constants.SELECT_SPECIFIED_DATES);
             throw new InvalidDate(date+":"+Constants.SELECT_SPECIFIED_DATES);
         }
     }
+
+
+
+
 
 
     /**
      * @param appointments  this variable contains appointments.
      * @return It returns List<PatientAppointmentListDto>
      */
+
     List<PatientAppointmentListDto> mapToAppointList(List<Appointment> appointments){
         log.info("appointment service::mapToAppointList");
         return appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
     }
+
     /**
      * @param appointments  this variable contains appointments.
      * @return It returns List<DoctorAppointmentListDto>
@@ -605,7 +617,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointments.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
     }
-
     /**
      * @param appointment  this variable contains appointments.
      * @return  It returns DoctorAppointmentListDto.
@@ -615,7 +626,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return mapper.map(appointment, DoctorAppointmentListDto.class);
     }
-
     /**
      * @param appointment this variable contains appointments.
      * @return  It returns PatientAppointmentListDto.
@@ -627,6 +637,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
+     * This function used for sending a mail to the patient on successfully booking.
      * @param appointment this variable contains appointments.
      * @throws JSONException
      * @throws MessagingException
@@ -655,10 +666,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
         log.info("exit: appointment service::sendEmailToUser");
     }
-
     /**
      * @param dateList this variable contains Date details.
      * @return It returns ResponseEntity<GenericMessage> with status code 200.
+     * This function gives weekly count of vists.
      */
     ResponseEntity<GenericMessage> weeklyGraph(ArrayList<java.sql.Date> dateList){
         log.info("inside: appointment service::weeklyGraph");

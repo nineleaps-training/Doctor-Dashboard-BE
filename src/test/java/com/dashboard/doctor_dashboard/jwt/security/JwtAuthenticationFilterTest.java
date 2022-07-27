@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
-
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.util.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +17,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class JwtAuthenticationFilterTest {
@@ -58,7 +56,7 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","Doctor",null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","Doctor",false,null,null,null);
 
         UserDetails userDetails = new UserDetails() {
             @Override
@@ -100,8 +98,7 @@ class JwtAuthenticationFilterTest {
             }
         };
 
-
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(true);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(true);
         Mockito.when(tokenProvider.getUsernameFromJWT(Mockito.any(String.class))).thenReturn("jigmet");
         Mockito.when(customUserDetailsService.loadUserByUsername(Mockito.any(String.class))).thenReturn(userDetails);
 
@@ -154,7 +151,7 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(false);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(false);
 
         authenticationFilter.doFilterInternal(request,response,filterChain);
 

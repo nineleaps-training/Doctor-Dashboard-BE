@@ -1,5 +1,8 @@
 package com.dashboard.doctor_dashboard.services.patient_service;
 
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
@@ -59,7 +62,7 @@ public class PatientServiceImpl implements PatientService {
      * @return ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
-    public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient,Long loginId) {
+    public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId) {
 
         var genericMessage = new GenericMessage();
 

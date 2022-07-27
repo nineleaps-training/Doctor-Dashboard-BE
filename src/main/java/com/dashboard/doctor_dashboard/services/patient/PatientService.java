@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.services.patient_service;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;

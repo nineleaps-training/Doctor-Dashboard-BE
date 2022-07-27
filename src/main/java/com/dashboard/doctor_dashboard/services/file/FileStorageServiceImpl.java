@@ -1,5 +1,5 @@
 package com.dashboard.doctor_dashboard.services.file_service;
-import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;

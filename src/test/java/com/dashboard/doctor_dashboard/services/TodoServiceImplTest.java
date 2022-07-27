@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
+import com.dashboard.doctor_dashboard.services.todo.TodoServiceImpl;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

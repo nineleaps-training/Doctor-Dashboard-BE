@@ -1,5 +1,9 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.PageRecords;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;

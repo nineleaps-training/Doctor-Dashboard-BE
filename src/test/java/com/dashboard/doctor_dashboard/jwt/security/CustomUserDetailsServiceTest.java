@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +47,7 @@ class CustomUserDetailsServiceTest {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role));
 
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,false,null,null,null);
 
         Mockito.when(loginRepo.findByNameOrEmailId(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(Optional.of(loginDetails));
 

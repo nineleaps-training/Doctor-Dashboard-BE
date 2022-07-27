@@ -1,12 +1,12 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
-import com.dashboard.doctor_dashboard.services.login_service.LoginServiceImpl;
+import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
+import com.dashboard.doctor_dashboard.services.login.LoginServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.json.webtoken.JsonWebSignature;
@@ -103,7 +103,7 @@ class LoginServiceTest {
         docDetails.put("hd","nineleaps.com");
         docDetails.put("email","pranay@gmail.com");
         docDetails.put("picture","picture1");
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",null,null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","doctor",false,null,null,null);
 
         Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(loginDetails);
 

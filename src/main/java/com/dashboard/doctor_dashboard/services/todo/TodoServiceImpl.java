@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.util.Constants;
 
