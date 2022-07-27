@@ -6,6 +6,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
@@ -25,4 +26,5 @@ public interface LoginService {
     String loginCreator(long id, String email, String firstName,String role,String profilePic);
 
     String deleteDoctorById(long id);
+    ResponseEntity<GenericMessage>  refreshTokenCreator(HttpServletRequest request);
 }

@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.jwt.entities.AuthenticationResponse;
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
+import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -38,7 +41,7 @@ public class JwtServiceImpl implements JwtService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
+        System.out.println("auth"+authentication);
         // get token form tokenProvider
 
         var claims = new Claims();
@@ -48,10 +51,23 @@ public class JwtServiceImpl implements JwtService {
         claims.setRole(login.getRole());
         claims.setProfilePic(login.getProfilePic());
 
-        String token = jwtTokenProvider.generateToken(authentication, claims);
+        String token = jwtTokenProvider.generateToken(authentication.getName(), claims);
         log.debug("JWTService: JWT token created.");
         log.info("exit: JwtServiceImpl::authenticateUser");
         return new AuthenticationResponse(token).getAccessToken();
+    }
+
+    @Override
+    public String createRefreshToken(DefaultClaims defaultClaims){
+
+//        Claims claims=new Claims();
+//        Map<String,Object> claims= (Map<String,Object>) defaultClaims.get("DoctorDetails");
+//        defaultClaims.
+//        System.out.println("Claim "+claims);
+        Map<String,Object> claims= new HashMap<>();
+
+        claims.put("DoctorDetails",defaultClaims.get("DoctorDetails"));
+        return jwtTokenProvider.doGenerateToken(defaultClaims.get("sub").toString(), claims);
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -43,6 +44,12 @@ public class LoginController {
         return loginService.tokenVerification(idToken.getIdtoken());
     }
 
+    @GetMapping(value = "/user/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GenericMessage> refreshTokenAuthentication(HttpServletRequest request) throws GeneralSecurityException, IOException, JSONException {
+        //authToken
+        log.info("refreshTokenAuthentication:: tokenAuthentication");
+        return loginService.refreshTokenCreator(request);
+    }
     /**
      * @return status 200 ok if the server is up and running.
      * This endpoint returns the status of  API.
