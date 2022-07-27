@@ -47,7 +47,7 @@ public class LoginController {
     @GetMapping(value = "/user/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GenericMessage> refreshTokenAuthentication(HttpServletRequest request) throws GeneralSecurityException, IOException, JSONException {
         //authToken
-        log.info("refreshTokenAuthentication:: tokenAuthentication");
+        log.info("refreshTokenAuthentication:: refreshTokenAuthentication");
         return loginService.refreshTokenCreator(request);
     }
     /**

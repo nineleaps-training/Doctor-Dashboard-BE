@@ -33,7 +33,6 @@ public class    JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println(request.toString());
         // get JWT (token) from http request
         String token = getJWTFromRequest(request);
 
@@ -50,13 +49,13 @@ public class    JwtAuthenticationFilter extends OncePerRequestFilter {
             // set spring security
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             status = Constants.SUCCESS;
-            System.out.println(status);
         }
         filterChain.doFilter(request, response);
     }
 
     // Bearer <accessToken>
     private String getJWTFromRequest(HttpServletRequest request) {
+
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());

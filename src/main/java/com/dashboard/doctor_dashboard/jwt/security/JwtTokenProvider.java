@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -29,17 +29,21 @@ public class JwtTokenProvider {
     // generate token
     public String generateToken(String email, Claims tokenClaims) {
 
-
+        log.info("inside: JwtTokenProvider::generateToken");
         Map<String,Object> claims= new HashMap<>();
         claims.put("DoctorDetails",tokenClaims);
-//        claims.put("role",tokenClaims.getRole());
+        log.info("exit: JwtTokenProvider::generateToken");
         return doGenerateToken(email,claims);
 
     }
 
     public String doGenerateToken(String email,Map<String,Object> claims){
+        log.info("inside: JwtTokenProvider::doGenerateToken");
+
         var currentDate = new Date();
         var expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
+        log.info("exit: JwtTokenProvider::doGenerateToken");
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(email)
@@ -51,15 +55,19 @@ public class JwtTokenProvider {
 
     // get username from the token
     public String getUsernameFromJWT(String token) {
+        log.info("inside: JwtTokenProvider::getUsernameFromJWT");
+
         var claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        System.out.println(claims);
+        log.info("inside: JwtTokenProvider::getUsernameFromJWT");
         return claims.getSubject();
     }
 
     public Long getIdFromToken(HttpServletRequest request){
+        log.info("inside: JwtTokenProvider::getIdFromToken");
+
         String jwtToken;
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
@@ -71,8 +79,10 @@ public class JwtTokenProvider {
                     .getBody();
             var mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
+            log.info("exit: JwtTokenProvider::getIdFromToken");
             return details.getDoctorId();
         }else{
+            log.info(" JwtTokenProvider::getIdFromToken");
             throw new APIException("JWT claims string is empty.");
         }
     }
@@ -86,7 +96,6 @@ public class JwtTokenProvider {
         } catch (MalformedJwtException ex) {
             throw new APIException( "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
-            log.info("xcvjkl");
             if(refreshToken(ex,request))
                 return false;
             throw new ExpiredJwtException(ex.getHeader(), ex.getClaims(), "Expired JWT token");
@@ -100,24 +109,25 @@ public class JwtTokenProvider {
     boolean refreshToken(ExpiredJwtException ex,HttpServletRequest request){
         log.info("inside::refreshToken");
         String isRefreshToken = request.getHeader("isRefreshToken");
-        log.info("refresh",isRefreshToken);
         String requestURL = request.getRequestURL().toString();
         if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refresh-token")) {
-            log.info("inside");
             allowForRefreshToken(ex, request);
+            log.info("exit1::refreshToken");
             return true;
         } else {
             request.setAttribute("exception", ex);
+            log.info("exit2::refreshToken");
             return false;
         }
     }
 
     private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {
-        log.info("allowForRefreshToken");
+        log.info("inside::allowForRefreshToken");
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 null, null, null);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         request.setAttribute("claims", ex.getClaims());
+        log.info("exit::allowForRefreshToken");
 
     }
 
