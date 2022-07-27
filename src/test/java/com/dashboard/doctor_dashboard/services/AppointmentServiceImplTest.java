@@ -784,8 +784,8 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PA,falseTIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
@@ -812,8 +812,8 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
@@ -840,8 +840,8 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
@@ -867,8 +867,8 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(2L,"pranay","pranay@gmail.com","nineleaps","profilePic1","DOCTOR",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(2L,"pranay","pranay@gmail.com","nineleaps","profilePic1","DOCTOR",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
@@ -898,7 +898,7 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagarrr","sagarssn@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
@@ -928,8 +928,8 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranayyy","sagarssn23@gmail.com","google","profilePic","PATIENT",null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"prana","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);

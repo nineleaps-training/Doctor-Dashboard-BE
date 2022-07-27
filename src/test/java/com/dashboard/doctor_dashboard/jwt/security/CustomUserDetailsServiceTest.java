@@ -46,7 +46,7 @@ class CustomUserDetailsServiceTest {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role));
 
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,false,null,null,null);
 
         Mockito.when(loginRepo.findByNameOrEmailId(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(Optional.of(loginDetails));
 

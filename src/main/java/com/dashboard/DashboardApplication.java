@@ -67,7 +67,7 @@ public class DashboardApplication {
 		allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());
 		allEndpoints.addAll(controllerEndpointsSupplier.getEndpoints());
 		String basePath = webEndpointProperties.getBasePath();
-		EndpointMapping endpointMapping = new EndpointMapping(basePath);
+		var endpointMapping = new EndpointMapping(basePath);
 		boolean shouldRegisterLinksMapping = this.shouldRegisterLinksMapping(webEndpointProperties, environment,
 				basePath);
 		return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints, endpointMediaTypes,

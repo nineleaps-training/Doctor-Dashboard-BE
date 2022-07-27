@@ -104,7 +104,7 @@ class LoginServiceTest {
         docDetails.put("hd","nineleaps.com");
         docDetails.put("email","pranay@gmail.com");
         docDetails.put("picture","picture1");
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",null,null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","doctor",false,null,null,null);
 
         Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(loginDetails);
 

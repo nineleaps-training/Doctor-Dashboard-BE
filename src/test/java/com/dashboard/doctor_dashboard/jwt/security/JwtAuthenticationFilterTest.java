@@ -58,7 +58,7 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","Doctor",null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1","Doctor",false,null,null,null);
 
         UserDetails userDetails = new UserDetails() {
             @Override
@@ -100,8 +100,7 @@ class JwtAuthenticationFilterTest {
             }
         };
 
-
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(true);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(true);
         Mockito.when(tokenProvider.getUsernameFromJWT(Mockito.any(String.class))).thenReturn("jigmet");
         Mockito.when(customUserDetailsService.loadUserByUsername(Mockito.any(String.class))).thenReturn(userDetails);
 
@@ -154,7 +153,7 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(false);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(false);
 
         authenticationFilter.doFilterInternal(request,response,filterChain);
 
