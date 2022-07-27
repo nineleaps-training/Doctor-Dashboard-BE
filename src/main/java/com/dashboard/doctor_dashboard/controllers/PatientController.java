@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.services.patient.PatientService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class PatientController {
 
 
-    private PatientService patientService;
+    private  PatientService patientService;
 
     @Autowired
     public PatientController(PatientService patientService) {
@@ -82,7 +82,7 @@ public class PatientController {
      * @return Patient deleted after successful API call with status code 200
      * This endpoint is used for deleting patient details.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
         log.info("PatientController:: deletePatientById");
 

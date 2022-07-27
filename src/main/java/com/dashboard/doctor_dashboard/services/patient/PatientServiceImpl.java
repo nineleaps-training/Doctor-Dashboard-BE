@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.services.patient;
 
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
 import com.dashboard.doctor_dashboard.util.Constants;
@@ -23,20 +23,20 @@ import org.springframework.stereotype.Service;
 public class PatientServiceImpl implements PatientService {
 
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
 
-    private AttributeRepository attributeRepository;
+    private final AttributeRepository attributeRepository;
 
 
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    private PrescriptionRepository prescriptionRepository;
+    private final PrescriptionRepository prescriptionRepository;
 
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
 
 

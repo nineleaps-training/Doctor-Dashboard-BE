@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.services.doctor;
 
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

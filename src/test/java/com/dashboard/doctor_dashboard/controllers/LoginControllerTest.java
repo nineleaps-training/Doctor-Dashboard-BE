@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
+import com.dashboard.doctor_dashboard.dtos.JwtToken;
 import com.dashboard.doctor_dashboard.services.login.LoginService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -98,7 +97,7 @@ class LoginControllerTest {
         Mockito.when(loginService.deleteDoctorById(Mockito.any(Long.class))).thenReturn(message);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/doctor/login/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/private/doctor/login/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 }

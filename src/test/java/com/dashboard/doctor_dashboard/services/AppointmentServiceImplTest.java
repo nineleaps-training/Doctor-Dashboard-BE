@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
-
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
@@ -15,8 +14,8 @@ import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.appointment.AppointmentServiceImpl;
-import com.dashboard.doctor_dashboard.util.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.services.appointment.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.appointment.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
@@ -47,7 +46,6 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;

@@ -2,8 +2,8 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
-import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
+import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 class JwtServiceImplTest {

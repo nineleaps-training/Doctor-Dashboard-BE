@@ -1,6 +1,5 @@
 package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;

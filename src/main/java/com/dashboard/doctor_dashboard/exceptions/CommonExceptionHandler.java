@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+import com.dashboard.doctor_dashboard.dtos.ErrorMessage;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.ErrorDetails;
 import com.dashboard.doctor_dashboard.util.wrappers.ValidationsSchema;

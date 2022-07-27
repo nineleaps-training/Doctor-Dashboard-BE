@@ -1,6 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.CommonExceptionHandler;
 import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
@@ -29,7 +32,6 @@ import org.springframework.web.context.request.WebRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -257,7 +259,7 @@ class DoctorControllerTest {
         Mockito.when(doctorService.deleteDoctor(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/doctor/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test

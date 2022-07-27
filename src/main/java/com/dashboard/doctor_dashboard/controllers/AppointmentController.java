@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
+import com.dashboard.doctor_dashboard.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.services.appointment.AppointmentService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -24,7 +24,7 @@ import java.time.LocalDate;
 @Slf4j
 public class AppointmentController {
 
-    private AppointmentService appointmentService;
+    private  AppointmentService appointmentService;
 
 
     @Autowired

@@ -1,10 +1,9 @@
 package com.dashboard.doctor_dashboard.services;
 
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -12,9 +11,10 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
+import com.dashboard.doctor_dashboard.services.appointment.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.appointment.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.services.prescription.PrescriptionServiceImpl;
-import com.dashboard.doctor_dashboard.util.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class PrescriptionServiceImplTest {

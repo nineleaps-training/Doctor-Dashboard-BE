@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class DoctorController {
 
 
-    private DoctorService doctorService;
+    private  DoctorService doctorService;
     @Autowired
     public DoctorController(DoctorService doctorService){
         this.doctorService = doctorService;
@@ -75,7 +75,7 @@ public class DoctorController {
      * @param id this variable contains loginId.
      * @return A success message wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deleteDoctor(@PathVariable("id") int id) {
         log.info("DoctorController:: deleteDoctor");
 

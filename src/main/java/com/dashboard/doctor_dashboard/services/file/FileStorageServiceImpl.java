@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.services.file;
 
-import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
@@ -18,12 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileStorageServiceImpl implements FileStorage {
 
 
-    private FileDBRepository fileDBRepository;
+    private final FileDBRepository fileDBRepository;
 
 
 
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Autowired
     public FileStorageServiceImpl(FileDBRepository fileDBRepository, AppointmentRepository appointmentRepository) {

@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+import com.dashboard.doctor_dashboard.dtos.ErrorMessage;
 import com.dashboard.doctor_dashboard.util.wrappers.ErrorDetails;
-import com.dashboard.doctor_dashboard.util.wrappers.ValidationsSchema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,9 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
 class CommonExceptionHandlerTest {

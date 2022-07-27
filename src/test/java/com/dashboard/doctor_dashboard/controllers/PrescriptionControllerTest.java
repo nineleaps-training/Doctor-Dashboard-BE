@@ -1,12 +1,12 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription.PrescriptionService;
 import com.dashboard.doctor_dashboard.util.Constants;
+import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -100,7 +99,7 @@ class PrescriptionControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/prescription/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/prescription/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
 

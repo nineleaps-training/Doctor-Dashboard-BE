@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 
-import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
+import com.dashboard.doctor_dashboard.dtos.JwtToken;
 import com.dashboard.doctor_dashboard.services.login.LoginService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class LoginController {
 
-    private LoginService loginService;
+    private  LoginService loginService;
     @Autowired
 
     public LoginController(LoginService loginService) {
@@ -66,7 +66,7 @@ public class LoginController {
      * @param id is used as path variable
      * @return Successfully deleted message after deleting user details.
      */
-    @DeleteMapping(value = "/doctor/login/{id}")
+    @DeleteMapping(value = "private/doctor/login/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
         log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);

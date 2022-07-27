@@ -1,10 +1,10 @@
 package com.dashboard.doctor_dashboard.services.doctor;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PageRecords;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.PageRecords;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
@@ -34,13 +34,13 @@ import java.util.Map;
 @Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public DoctorServiceImpl(DoctorRepository doctorRepository, LoginRepo loginRepo, JwtTokenProvider jwtTokenProvider) {

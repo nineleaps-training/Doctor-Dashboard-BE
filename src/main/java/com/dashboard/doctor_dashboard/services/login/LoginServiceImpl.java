@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.services.login;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
-import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
@@ -34,10 +33,10 @@ import java.util.Map;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     @Autowired
     public LoginServiceImpl(LoginRepo loginRepo, JwtService jwtService) {
