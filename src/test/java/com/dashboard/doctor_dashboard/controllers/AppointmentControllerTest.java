@@ -68,8 +68,8 @@ class AppointmentControllerTest {
         m.put("appointId","1L");
         m.put("message","Successfully created");
 
-        AppointmentDto appointment = new AppointmentDto("dentist",localDate,"fever","sagar","sagarssn23@gmal.com",
-                "pranay", localTime,true,"completed",null,null,new Patient(),new DoctorDetails());
+        AppointmentDto appointment = new AppointmentDto("dentist",localDate,"fever","xyz","xyz@gmal.com",
+                "abc", localTime,true,"completed",null,null,new Patient(),new DoctorDetails());
 
         Mockito.when(appointmentService.addAppointment(Mockito.any(AppointmentDto.class),Mockito.any(HttpServletRequest.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m), HttpStatus.CREATED));
@@ -100,8 +100,8 @@ class AppointmentControllerTest {
         final Long patientId = 1L;
         int pageNo = 1;
         Map<String, List<PatientAppointmentListDto>> map =new HashMap<>();
-        PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
-        PatientAppointmentListDto dto2 = new PatientAppointmentListDto(1L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
+        PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"xyz","completed",true);
+        PatientAppointmentListDto dto2 = new PatientAppointmentListDto(1L,"dentist", LocalDate.now(),LocalTime.now(),"xyz","completed",true);
 
         List<PatientAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto2));
         map.put("past",dto);
@@ -124,8 +124,8 @@ class AppointmentControllerTest {
         int pageNo = 1;
 
         Map<String, List<DoctorAppointmentListDto>> map =new HashMap<>();
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
-        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"xyz","xyzssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"xyz","xyzssn23@gmal.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto2));
         map.put("past",dto);
         map.put("today",dto);
@@ -201,7 +201,7 @@ class AppointmentControllerTest {
     @Test
     void getFollowDetailsTest() throws Exception {
         final Long appointId = 1L;
-        FollowUpDto followUpDto = new FollowUpDto(1L,"sagar",1L,"dentist","completed");
+        FollowUpDto followUpDto = new FollowUpDto(1L,"xyz",1L,"dentist","completed");
 
         Mockito.when(appointmentService.getFollowDetails(Mockito.any(Long.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,followUpDto), HttpStatus.OK));
@@ -257,8 +257,8 @@ class AppointmentControllerTest {
     void recentAppointment() throws Exception {
         final Long doctorId = 1L;
 
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
-        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"xyz","xyzssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"xyz","xyzssn23@gmal.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto2));
 
         Mockito.when(appointmentService.recentAppointment(Mockito.any(Long.class))).thenReturn(
@@ -274,7 +274,7 @@ class AppointmentControllerTest {
     void getAppointmentByIdTest() throws Exception {
         final Long appointId = 1L;
 
-        PatientProfileDto patientProfileDto = new PatientProfileDto(1L,LocalDate.now(),"sagar","sagarssn3@gmail.com",
+        PatientProfileDto patientProfileDto = new PatientProfileDto(1L,LocalDate.now(),"xyz","xyz@gmail.com",
                 "fever","dentist",true,1L,null,null,null,"completed");
 
         Mockito.when(appointmentService.getAppointmentById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientProfileDto), HttpStatus.OK));

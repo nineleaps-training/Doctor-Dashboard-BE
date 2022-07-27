@@ -69,8 +69,8 @@ class DoctorControllerTest {
 //    void  getAllDoctors() throws Exception {
 //        final Long id = 1L;
 //        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
+//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
 //        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 //
 //        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
@@ -87,8 +87,8 @@ class DoctorControllerTest {
 //    void throwErrorIfIdNotPresentDbForAllDoctor() throws Exception {
 //        final Long id = 1L;
 //        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
+//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
 //        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 //
 //        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
@@ -102,7 +102,7 @@ class DoctorControllerTest {
     @Test
     void getDoctorsByIdIfIdPresent() throws Exception {
         final Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
+        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","xyzssn23@gmail.com",
                 "orthology",null,"male", (short) 21,"MBBS",(short)8);
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorDetails);
@@ -118,7 +118,7 @@ class DoctorControllerTest {
 //    @Test
 //    void throwErrorIfIdNotPresentDb() throws Exception {
 //        final Long id = 1L;
-//        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
+//        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","xyzssn23@gmail.com",
 //                "orthology",null,"male", (short) 21,"MBBS",(short)8);
 //
 //        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
@@ -265,8 +265,8 @@ class DoctorControllerTest {
     @Test
     void getAllDoctorsBySpecialityTest() throws Exception {
         final String speciality = "orthology";
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<DoctorListDto>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);

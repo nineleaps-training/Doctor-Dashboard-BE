@@ -60,7 +60,7 @@ class PrescriptionControllerTest {
     @Test
     void addPrescriptionTest() throws Exception {
         final Long id =1L;
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","completed","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","completed","xyz","xyzssn23@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,null,"completed","mri check",true,1L);
 
         Mockito.when(prescriptionService.addPrescription(Mockito.any(Long.class),Mockito.any(UpdatePrescriptionDto.class))).thenReturn(
