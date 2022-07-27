@@ -1,7 +1,5 @@
-package com.dashboard.doctor_dashboard.entities.login_entity;
+package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

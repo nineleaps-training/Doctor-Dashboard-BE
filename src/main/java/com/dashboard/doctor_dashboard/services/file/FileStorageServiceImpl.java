@@ -1,4 +1,5 @@
-package com.dashboard.doctor_dashboard.services.file_service;
+package com.dashboard.doctor_dashboard.services.file;
+
 import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -12,25 +13,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-/**
- * implementation of FileStorageService interface
- */
+
 @Service
 public class FileStorageServiceImpl implements FileStorage {
 
 
-    private FileDBRepository fileDBRepository;
+    private final FileDBRepository fileDBRepository;
 
 
 
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Autowired
     public FileStorageServiceImpl(FileDBRepository fileDBRepository, AppointmentRepository appointmentRepository) {
         this.fileDBRepository = fileDBRepository;
         this.appointmentRepository = appointmentRepository;
     }
+
 
     /**
      * This function of service is for uploading files.

@@ -1,9 +1,6 @@
-package com.dashboard.doctor_dashboard.services.prescription_service;
-
-
+package com.dashboard.doctor_dashboard.services.prescription;
 
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
-
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;

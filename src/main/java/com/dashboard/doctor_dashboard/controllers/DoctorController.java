@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
-
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-//    @GetMapping("/get-all/doctor/{doctorId}")
+
 
     /**
      * This endpoint returns DoctorBasicDetailsDto which contains details  of the doctor.
@@ -49,7 +48,7 @@ public class DoctorController {
      * @return It returns a DoctorFormDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
      */
     @PostMapping("/add-doctor-details/{id}")
-    public ResponseEntity<GenericMessage>  addDoctorDetails( @Valid @RequestBody DoctorFormDto doctorDetails,@PathVariable("id") long id,HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  addDoctorDetails(@Valid @RequestBody DoctorFormDto doctorDetails, @PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: addDoctorDetails");
 
         return doctorService.addDoctorDetails(doctorDetails,id,request);
@@ -64,7 +63,7 @@ public class DoctorController {
      * @return It returns updated doctor fields wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage>  editDoctorDetails( @Valid @RequestBody UserDetailsUpdateDto details,@PathVariable("id") long id, HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  editDoctorDetails(@Valid @RequestBody UserDetailsUpdateDto details, @PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: updateDoctorDetails");
 
         return doctorService.updateDoctor(details,id,request);
@@ -75,7 +74,7 @@ public class DoctorController {
      * @param id this variable contains loginId.
      * @return A success message wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deleteDoctor(@PathVariable("id") int id) {
         log.info("DoctorController:: deleteDoctor");
 

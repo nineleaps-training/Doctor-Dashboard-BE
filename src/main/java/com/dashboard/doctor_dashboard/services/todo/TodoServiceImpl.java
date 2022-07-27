@@ -1,10 +1,9 @@
-package com.dashboard.doctor_dashboard.services.todo_service;
+package com.dashboard.doctor_dashboard.services.todo;
 
-import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 
 /**
  * implementation of TodoService interface
@@ -28,6 +26,7 @@ public class TodoServiceImpl implements TodoService {
         this.todoRepository = todoRepository;
         this.mapper=mapper;
     }
+
     /**
      * This function of service is for adding todos/task  for doctor.
      * @param todolist which contains fields description,status and doctor details
@@ -63,6 +62,7 @@ public class TodoServiceImpl implements TodoService {
 
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
+
 
     /**
      * This function of service is for deleting todos/task by id

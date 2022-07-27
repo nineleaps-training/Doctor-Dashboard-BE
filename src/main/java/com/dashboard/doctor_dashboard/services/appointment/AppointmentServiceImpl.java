@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment_service;
+package com.dashboard.doctor_dashboard.services.appointment;
 
 import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
@@ -12,8 +12,6 @@ import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.util.Constants;
-import com.dashboard.doctor_dashboard.util.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;

@@ -1,7 +1,4 @@
-package com.dashboard.doctor_dashboard.services.login_service;
-
-
-
+package com.dashboard.doctor_dashboard.services.login;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -9,6 +6,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
@@ -28,4 +26,5 @@ public interface LoginService {
     String loginCreator(long id, String email, String firstName,String role,String profilePic);
 
     String deleteDoctorById(long id);
+    ResponseEntity<GenericMessage>  refreshTokenCreator(HttpServletRequest request);
 }

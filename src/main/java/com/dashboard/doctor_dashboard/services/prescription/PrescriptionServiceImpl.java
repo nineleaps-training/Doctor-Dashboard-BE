@@ -1,6 +1,4 @@
-package com.dashboard.doctor_dashboard.services.prescription_service;
-
-
+package com.dashboard.doctor_dashboard.services.prescription;
 
 import com.dashboard.doctor_dashboard.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
@@ -9,13 +7,9 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-
-
-
+import com.dashboard.doctor_dashboard.services.appointment.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.appointment.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
-
-import com.dashboard.doctor_dashboard.util.MailServiceImpl;
-import com.dashboard.doctor_dashboard.util.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -36,16 +30,16 @@ import java.io.UnsupportedEncodingException;
 public class PrescriptionServiceImpl implements PrescriptionService   {
 
 
-    private PrescriptionRepository prescriptionRepository;
+    private final PrescriptionRepository prescriptionRepository;
 
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
 
-    private AttributeRepository attributeRepository;
-    private MailServiceImpl mailService;
+    private final AttributeRepository attributeRepository;
+    private final MailServiceImpl mailService;
 
-    private PdFGeneratorServiceImpl pdFGeneratorService;
+    private final PdFGeneratorServiceImpl pdFGeneratorService;
 
 
     @Autowired
@@ -56,6 +50,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         this.pdFGeneratorService = pdFGeneratorService;
         this.mailService=mailService;
     }
+
     /**
      * This function of service is for adding prescription of patient.
      * @param appointId
@@ -81,19 +76,20 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                     log.info("exit: PrescriptionServiceImpl::addPrescription");
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,Constants.PRESCRIPTION_CREATED),HttpStatus.CREATED);
                 }
-                log.info(" PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
+                log.info("PrescriptionServiceImpl::addPrescription "+Constants.APPOINTMENT_NOT_FOUND);
 
                 throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
             }
             else {
-                log.info("PatientServiceImpl::addPrescription  ");
+                log.info("PrescriptionServiceImpl::addPrescription");
                 throw new APIException("Prescription cannot be added for other status like completed,follow Up, and to be attended");
 
             }
         }
-        log.info("  PatientServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
+        log.info("PrescriptionServiceImpl::addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
+
     /**
      * This function of service is for getting all prescription of patient by appointment id
      * @param appointId
@@ -112,6 +108,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
+
     /**
      * This function of service is for deleting appointment by id
      * @param id
@@ -126,6 +123,8 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         log.info("exit: PrescriptionServiceImpl::deleteAppointmentById");
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
+
+
     /**
      * This function of service is for sending mail to user after successfully updating his prescription.
      * @param patientDto which contains field category,doctorName,status,patientName etc
@@ -133,7 +132,6 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
      * @throws MessagingException
      * @throws UnsupportedEncodingException
      */
-
     public void sendEmailToUserAfterPrescription(PatientDto patientDto) throws JSONException, MessagingException, UnsupportedEncodingException {
         log.info("inside: PrescriptionServiceImpl::sendEmailToUserAfterPrescription");
         String toEmail = patientDto.getPatientEmail();

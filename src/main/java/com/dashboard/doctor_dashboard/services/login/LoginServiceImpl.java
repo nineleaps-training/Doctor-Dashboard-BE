@@ -1,19 +1,17 @@
-package com.dashboard.doctor_dashboard.services.login_service;
-
+package com.dashboard.doctor_dashboard.services.login;
 
 import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -22,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -34,10 +33,10 @@ import java.util.Map;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     @Autowired
     public LoginServiceImpl(LoginRepo loginRepo, JwtService jwtService) {
@@ -48,6 +47,7 @@ public class LoginServiceImpl implements LoginService {
     private final String[] fields = {"given_name","hd", "email","picture"};
 
     /**
+     * This function is for adding user into the database
      * @param loginDetails this variable contains Login details.
      * @return It returns a Map<String, Object>.
      */
@@ -81,6 +81,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     /**
+     * This function of service is for verification of google token and then returns jwt token
      * @param idTokenString this variable contain Id token String.
      * @return It returns a ResponseEntity<GenericMessage> with status code 201 and a Jwt Token.
      * @throws GeneralSecurityException
@@ -100,7 +101,8 @@ public class LoginServiceImpl implements LoginService {
     }
 
     /**
-     * @param idToken this variable contain Id token.
+     * This function extracts data from the Google token.
+     * @param idToken this variable contains Id token.
      * @return It returns a Jwt token.
      */
     public String takingInfoFromToken(GoogleIdToken idToken) {
@@ -119,13 +121,12 @@ public class LoginServiceImpl implements LoginService {
 
         }
         log.debug(Constants.LOGIN+"::takingInfoFromToken"+": login failed due to Invalid ID token.");
-
-
         throw new GoogleLoginException("Invalid ID token.");
     }
 
 
     /**
+     * This function of service is for creating jwt token
      * @param id this variable contain Id .
      * @param email this variable contain email.
      * @param name this variable contain name.
@@ -147,9 +148,9 @@ public class LoginServiceImpl implements LoginService {
 
         return jwtService.authenticateUser(login);
     }
-
     /**
-     * @param id this variable contain Id .
+     * This function of service is for deleting user.
+     * @param id this variable contains loginId .
      * @return  It returns a Jwt token.
      */
     @Override
@@ -160,5 +161,14 @@ public class LoginServiceImpl implements LoginService {
         return "Successfully deleted";
     }
 
-
+    @Override
+    public ResponseEntity<GenericMessage> refreshTokenCreator(HttpServletRequest request){
+        DefaultClaims defaultClaims= (DefaultClaims) request.getAttribute("claims");
+//        Map<String, Object> claims = null;
+//        for (Map.Entry<String, Object> entry : defaultClaims.entrySet()) {
+//            claims.put(entry.getKey(), entry.getValue());
+//        }
+        System.out.println("defaultClaims "+defaultClaims);
+        return  new  ResponseEntity<>(new GenericMessage(Constants.SUCCESS,jwtService.createRefreshToken(defaultClaims)),HttpStatus.CREATED);
+    }
 }

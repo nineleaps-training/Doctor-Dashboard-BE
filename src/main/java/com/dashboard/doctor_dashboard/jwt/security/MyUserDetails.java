@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MyUserDetails implements UserDetails {
 
-    private transient LoginDetails user;
+    private final transient LoginDetails user;
     public MyUserDetails(LoginDetails user) {
         this.user=user;
     }

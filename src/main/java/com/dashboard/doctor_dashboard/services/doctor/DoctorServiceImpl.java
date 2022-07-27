@@ -1,17 +1,15 @@
-package com.dashboard.doctor_dashboard.services.doctor_service;
+package com.dashboard.doctor_dashboard.services.doctor;
 
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.dtos.PageRecords;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +33,13 @@ import java.util.Map;
 @Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
 
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public DoctorServiceImpl(DoctorRepository doctorRepository, LoginRepo loginRepo, JwtTokenProvider jwtTokenProvider) {
@@ -50,7 +48,10 @@ public class DoctorServiceImpl implements DoctorService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+
+
     /**
+     * This function of service is for getting all doctors
      * @param id  this variable contains Id.
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -77,8 +78,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
 
-
     /**
+     * This function of service is for getting doctor details
      * @param id  this variable contains Id.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -102,8 +103,8 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
-
     /**
+     * This function of service is for adding doctor details
      * @param details this variable contains details.
      * @param id this variable contains Id.
      * @param request this variable contains request.
@@ -133,50 +134,52 @@ public class DoctorServiceImpl implements DoctorService {
                 log.error("Doctor Service Impl: update not allowed in this API endpoint.");
                 throw new APIException("update not allowed in this API endpoint.");
             }
-//
+
         }
+
         log.info("DoctorServiceImpl::addDoctorDetails"+Constants.DOCTOR_NOT_FOUND);
 
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 
-        /**
-         * @param details this variable contains details.
-         * @param id this variable contains Id.
-         * @param request this variable contains request.
-         * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
-         */
-        @Override
-        public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
-            log.info("inside: DoctorServiceImpl::updateDoctor");
-
-
-            var genericMessage = new GenericMessage();
-
-            Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-            if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
-                if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
-                    doctorRepository.updateDoctorDb(details.getMobileNo());
-                    genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
-                    genericMessage.setStatus(Constants.SUCCESS);
-                    log.info("exit: DoctorServiceImpl::updateDoctor");
-
-                    return new ResponseEntity<>(genericMessage,HttpStatus.OK);
-                }
-
-                log.info("DoctorServiceImpl::updateDoctor"+Constants.DETAILS_MISMATCH);
-
-                throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
-            }
-            log.info("DoctorServiceImpl::updateDoctor"+Constants.DOCTOR_NOT_FOUND);
-
-            throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
-        }
-
-
 
     /**
+     * This function of service is for updating doctor details
+     * @param details this variable contains details.
+     * @param id this variable contains Id.
+     * @param request this variable contains request.
+     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     */
+    @Override
+    public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
+        log.info("inside: DoctorServiceImpl::updateDoctor");
+
+
+        var genericMessage = new GenericMessage();
+
+        Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
+        if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
+            if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
+                doctorRepository.updateDoctorDb(details.getMobileNo());
+                genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
+                genericMessage.setStatus(Constants.SUCCESS);
+                log.info("exit: DoctorServiceImpl::updateDoctor");
+
+                return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            }
+
+            log.info("DoctorServiceImpl::updateDoctor"+Constants.DETAILS_MISMATCH);
+
+            throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
+        }
+        log.info("DoctorServiceImpl::updateDoctor"+Constants.DOCTOR_NOT_FOUND);
+
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
+    }
+
+    /**
+     * this function of service is for deleting doctor details
      * @param id this variable contains Id.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -195,8 +198,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
-
     /**
+     * This function of service is for getting all doctor by speciality
      * @param speciality this variable contains speciality.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -208,8 +211,6 @@ public class DoctorServiceImpl implements DoctorService {
         Pageable pageable= PageRequest.of(pageNo,pageSize);
         if (doctorRepository.isSpecialityAvailable(speciality) != null) {
             Page<DoctorListDto> list = doctorRepository.getAllDoctorsBySpeciality(speciality,pageable);
-
-
             genericMessage.setData(new PageRecords(list.toList(),pageNo,pageSize,list.getTotalElements(),list.getTotalPages(),list.isLast()));
             genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: DoctorServiceImpl::getAllDoctorsBySpeciality");
@@ -220,8 +221,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY);
     }
-
     /**
+     * This function of service is for fetching details for gender chart
      * @param doctorId this variable contains doctor Id.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -245,7 +246,9 @@ public class DoctorServiceImpl implements DoctorService {
 
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
+
     /**
+     * This function of service is for fetching details for blood group chart
      * @param doctorId this variable contains doctor Id.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
@@ -270,7 +273,9 @@ public class DoctorServiceImpl implements DoctorService {
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
+
     /**
+     * This function of service is for fetching details for age group chart
      * @param doctorId  this variable contains doctor Id.
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */

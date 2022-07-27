@@ -1,6 +1,5 @@
 package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -48,7 +47,8 @@ public class DoctorDetails {
 
     @Column(name = "degree",columnDefinition = "varchar(250)",nullable = false)
     private String degree;
-    private boolean deleted = Boolean.FALSE;
+    @Column(name = "deleted",columnDefinition = "tinyint(1) default 0git")
+    private boolean deleted=false;
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)
     private Date createdAt;

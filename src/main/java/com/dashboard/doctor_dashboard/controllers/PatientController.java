@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.services.patient.PatientService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    //CRUD operation for patient
     /**
      * @param patient consists field mobileNo,gender,age,bloodGroup,address and alternative mobile no
      * @param loginId is used as a path variable
@@ -73,7 +72,7 @@ public class PatientController {
      * This endpoint is used for updating patient profile.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage> editPatientDetails( @Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto,@PathVariable("id") Long id) {
+    public ResponseEntity<GenericMessage> editPatientDetails(@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto, @PathVariable("id") Long id) {
         log.info("PatientController:: editPatientDetails");
 
         return patientService.updatePatientDetails(id, userDetailsUpdateDto);
@@ -83,7 +82,7 @@ public class PatientController {
      * @return Patient deleted after successful API call with status code 200
      * This endpoint is used for deleting patient details.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
         log.info("PatientController:: deletePatientById");
 

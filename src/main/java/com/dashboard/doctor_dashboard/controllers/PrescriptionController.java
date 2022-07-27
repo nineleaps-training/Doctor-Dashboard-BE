@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.services.prescription.PrescriptionService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -35,7 +35,7 @@ public class PrescriptionController {
      * This endpoint is used for uploading prescription for patient.
      */
     @PostMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> addPrescription(@Valid @RequestBody UpdatePrescriptionDto updatePrescriptionDto,@PathVariable("appointId") Long appointId ) throws MessagingException, JSONException, IOException {
+    public ResponseEntity<GenericMessage> addPrescription(@Valid @RequestBody UpdatePrescriptionDto updatePrescriptionDto, @PathVariable("appointId") Long appointId ) throws MessagingException, JSONException, IOException {
         log.info("PrescriptionController:: addPrescription");
 
         return prescriptionService.addPrescription(appointId,updatePrescriptionDto);
@@ -58,7 +58,7 @@ public class PrescriptionController {
      * @return Appointment deleted after successful api call with status code 200.
      * This endpoint is used for deleting the appointment.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deleteAppointment(@PathVariable("id") Long id) {
         log.info("PrescriptionController:: deleteAppointment");
         return prescriptionService.deleteAppointmentById(id);

@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 public class ReceptionistController {
 
-    ReceptionistService receptionistService;
+    private  ReceptionistService receptionistService;
 
 
     @Autowired
@@ -56,7 +56,7 @@ public class ReceptionistController {
      */
 
     @PostMapping("/vitals/{appointmentId}")
-    public ResponseEntity<GenericMessage> addVitals(@Valid @RequestBody AttributesDto attributesDto,@PathVariable("appointmentId") Long appointmentId){
+    public ResponseEntity<GenericMessage> addVitals(@Valid @RequestBody AttributesDto attributesDto, @PathVariable("appointmentId") Long appointmentId){
         log.info("ReceptionistController:: addVitals");
 
         return receptionistService.addAppointmentVitals(attributesDto,appointmentId);

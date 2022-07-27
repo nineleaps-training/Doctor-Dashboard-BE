@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
-import com.dashboard.doctor_dashboard.services.login_service.LoginService;
+import com.dashboard.doctor_dashboard.dtos.JwtToken;
+import com.dashboard.doctor_dashboard.services.login.LoginService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -42,6 +43,12 @@ public class LoginController {
         return loginService.tokenVerification(idToken.getIdtoken());
     }
 
+    @GetMapping(value = "/user/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GenericMessage> refreshTokenAuthentication(HttpServletRequest request) throws GeneralSecurityException, IOException, JSONException {
+        //authToken
+        log.info("refreshTokenAuthentication:: tokenAuthentication");
+        return loginService.refreshTokenCreator(request);
+    }
     /**
      * @return status 200 ok if the server is up and running.
      * This endpoint returns the status of  API.
@@ -58,7 +65,7 @@ public class LoginController {
      * @param id is used as path variable
      * @return Successfully deleted message after deleting user details.
      */
-    @DeleteMapping(value = "/doctor/login/{id}")
+    @DeleteMapping(value = "private/doctor/login/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
         log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);

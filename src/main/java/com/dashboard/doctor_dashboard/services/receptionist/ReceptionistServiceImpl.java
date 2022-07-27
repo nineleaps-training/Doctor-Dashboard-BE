@@ -1,19 +1,16 @@
 package com.dashboard.doctor_dashboard.services.receptionist;
 
-
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.PageRecords;
+import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PageRecords;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
-
 import com.dashboard.doctor_dashboard.util.Constants;
-
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -36,13 +33,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReceptionistServiceImpl implements ReceptionistService {
 
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
-    private AppointmentRepository appointmentRepository;
+    private final AppointmentRepository appointmentRepository;
 
-    private AttributeRepository attributeRepository;
+    private final AttributeRepository attributeRepository;
 
     @Autowired
     public ReceptionistServiceImpl(ModelMapper mapper, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository) {
@@ -51,6 +48,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         this.appointmentRepository = appointmentRepository;
         this.attributeRepository = attributeRepository;
     }
+
     /**
      * This function of service is for getting all the doctor present.
      * @return ResponseEntity<GenericMessage> with status code 200 and list doctor present in the database.
@@ -61,6 +59,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
 
     }
+
     /**
      * This function of service is for getting all the appointments of the doctor
      * @param doctorId
@@ -86,6 +85,8 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
+
+
     /**
      * This function of service is for getting all the today's appointments present for vitals update.
      * @param pageNo
@@ -109,9 +110,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , pageRecords),HttpStatus.OK);
     }
+
+
     /**
      * This function of service is for adding vitals of patients.
-     * @param appointmentId it contains appointment id.
+     * @param attributesDto which contains fields bloodGroup,bodyTemp,notes and glucose level...
+     * @param appointmentId
      * @return ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
@@ -136,11 +140,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
-    /**
-     * This function of service converts appointment entity to patientViewDto
-     * @param appointment which contains fields category,dateOfAppointment,symptoms,patientName etc..
-     * @return PatientViewDto which contains appointment appointId,appointmentTime,patientName,patientEmail and status
-     */
+
     private PatientViewDto mapToDto2(Appointment appointment) {
         return mapper.map(appointment, PatientViewDto.class);
     }
