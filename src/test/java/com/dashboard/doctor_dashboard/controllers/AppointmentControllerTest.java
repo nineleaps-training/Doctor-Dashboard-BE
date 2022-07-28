@@ -33,7 +33,6 @@ import java.util.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith(MockitoExtension.class)
 class AppointmentControllerTest {
 
     @Mock

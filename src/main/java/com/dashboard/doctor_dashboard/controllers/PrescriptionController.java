@@ -19,7 +19,7 @@ import java.io.IOException;
 @Slf4j
 public class PrescriptionController {
 
-    private PrescriptionService prescriptionService;
+    private final PrescriptionService prescriptionService;
     @Autowired
     public PrescriptionController(PrescriptionService prescriptionService){
         this.prescriptionService = prescriptionService;

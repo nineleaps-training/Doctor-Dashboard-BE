@@ -16,7 +16,7 @@ import javax.validation.Valid;
 @Slf4j
 public class TodoController {
 
-    private TodoService todoService;
+    private final TodoService todoService;
     @Autowired
     public TodoController(TodoService todoService){
         this.todoService = todoService;

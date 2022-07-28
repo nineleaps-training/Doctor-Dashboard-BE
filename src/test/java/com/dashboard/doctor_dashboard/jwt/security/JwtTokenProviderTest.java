@@ -177,7 +177,7 @@ class JwtTokenProviderTest {
 
         assertAll(
                 ()->assertThat(apiException).isNotNull(),
-                ()->assertEquals("Invalid JWT signature",apiException.getMessage())
+                ()->assertEquals("Invalid JWT token",apiException.getMessage())
         );
     }
 
@@ -205,7 +205,7 @@ class JwtTokenProviderTest {
         StringBuffer stringBuffer= new StringBuffer("/get-all");
         Mockito.when(request.getHeader("isRefreshToken")).thenReturn("");
         Mockito.when(request.getRequestURL()).thenReturn(stringBuffer);
-        ExpiredJwtException apiException = assertThrows(ExpiredJwtException.class,()->{
+        APIException apiException = assertThrows(APIException.class,()->{
             jwtTokenProvider.validateToken(token3,request);
         });
 
@@ -246,7 +246,7 @@ class JwtTokenProviderTest {
 
         assertAll(
                 ()->assertThat(apiException).isNotNull(),
-                ()->assertEquals("Unsupported JWT token",apiException.getMessage())
+                ()->assertEquals("Invalid JWT token",apiException.getMessage())
         );
 
     }
@@ -261,7 +261,7 @@ class JwtTokenProviderTest {
 
         assertAll(
                 ()->assertThat(apiException).isNotNull(),
-                ()->assertEquals("JWT claims string is empty.",apiException.getMessage())
+                ()->assertEquals("Invalid JWT token",apiException.getMessage())
         );
 
     }

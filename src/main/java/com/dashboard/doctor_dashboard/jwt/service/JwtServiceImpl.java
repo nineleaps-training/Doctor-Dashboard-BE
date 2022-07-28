@@ -41,7 +41,6 @@ public class JwtServiceImpl implements JwtService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        System.out.println("auth"+authentication);
         // get token form tokenProvider
 
         var claims = new Claims();
@@ -60,10 +59,6 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String createRefreshToken(DefaultClaims defaultClaims){
 
-//        Claims claims=new Claims();
-//        Map<String,Object> claims= (Map<String,Object>) defaultClaims.get("DoctorDetails");
-//        defaultClaims.
-//        System.out.println("Claim "+claims);
         Map<String,Object> claims= new HashMap<>();
 
         claims.put("DoctorDetails",defaultClaims.get("DoctorDetails"));

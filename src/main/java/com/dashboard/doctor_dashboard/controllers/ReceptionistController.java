@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 public class ReceptionistController {
 
-    private  ReceptionistService receptionistService;
+    private final  ReceptionistService receptionistService;
 
 
     @Autowired

@@ -23,10 +23,10 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     @Transactional
     @Modifying
     void updateDoctorDb(String phoneNo);
-    //
+
     @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where deleted = false and id=:id")
     DoctorFormDto getDoctorById(Long id);
-    //
+
     @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on deleted = false and  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
 
@@ -37,14 +37,14 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on deleted = false and  dd.loginId=ld.id and speciality=:speciality")
     Page<DoctorListDto> getAllDoctorsBySpeciality(String speciality, Pageable pageable);
 
-    //
+
     @Query(value = "select id from doctor_details d where deleted = false and d.login_id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
 
     @Query(value = "select distinct(speciality) from doctor_details d where deleted = false and d.speciality=:speciality", nativeQuery = true)
     String isSpecialityAvailable(String speciality);
 
-    //
+
     @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on deleted = false and dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 

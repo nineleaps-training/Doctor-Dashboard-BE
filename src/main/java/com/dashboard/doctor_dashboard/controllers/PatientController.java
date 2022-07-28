@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class PatientController {
 
 
-    private PatientService patientService;
+    private final PatientService patientService;
 
     @Autowired
     public PatientController(PatientService patientService) {

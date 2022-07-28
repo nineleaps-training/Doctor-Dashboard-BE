@@ -32,7 +32,6 @@ public class JwtTokenProvider {
 
         Map<String,Object> claims= new HashMap<>();
         claims.put("DoctorDetails",tokenClaims);
-//        claims.put("role",tokenClaims.getRole());
         return doGenerateToken(email,claims);
 
     }
@@ -81,19 +80,13 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
-            throw new APIException( "Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
+        }catch (SignatureException | MalformedJwtException  |UnsupportedJwtException | IllegalArgumentException ex) {
             throw new APIException( "Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            log.info("xcvjkl");
+        }
+        catch (ExpiredJwtException ex) {
             if(refreshToken(ex,request))
                 return false;
-            throw new ExpiredJwtException(ex.getHeader(), ex.getClaims(), "Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            throw new APIException("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            throw new APIException("JWT claims string is empty.");
+            throw new APIException("Expired JWT token");
         }
     }
 

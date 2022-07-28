@@ -24,7 +24,7 @@ import java.time.LocalDate;
 @Slf4j
 public class AppointmentController {
 
-    private AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
 
     @Autowired

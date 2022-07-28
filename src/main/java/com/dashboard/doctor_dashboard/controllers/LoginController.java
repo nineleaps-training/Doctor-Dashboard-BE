@@ -22,7 +22,7 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class LoginController {
 
-    private LoginService loginService;
+    private final LoginService loginService;
     @Autowired
 
     public LoginController(LoginService loginService) {

@@ -15,9 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class FileController {
 
-    private FileStorage storageService;
+    private final FileStorage storageService;
     @Autowired
-    public FileController(FileStorageServiceImpl storageService){
+    public FileController(FileStorage storageService){
         this.storageService = storageService;
     }
 
