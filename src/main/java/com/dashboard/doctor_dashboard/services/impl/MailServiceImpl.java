@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import com.dashboard.doctor_dashboard.util.Constants;

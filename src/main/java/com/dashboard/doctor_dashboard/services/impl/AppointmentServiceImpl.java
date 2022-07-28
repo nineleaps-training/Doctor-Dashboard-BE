@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
@@ -11,6 +11,7 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
+import com.dashboard.doctor_dashboard.services.AppointmentService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;

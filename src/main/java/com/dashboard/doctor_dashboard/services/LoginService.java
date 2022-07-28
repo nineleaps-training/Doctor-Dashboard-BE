@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.login;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;

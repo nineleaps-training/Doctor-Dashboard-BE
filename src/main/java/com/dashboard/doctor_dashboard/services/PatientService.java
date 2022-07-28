@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.patient;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;

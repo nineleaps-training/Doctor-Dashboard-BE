@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.JwtToken;
-import com.dashboard.doctor_dashboard.services.login.LoginService;
+import com.dashboard.doctor_dashboard.services.LoginService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

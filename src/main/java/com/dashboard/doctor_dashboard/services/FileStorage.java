@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.file;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.springframework.http.ResponseEntity;

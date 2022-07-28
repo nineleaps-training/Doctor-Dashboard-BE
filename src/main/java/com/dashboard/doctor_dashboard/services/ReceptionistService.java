@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.receptionist;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;

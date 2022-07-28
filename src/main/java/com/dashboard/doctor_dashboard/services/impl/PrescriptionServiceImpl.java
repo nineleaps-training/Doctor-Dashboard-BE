@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.prescription;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
@@ -7,8 +7,9 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.appointment.MailServiceImpl;
-import com.dashboard.doctor_dashboard.services.appointment.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
+import com.dashboard.doctor_dashboard.services.impl.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  */
 @Service
 @Slf4j
-public class PrescriptionServiceImpl implements PrescriptionService   {
+public class PrescriptionServiceImpl implements PrescriptionService {
 
 
     private final PrescriptionRepository prescriptionRepository;

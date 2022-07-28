@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.doctor;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
@@ -9,6 +9,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;

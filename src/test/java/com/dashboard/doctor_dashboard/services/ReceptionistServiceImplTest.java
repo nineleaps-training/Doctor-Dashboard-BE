@@ -10,7 +10,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.ReceptionistServiceImpl;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

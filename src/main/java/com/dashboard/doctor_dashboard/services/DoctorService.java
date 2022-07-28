@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.doctor;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;

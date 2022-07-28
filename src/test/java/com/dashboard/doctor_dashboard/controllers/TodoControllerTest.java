@@ -3,7 +3,7 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.services.todo.TodoService;
+import com.dashboard.doctor_dashboard.services.TodoService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

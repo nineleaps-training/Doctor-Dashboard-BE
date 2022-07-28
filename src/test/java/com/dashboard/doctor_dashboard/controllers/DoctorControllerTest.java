@@ -5,7 +5,7 @@ import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.exceptions.CommonExceptionHandler;
-import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

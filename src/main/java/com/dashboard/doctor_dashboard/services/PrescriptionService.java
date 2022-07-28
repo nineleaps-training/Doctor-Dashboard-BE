@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.prescription;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;

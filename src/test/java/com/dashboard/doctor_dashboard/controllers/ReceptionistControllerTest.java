@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

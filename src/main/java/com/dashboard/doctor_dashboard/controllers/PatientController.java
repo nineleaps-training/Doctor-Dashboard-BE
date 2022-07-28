@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.services.patient.PatientService;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

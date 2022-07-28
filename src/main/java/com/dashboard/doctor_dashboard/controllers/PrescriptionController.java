@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.services.prescription.PrescriptionService;
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;

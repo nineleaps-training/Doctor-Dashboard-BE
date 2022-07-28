@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.todo;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
