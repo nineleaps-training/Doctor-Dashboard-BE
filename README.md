@@ -162,7 +162,9 @@ CLI, click Use GitHub CLI, then copy the link.
 4. Open Terminal.
 5. Change the current working directory to the location where you want the clone to be performed.
 6. Type git clone, and then paste the URL you copied earlier.
+```
 $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+```
 7. Press Enter.
 
 ### Opening project in Intellij:
