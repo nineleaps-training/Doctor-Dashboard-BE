@@ -47,7 +47,7 @@ public class DoctorDetails {
 
     @Column(name = "degree",columnDefinition = "varchar(250)",nullable = false)
     private String degree;
-    @Column(name = "deleted",columnDefinition = "tinyint(1) default 0git")
+    @Column(name = "deleted",columnDefinition = "tinyint(1) default 0")
     private boolean deleted=false;
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)
