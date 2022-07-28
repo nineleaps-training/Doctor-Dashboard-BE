@@ -64,39 +64,6 @@ class DoctorControllerTest {
     }
 
 
-//    @Test
-//    void  getAllDoctors() throws Exception {
-//        final Long id = 1L;
-//        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
-//        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
-//
-//        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
-//
-//
-//        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/api/v1/doctor/get-all/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-//
-//    }
-
-//    @Test
-//    void throwErrorIfIdNotPresentDbForAllDoctor() throws Exception {
-//        final Long id = 1L;
-//        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
-//        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
-//
-//        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/api/v1/doctor/get-all/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-//
-//
-//    }
 
     @Test
     void getDoctorsByIdIfIdPresent() throws Exception {
@@ -113,20 +80,6 @@ class DoctorControllerTest {
                 .get("/api/v1/doctor/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
-
-//    @Test
-//    void throwErrorIfIdNotPresentDb() throws Exception {
-//        final Long id = 1L;
-//        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-//                "orthology",null,"male", (short) 21,"MBBS",(short)8);
-//
-//        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .get("/api/v1/doctor/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-//
-//
-//    }
 
     @Test
     void addDoctorDetails() throws Exception {
@@ -170,29 +123,6 @@ class DoctorControllerTest {
 
     }
 
-//    @Test
-//    void throwErrorIfIdMisMatchForAddDoctor() throws Exception {
-//        BindingResult result = mock(BindingResult.class);
-//        WebRequest webRequest = mock(WebRequest.class);
-//        HttpServletRequest request = mock(HttpServletRequest.class);
-//
-//
-//        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
-//                "9728330045",(short)6,"MBBS");
-//
-//        Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
-//                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
-//
-//        String content = objectMapper.writeValueAsString(doctorFormDto);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
-//
-//
-//    }
-
-
-
     @Test
     void updateDoctorDetails() throws Exception {
         BindingResult result = mock(BindingResult.class);
@@ -229,27 +159,6 @@ class DoctorControllerTest {
 
 
     }
-
-//    @Test
-//    void throwErrorIfIdMisMatchForUpdateDoctor() throws Exception {
-//        BindingResult result = mock(BindingResult.class);
-//        WebRequest webRequest = mock(WebRequest.class);
-//        HttpServletRequest request = mock(HttpServletRequest.class);
-//
-//
-//        UserDetailsUpdateDto doctorFormDto = new UserDetailsUpdateDto(1L,
-//                "9728330045");
-//
-//        Mockito.when(doctorService.updateDoctor(Mockito.any(UserDetailsUpdateDto.class),
-//                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
-//
-//        String content = objectMapper.writeValueAsString(doctorFormDto);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
-//
-//
-//    }
 
     @Test
     void deleteDoctor() throws Exception {

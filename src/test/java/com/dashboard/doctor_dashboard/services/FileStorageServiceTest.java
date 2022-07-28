@@ -136,27 +136,6 @@ class FileStorageServiceTest {
     }
 
 
-//    @Test
-//    void throwsException() throws IOException {
-//        final Long id = 1L;
-//        InputStream in = mock(InputStream.)
-//
-//        MultipartFile file1 = new MockMultipartFile(
-//                "file"," j bjhbhj",
-//                String.valueOf(MediaType.TEXT_PLAIN),
-//                null
-//        );
-////        MockMultipartFile file = mock(MockMultipartFile.class);
-//        Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
-//       // Mockito.when(file.getBytes()).thenThrow(IOException.class);
-//        System.out.println("empty"+file1.getBytes());
-//        Exception exception = assertThrows(Exception.class,()->{
-//            fileStorageServiceImpl.store(file1,id);
-//        });
-//        System.out.println(exception);
-//
-//    }
-
 
     @Test
     void getFile() throws IOException {

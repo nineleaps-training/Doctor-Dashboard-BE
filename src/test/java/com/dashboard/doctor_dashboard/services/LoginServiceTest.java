@@ -159,28 +159,6 @@ class LoginServiceTest {
     }
 
 
-//    @Test
-//    void existingUserInfoFromGoogleToken(){
-//        JsonWebSignature.Header header=new JsonWebSignature.Header();
-//        GoogleIdToken.Payload payload=new GoogleIdToken.Payload();
-//        payload.set("email","pranay@gmail.com");
-//        payload.set("given_name","pranay");
-//        payload.set("family_name","Reddy");
-//        byte[] b = new byte[5];
-//        DoctorDetails newDoctor = new DoctorDetails();
-////        newDoctor.setId(1L);
-////        newDoctor.setFirstName("pranay");
-////        newDoctor.setLastName("Reddy");
-////        newDoctor.setEmail("pranay@gmail.com");
-//        Mockito.doReturn(false).when(loginService).addUser(Mockito.any());
-//        Mockito.when(loginRepo.getId("pranay@gmail.com")).thenReturn(1);
-//        Mockito.doReturn("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcmFuYXkubmFyZWRkeUBuaW5lbGVhcHMuY29tIiwiaWF0IjoxNjQ5NTczMDIzLCJleHAiOjE2NDk2NTk0MjMsIkRvY3RvckRldGFpbHMiOnsiZG9jdG9ySWQiOjEsImRvY3Rvck5hbWUiOiJwcmFuYXkiLCJkb2N0b3JFbWFpbCI6InByYW5heS5uYXJlZGR5QG5pbmVsZWFwcy5jb20ifX0.udyr6ov047PEjYaGWR691WZWGqfuwrm9pN-NWtMFjAv-rJLHuDEd49ia4ibvSM3OhgW8C7VmC3CnI5Zy4QwNag").when(loginService).
-//                loginCreator(Mockito.any(Long.class),Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class),Mockito.any(String.class));
-//
-//        GoogleIdToken idToken=new GoogleIdToken(header,payload,b,b);
-//        String value=loginService.takingInfoFromToken(idToken);
-//        assertEquals("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcmFuYXkubmFyZWRkeUBuaW5lbGVhcHMuY29tIiwiaWF0IjoxNjQ5NTczMDIzLCJleHAiOjE2NDk2NTk0MjMsIkRvY3RvckRldGFpbHMiOnsiZG9jdG9ySWQiOjEsImRvY3Rvck5hbWUiOiJwcmFuYXkiLCJkb2N0b3JFbWFpbCI6InByYW5heS5uYXJlZGR5QG5pbmVsZWFwcy5jb20ifX0.udyr6ov047PEjYaGWR691WZWGqfuwrm9pN-NWtMFjAv-rJLHuDEd49ia4ibvSM3OhgW8C7VmC3CnI5Zy4QwNag",value);
-//    }
 
     @Test
     void InvalidGoogleToken(){

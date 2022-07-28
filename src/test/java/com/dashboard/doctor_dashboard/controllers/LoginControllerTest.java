@@ -63,23 +63,6 @@ class LoginControllerTest {
 
 
     }
-
-//    @Test
-//    void ThrowErrorIfTokenExpired() throws Exception {
-//        String token = "ID token expired.";
-//        JwtToken idToken = new JwtToken();
-//        idToken.setIdtoken(token);
-//        Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(token);
-//
-//        String content = objectMapper.writeValueAsString(idToken);
-//
-//        mockMvc.perform(MockMvcRequestBuilders
-//                .post("/api/v1/user/login").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnauthorized());
-//
-//
-//    }
-
-
     @Test
     void checkServerStatus() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders

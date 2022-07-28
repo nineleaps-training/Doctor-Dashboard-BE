@@ -249,9 +249,6 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-//        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
-//                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
-
         AppointmentDto appointment1 = new AppointmentDto("dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
