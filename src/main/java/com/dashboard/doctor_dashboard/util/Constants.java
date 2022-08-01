@@ -11,6 +11,7 @@ public class Constants {
     public static final String LOGIN = "Login";
     public static final String  DEFAULT_PAGE_SIZE="10";
 
+    public static final String  UNAUTHORIZED="Authentication failed,token is not valid";
 
     //Login
     public static final String LOGIN_DETAILS_NOT_FOUND = "login details not found with the id provided.";
