@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
-import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
@@ -12,9 +10,9 @@ import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * implementation of PatientService interface
@@ -58,14 +56,14 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for adding patient details.
+     *
      * @param patient
      * @param loginId
      * @return ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
-    public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId) {
+    public PatientEntityDto addPatient(PatientEntityDto patient, Long loginId) {
         log.info("inside: PatientServiceImpl::addPatient");
-        var genericMessage = new GenericMessage();
 
         Long temp = loginRepo.isIdAvailable(loginId);
         if(temp != null){
@@ -73,11 +71,9 @@ public class PatientServiceImpl implements PatientService {
                     insertIntoPatient(patient.getAge(),patient.getMobileNo(),patient.getAlternateMobileNo(),
                             patient.getGender(), patient.getAddress(), patient.getBloodGroup(),loginId);
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
-            genericMessage.setData(mapToDto(patientDetails));
-            genericMessage.setStatus(Constants.SUCCESS);
             log.debug(Constants.PATIENT+": On boarding completed..");
             log.info("exit: PatientServiceImpl::addPatient");
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+            return mapToDto(patientDetails) ;
         }else {
             log.info("PatientServiceImpl::addPatient"+Constants.LOGIN_DETAILS_NOT_FOUND);
             throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
@@ -86,21 +82,19 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for getting patient details by login id
+     *
      * @param loginId
      * @return ResponseEntity<GenericMessage> with status code 200 and patient details
      */
     @Override
-    public ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId) {
+    public PatientEntityDto getPatientDetailsById(Long loginId) {
         log.info("inside: PatientServiceImpl::getPatientDetailsById");
-
-        var genericMessage = new GenericMessage();
-
+        
         if(loginRepo.isIdAvailable(loginId) != null){
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
-            genericMessage.setData(mapToDto(patientDetails));
-            genericMessage.setStatus(Constants.SUCCESS);
+            
             log.info("exit: PatientServiceImpl::getPatientDetailsById");
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+            return (mapToDto(patientDetails)) ;
         }else {
             log.info("PatientServiceImpl::getPatientDetailsById"+Constants.LOGIN_DETAILS_NOT_FOUND);
             throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
@@ -112,17 +106,18 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for deleting patient by id
+     *
      * @param id
      * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
      */
     @Override
-    public ResponseEntity<GenericMessage> deletePatientById(Long id) {
+    public String deletePatientById(Long id) {
         log.info("inside: PatientServiceImpl::deletePatientById");
 
-        patientRepository.deleteById(id);
+        patientRepository.deletePatientById(id);
         log.debug(Constants.PATIENT+": patient deleted.");
         log.info("exit: PatientServiceImpl::deletePatientById");
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
+        return "successfully deleted";
     }
 
 
@@ -138,12 +133,13 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for updating patient details
+     *
      * @param id
      * @param patient
      * @return ResponseEntity<GenericMessage> with status code 200 and message successfully updated.
      */
     @Override
-    public ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto patient) {
+    public String updatePatientDetails(Long id, UserDetailsUpdateDto patient) {
         log.info("inside: PatientServiceImpl::updatePatientDetails");
 
 
@@ -155,7 +151,7 @@ public class PatientServiceImpl implements PatientService {
             genericMessage.setStatus(Constants.SUCCESS);
             log.debug(Constants.PATIENT+": Updated completed..");
             log.info("exit: PatientServiceImpl::updatePatientDetails");
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+            return "updated successfully";
 
         } else {
             log.info("PatientServiceImpl::updatePatientDetails"+Constants.PATIENT);
@@ -165,17 +161,18 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for getting all notification by patient id
+     *
      * @param patientId
      * @return ResponseEntity<GenericMessage> with status code 200 and list of doctorName and appointId.
      */
     @Override
-    public ResponseEntity<GenericMessage> getNotifications(long patientId) {
+    public List<NotificationDto> getNotifications(long patientId) {
 
         log.info("inside: PatientServiceImpl::getNotifications");
 
         if (loginRepo.existsById(patientId)&&patientRepository.getId(patientId)!=null) {
             log.info("exit: PatientServiceImpl::getNotifications");
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.getNotifications(patientRepository.getId(patientId))), HttpStatus.OK);
+            return  appointmentRepository.getNotifications(patientRepository.getId(patientId));
         }
         log.info("PatientServiceImpl::getNotifications"+Constants.PATIENT_NOT_FOUND);
 
@@ -184,12 +181,13 @@ public class PatientServiceImpl implements PatientService {
 
     /**
      * This function of service is for getting appointment details by appointmentId and patientId
+     *
      * @param appointmentId
      * @param patientId
      * @return ResponseEntity<GenericMessage> with status code 200 and appointment details
      */
     @Override
-    public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
+    public AppointmentViewDto viewAppointment(Long appointmentId, long patientId){
         log.info("inside: PatientServiceImpl::viewAppointment");
 
         if(patientRepository.getId(patientId)!=null){
@@ -203,7 +201,7 @@ public class PatientServiceImpl implements PatientService {
                     viewDto.setPrescription(prescriptionRepository.getAllPrescriptionByAppointment(appointmentId));
 
                     log.info("exit: PatientServiceImpl::viewAppointment");
-                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, viewDto), HttpStatus.OK);
+                    return viewDto;
                 }
                 else{
                     log.info("PatientServiceImpl::viewAppointment "+Constants.DOCTOR_NOT_FOUND);

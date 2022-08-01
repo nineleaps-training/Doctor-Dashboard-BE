@@ -1,27 +1,26 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import org.springframework.http.ResponseEntity;
+import com.dashboard.doctor_dashboard.dtos.*;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * interface for patient service layer.
  */
 @Service
 public interface PatientService {
-    ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId);
+    PatientEntityDto addPatient(PatientEntityDto patient, Long loginId);
 
-    ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId);
+    PatientEntityDto getPatientDetailsById(Long loginId);
 
 
-    ResponseEntity<GenericMessage> deletePatientById(Long id);
+    String deletePatientById(Long id);
 
-    ResponseEntity<GenericMessage> updatePatientDetails(Long id, UserDetailsUpdateDto userDetailsUpdateDto);
+    String updatePatientDetails(Long id, UserDetailsUpdateDto userDetailsUpdateDto);
 
-    ResponseEntity<GenericMessage> viewAppointment(Long appointmentId, long patientId);
+    AppointmentViewDto viewAppointment(Long appointmentId, long patientId);
 
-    ResponseEntity<GenericMessage> getNotifications(long patientId);
+    List<NotificationDto> getNotifications(long patientId);
 
 }

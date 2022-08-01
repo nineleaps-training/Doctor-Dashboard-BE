@@ -1,19 +1,19 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import org.springframework.http.ResponseEntity;
+import com.dashboard.doctor_dashboard.dtos.*;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * interface for receptionist service layer.
  */
 @Service
 public interface ReceptionistService {
-    ResponseEntity<GenericMessage> getDoctorDetails();
-    ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo,int pageSize);
-    ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo,int pageSize);
+    List<DoctorDropdownDto> getDoctorDetails();
+    PageRecords getDoctorAppointments(Long doctorId, int pageNo, int pageSize);
+    PageRecords todayAllAppointmentForClinicStaff(int pageNo, int pageSize);
 
-    ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId);
+    String addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId);
 
 }

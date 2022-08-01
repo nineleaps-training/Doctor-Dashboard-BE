@@ -1,12 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import org.springframework.http.ResponseEntity;
+import com.dashboard.doctor_dashboard.dtos.*;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * interface for doctor service layer.
@@ -14,23 +12,23 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public interface DoctorService {
 
-    ResponseEntity<GenericMessage> getAllDoctors(Long id);
+    List<DoctorListDto> getAllDoctors(Long id);
 
-    ResponseEntity<GenericMessage> getDoctorById(long id);
+    DoctorBasicDetailsDto getDoctorById(long id);
 
     //<<<<<<< HEAD
-    ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request);
-    ResponseEntity<GenericMessage>  addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
+    DoctorFormDto updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request);
+    DoctorFormDto addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
 
-    ResponseEntity<GenericMessage> deleteDoctor(long id);
+    String deleteDoctor(long id);
 
-    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality,int pageNo,int pageSize);
+    PageRecords getAllDoctorsBySpeciality(String speciality, int pageNo, int pageSize);
 
-    ResponseEntity<GenericMessage> genderChart(Long doctorId);
+    Map<String, Integer> genderChart(Long doctorId);
 
-    ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId);
+    Map<String, Integer> bloodGroupChart(Long doctorId);
 
-    ResponseEntity<GenericMessage> ageGroupChart(Long doctorId);
+    Map<String, Integer> ageGroupChart(Long doctorId);
 
 
 

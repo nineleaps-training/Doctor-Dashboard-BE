@@ -1,9 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
-import org.springframework.http.ResponseEntity;
+import com.dashboard.doctor_dashboard.entities.*;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * interface for todoservice layer.
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TodoService {
 
-    ResponseEntity<GenericMessage> addTodo(TodoListDto todolist);
+    Todolist addTodo(TodoListDto todolist);
 
 
-    ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId);
+    List<Todolist> getAllTodoByDoctorId(Long doctorId);
 
 
-    ResponseEntity<GenericMessage> deleteTodoById(Long id);
+    String deleteTodoById(Long id);
 }

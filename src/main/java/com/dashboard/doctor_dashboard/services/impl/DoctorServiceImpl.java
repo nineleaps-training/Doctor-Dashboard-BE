@@ -1,9 +1,6 @@
 package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.dtos.PageRecords;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
@@ -17,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,11 +48,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * This function of service is for getting all doctors
-     * @param id  this variable contains Id.
+     *
+     * @param id this variable contains Id.
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllDoctors(Long id){
+    public List<DoctorListDto> getAllDoctors(Long id){
         log.info("inside: DoctorServiceImpl::getAllDoctors");
 
 
@@ -69,7 +65,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: DoctorServiceImpl::getAllDoctors");
 
-            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            return list;
         }
 
 
@@ -85,18 +81,11 @@ public class DoctorServiceImpl implements DoctorService {
      * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getDoctorById(long id){
+    public DoctorBasicDetailsDto getDoctorById(long id){
         log.info("inside: DoctorServiceImpl::getDoctorById");
-
-
-        var genericMessage = new GenericMessage();
-
         if (doctorRepository.isIdAvailable(id) != null) {
-            genericMessage.setData(doctorRepository.findDoctorById(id));
-            genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: DoctorServiceImpl::getDoctorById");
-
-            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            return doctorRepository.findDoctorById(id);
         }
 
         log.info("DoctorServiceImpl::getDoctorById"+Constants.DOCTOR_NOT_FOUND);
@@ -106,29 +95,25 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * This function of service is for adding doctor details
+     *
      * @param details this variable contains details.
-     * @param id this variable contains Id.
+     * @param id      this variable contains Id.
      * @param request this variable contains request.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request){
+    public DoctorFormDto addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::addDoctorDetails");
 
-
-        var genericMessage = new GenericMessage();
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if(doctorRepository.isIdAvailable(details.getLoginId())==null) {
                 if (details.getLoginId() == id && details.getLoginId().equals(doctorLoginId)) {
                     doctorRepository.insertARowIntoTheTable(details.getLoginId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
-                    genericMessage.setData( doctorRepository.getDoctorById(details.getLoginId()));
-                    genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor on boarding completed.");
                     log.info("exit: DoctorServiceImpl::addDoctorDetails");
-
-                    return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+                    return doctorRepository.getDoctorById(details.getLoginId());
                 }
             }
             else {
@@ -147,27 +132,25 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * This function of service is for updating doctor details
+     *
      * @param details this variable contains details.
-     * @param id this variable contains Id.
+     * @param id      this variable contains Id.
      * @param request this variable contains request.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
+    public DoctorFormDto updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::updateDoctor");
 
-
-        var genericMessage = new GenericMessage();
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
             if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
                 doctorRepository.updateDoctorDb(details.getMobileNo());
-                genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
-                genericMessage.setStatus(Constants.SUCCESS);
+
                 log.info("exit: DoctorServiceImpl::updateDoctor");
 
-                return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+                return  doctorRepository.getDoctorById(details.getId());
             }
 
             log.info("DoctorServiceImpl::updateDoctor"+Constants.DETAILS_MISMATCH);
@@ -181,31 +164,29 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * this function of service is for deleting doctor details
+     *
      * @param id this variable contains Id.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> deleteDoctor(long id){
+    public String deleteDoctor(long id){
         log.info("inside: DoctorServiceImpl::deleteDoctor");
 
 
-        var genericMessage = new GenericMessage();
-
-        doctorRepository.deleteById(id);
-        genericMessage.setData("Successfully deleted");
-        genericMessage.setStatus(Constants.SUCCESS);
+        doctorRepository.deleteDoctorById(id);
         log.debug("Doctor: Doctor deleted.");
         log.info("exit: DoctorServiceImpl::deleteDoctor");
 
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        return "Successfully deleted";
     }
     /**
      * This function of service is for getting all doctor by speciality
+     *
      * @param speciality this variable contains speciality.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality,int pageNo,int pageSize){
+    public PageRecords getAllDoctorsBySpeciality(String speciality, int pageNo, int pageSize){
         log.info("inside: DoctorServiceImpl::getAllDoctorsBySpeciality");
 
         var genericMessage = new GenericMessage();
@@ -216,7 +197,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: DoctorServiceImpl::getAllDoctorsBySpeciality");
 
-            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            return new PageRecords(list.toList(),pageNo,pageSize,list.getTotalElements(),list.getTotalPages(),list.isLast());
         }
         log.info("DoctorServiceImpl::getAllDoctorsBySpeciality"+Constants.DOCTOR_NOT_FOUND_SPECIALITY);
 
@@ -224,11 +205,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
     /**
      * This function of service is for fetching details for gender chart
+     *
      * @param doctorId this variable contains doctor Id.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> genderChart(Long doctorId){
+    public Map<String, Integer> genderChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::genderChart");
 
         Map<String,Integer> chart = new HashMap<>();
@@ -241,7 +223,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             log.info("exit: DoctorServiceImpl::genderChart");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+            return chart;
         }
         log.info("DoctorServiceImpl::genderChart"+Constants.DOCTOR_NOT_FOUND);
 
@@ -250,11 +232,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * This function of service is for fetching details for blood group chart
+     *
      * @param doctorId this variable contains doctor Id.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId){
+    public Map<String, Integer> bloodGroupChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::bloodGroupChart");
 
         Map<String,Integer> chart = new HashMap<>();
@@ -267,7 +250,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             log.info("exit: DoctorServiceImpl::bloodGroupChart");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+            return chart;
         }
         log.info("DoctorServiceImpl::bloodGroupChart"+Constants.DOCTOR_NOT_FOUND);
 
@@ -277,11 +260,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     /**
      * This function of service is for fetching details for age group chart
-     * @param doctorId  this variable contains doctor Id.
-     * @return  It returns a ResponseEntity<GenericMessage> with status code 200 .
+     *
+     * @param doctorId this variable contains doctor Id.
+     * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId){
+    public Map<String, Integer> ageGroupChart(Long doctorId){
         log.info("inside: DoctorServiceImpl::ageGroupChart");
 
         Map<String,Integer> chart = new HashMap<>();
@@ -312,7 +296,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             log.info("exit: DoctorServiceImpl::ageGroupChart");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+            return chart;
 
         }
         log.info("DoctorServiceImpl::ageGroupChart"+Constants.DOCTOR_NOT_FOUND);

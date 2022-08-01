@@ -17,6 +17,9 @@ public interface LoginRepo extends PagingAndSortingRepository<LoginDetails, Long
     @Query(value = "select email_id from login_details where deleted = false and  id =:doctorId",nativeQuery = true)
     String email(Long doctorId);
 
+    @Query(value = "UPDATE login_details SET deleted = true WHERE id=:id", nativeQuery = true)
+    Void deleteUserById(Long id);
+
     @Query(value = "select id from login_details d where deleted = false and  d.id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
     @Query(value = "select role from login_details d where deleted = false and  d.id=:id", nativeQuery = true)

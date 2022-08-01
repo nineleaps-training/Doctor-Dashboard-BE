@@ -21,13 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -79,16 +78,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function of service  is for adding appointment details
-     * @param appointment  this variable contains appointment details.
-     * @param request  this variable contains request.
+     *
+     * @param appointment this variable contains appointment details.
+     * @param request     this variable contains request.
      * @return It returns a ResponseEntity<GenericMessage> with status code 201.
      * @throws MessagingException
      * @throws JSONException
-     * @throws UnsupportedEncodingException
-     * This function is used for booking appointments.
+     * @throws UnsupportedEncodingException This function is used for booking appointments.
      */
     @Override
-    public ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
+    public Map<String, String> addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
         log.info("inside: appointment service::addAppointment");
         Map<String,String> response = new HashMap<>();
         Long loginId=jwtTokenProvider.getIdFromToken(request);
@@ -112,7 +111,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     response.put("message",Constants.APPOINTMENT_CREATED);
                     sendEmailToUser(mapper.map(appointment,Appointment.class)); //sending mail to user on successful appointment booking.
                     log.info("exit: appointment service::addAppointment");
-                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,response),HttpStatus.CREATED);
+                    return response;
                 }
                 log.info("appointment service::addAppointment "+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
                 throw new InvalidDate(appDate+":"+Constants.APPOINTMENT_CANNOT_BE_BOOKED);
@@ -214,14 +213,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     /**
      * This function of service of getting all appointment by patient
+     *
      * @param loginId this variable contains login id.
-     * @param pageNo this variable contains Page no.
+     * @param pageNo  this variable contains Page no.
      * @return It returns a ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo,int pageSize ){
+    public Map<String, PageRecords> getAllAppointmentByPatientId(Long loginId, int pageNo, int pageSize ){
         log.info("inside: appointment service::getAllAppointmentByPatientId");
-        var genericMessage = new GenericMessage();
         Map<String, PageRecords> m = new HashMap<>();
         Pageable paging= PageRequest.of(pageNo, pageSize);
 
@@ -243,13 +242,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             m.put("today",pageRecordsToday);
             m.put("upcoming",pageRecordsUpcoming);
 
-            genericMessage.setData(m);
-            genericMessage.setStatus(Constants.SUCCESS);
 
 
             log.info("exit: appointment service::getAllAppointmentByPatientId");
 
-            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            return m;
         }
 
         log.info("appointment service::getAllAppointmentByPatientId"+Constants.PATIENT_NOT_FOUND);
@@ -258,12 +255,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function of service of getting all appointment by doctor
+     *
      * @param loginId this variable contains login id.
-     * @param pageNo this variable contains Page no.
+     * @param pageNo  this variable contains Page no.
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo,int pageSize ){
+    public Map<String, PageRecords> getAllAppointmentByDoctorId(Long loginId, int pageNo, int pageSize ){
         log.info("inside: appointment service::getAllAppointmentByDoctorId");
         var genericMessage = new GenericMessage();
         List<DoctorAppointmentListDto> today = new ArrayList<>();
@@ -297,7 +295,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             log.info("exit: appointment service::getAllAppointmentByDoctorId");
 
-            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+            return m;
         }
         log.info("appointment service::getAllAppointmentByDoctorId"+Constants.DOCTOR_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
@@ -309,13 +307,13 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getFollowDetails(Long appointId){
+    public FollowUpDto getFollowDetails(Long appointId){
         log.info("inside: appointment service::getFollowDetails");
 
         if(appointmentRepository.getId(appointId) != null && appointId.equals(appointmentRepository.getId(appointId))){
             log.info("exit: appointment service::getFollowDetails");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId), FollowUpDto.class)),HttpStatus.OK);
+            return mapper.map(appointmentRepository.getFollowUpData(appointId), FollowUpDto.class);
         }
         log.info("appointment service::getFollowDetails"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
@@ -327,13 +325,13 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return It returns a  ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getAppointmentById(Long appointId){
+    public PatientProfileDto getAppointmentById(Long appointId){
         log.info("inside: appointment service::getAppointmentById");
         if(appointmentRepository.getId(appointId) != null){
             var appointment = appointmentRepository.getAppointmentById(appointId);
             log.info("exit: appointment service::getAppointmentById");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointment, PatientProfileDto.class)),HttpStatus.OK);
+            return mapper.map(appointment, PatientProfileDto.class);
         }
         log.info("appointment service::getAppointmentById"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
@@ -341,11 +339,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     /**
      * This function is used for getting weekly visits to the doctor in a month.
+     *
      * @param doctorId this variable contains appointment details.
-     * @return  It returns a  ResponseEntity<GenericMessage> for weeklyDoctorCountChart.
+     * @return It returns a  ResponseEntity<GenericMessage> for weeklyDoctorCountChart.
      */
     @Override
-    public ResponseEntity<GenericMessage> weeklyDoctorCountChart(Long doctorId){
+    public ArrayList<String> weeklyDoctorCountChart(Long doctorId){
         log.info("inside: appointment service::weeklyDoctorCountChart");
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             ArrayList<java.sql.Date> dateList = appointmentRepository.getAllDatesByDoctorId(doctorId);
@@ -359,11 +358,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function is used for getting weekly visits of the patient to the doctors in a month.
+     *
      * @param patientId this variable contains patient Id.
-     * @return  It returns a  ResponseEntity<GenericMessage> for  weeklyPatientCountChart
+     * @return It returns a  ResponseEntity<GenericMessage> for  weeklyPatientCountChart
      */
     @Override
-    public ResponseEntity<GenericMessage> weeklyPatientCountChart(Long patientId){
+    public ArrayList<String> weeklyPatientCountChart(Long patientId){
         log.info("inside: appointment service::weeklyPatientCountChart");
         Long id = patientRepository.getId(patientId);
         if(id != null) {
@@ -378,11 +378,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function is used for getting upcoming appointments of the doctor in the current day.
+     *
      * @param doctorId this variable contains doctor Id.
      * @return It returns ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> recentAppointment(Long doctorId){
+    public List<DoctorAppointmentListDto> recentAppointment(Long doctorId){
 
         log.info("inside: appointment service::recentAppointment");
         if(doctorRepository.isIdAvailable(doctorId) != null) {
@@ -391,7 +392,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     .map(this::mapToDto).collect(Collectors.toList());
             log.info("exit: appointment service::recentAppointment");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list),HttpStatus.OK);
+            return list;
         }
         log.info("appointment service::recentAppointment"+Constants.DOCTOR_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
@@ -399,18 +400,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function used for getting sum of total appointments till date.
+     *
      * @param doctorId this variable contains doctor Id.
      * @return It returns ResponseEntity<GenericMessage> with status code 200.
      */
 
     @Override
-    public ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId){
+    public int totalNoOfAppointment(Long doctorId){
         log.info("inside: appointment service::totalNoOfAppointment");
 
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             log.info("exit: appointment service::totalNoOfAppointment");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.totalNoOfAppointment(doctorId)), HttpStatus.OK);
+            return appointmentRepository.totalNoOfAppointment(doctorId);
         }
         log.info("appointment service::totalNoOfAppointment"+Constants.DOCTOR_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
@@ -418,17 +420,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function used for getting total number of current day appointments.
+     *
      * @param doctorId this variable contains doctor Id.
-     * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> todayAppointments(Long doctorId){
+    public int todayAppointments(Long doctorId){
         log.info("inside: appointment service::todayAppointments");
 
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             log.info("exit: appointment service::todayAppointments");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.todayAppointments(doctorId)), HttpStatus.OK);
+            return appointmentRepository.todayAppointments(doctorId);
         }
         log.info("appointment service::todayAppointments"+Constants.DOCTOR_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
@@ -436,17 +439,18 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function used for getting total number of appointments added in current week.
-     * @param doctorId  this variable contains doctor Id.
-     * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
+     *
+     * @param doctorId this variable contains doctor Id.
+     * @return It returns ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId){
+    public int totalNoOfAppointmentAddedThisWeek(Long doctorId){
         log.info("inside: appointment service::totalNoOfAppointmentAddedThisWeek");
 
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             log.info("exit: appointment service::totalNoOfAppointmentAddedThisWeek");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.totalNoOfAppointmentAddedThisWeek(doctorId)), HttpStatus.OK);
+            return appointmentRepository.totalNoOfAppointmentAddedThisWeek(doctorId);
         }
         log.info("appointment service::totalNoOfAppointmentAddedThisWeek"+Constants.DOCTOR_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
@@ -454,18 +458,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * This function used for getting the sum of different categories the patient visited till date.
+     *
      * @param loginId this variable contains login Id.
-     * @return  It returns ResponseEntity<GenericMessage> with status code 200 .
+     * @return It returns ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> patientCategoryGraph(Long loginId){
+    public ArrayList<String> patientCategoryGraph(Long loginId){
         log.info("inside: appointment service::patientCategoryGraph");
 
         Long patientId = patientRepository.getId(loginId);
         if(patientId != null) {
             log.info("exit: appointment service::patientCategoryGraph");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.patientCategoryGraph(patientId)), HttpStatus.OK);
+            return appointmentRepository.patientCategoryGraph(patientId);
         }
         log.info("appointment service::patientCategoryGraph"+Constants.PATIENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
@@ -592,9 +597,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
 
-
-
-
     /**
      * @param appointments  this variable contains appointments.
      * @return It returns List<PatientAppointmentListDto>
@@ -670,7 +672,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return It returns ResponseEntity<GenericMessage> with status code 200.
      * This function gives weekly count of vists.
      */
-    ResponseEntity<GenericMessage> weeklyGraph(ArrayList<java.sql.Date> dateList){
+    ArrayList<String> weeklyGraph(ArrayList<Date> dateList){
         log.info("inside: appointment service::weeklyGraph");
 
         int lengthOfMonth = LocalDate.now().lengthOfMonth();
@@ -721,7 +723,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         newList.add(fourthWeek+","+fourthWeekCount);
         newList.add(lastWeek+","+lastWeekCount);
         log.info("exit: appointment service::weeklyGraph");
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,newList),HttpStatus.OK);
+        return newList;
     }
 
 }

@@ -1,13 +1,13 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.*;
 import org.codehaus.jettison.json.JSONException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * interface for prescription service layer.
@@ -15,9 +15,9 @@ import java.io.IOException;
 @Service
 public interface PrescriptionService {
 
-    ResponseEntity<GenericMessage> addPrescription(Long id, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException;
+    String addPrescription(Long id, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException;
 
-    ResponseEntity<GenericMessage> getAllPrescriptionByAppointment(Long appointId);
+    List<Prescription> getAllPrescriptionByAppointment(Long appointId);
 
-    ResponseEntity<GenericMessage> deleteAppointmentById(Long id);
+    String deleteAppointmentById(Long id);
 }

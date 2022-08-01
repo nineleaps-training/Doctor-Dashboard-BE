@@ -30,6 +30,8 @@ public interface PatientRepository extends PagingAndSortingRepository<Patient, L
     @Query(value = "select upper(blood_group),count(blood_group) from attributes inner join patient_details where deleted = false and patient_details.id = attributes.id and doctor_id =:doctorId group by blood_group", nativeQuery = true)
     ArrayList<String> bloodGroup(@Param(value = "doctorId") Long doctorId);
 
+    @Query(value = "UPDATE patient_details SET deleted = true WHERE id=:id", nativeQuery = true)
+    Void deletePatientById(Long id);
 
     @Query(value = "insert into patient_details (age,mobile_no,alternate_mobile_no,timestamp,gender,address,blood_group,created_at,login_id) values(:age,:mobileNo,:alternateMobileNo,now(),:gender,:address,:bloodGroup,now(),:loginId)",nativeQuery = true)
     @Transactional

@@ -155,9 +155,9 @@ public class LoginServiceImpl implements LoginService {
      * @return  It returns a Jwt token.
      */
     @Override
-    public String deleteDoctorById(long id) {
+    public String deleteUserById(long id) {
         log.info("inside: LoginServiceImpl::deleteDoctorById");
-        loginRepo.deleteById(id);
+        loginRepo.deleteUserById(id);
         log.info("exit: LoginServiceImpl::deleteDoctorById");
         return "Successfully deleted";
     }

@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.dtos.PageRecords;
-import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -12,15 +10,12 @@ import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,23 +47,25 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
     /**
      * This function of service is for getting all the doctor present.
+     *
      * @return ResponseEntity<GenericMessage> with status code 200 and list doctor present in the database.
      */
     @Override
-    public ResponseEntity<GenericMessage> getDoctorDetails() {
+    public List<DoctorDropdownDto> getDoctorDetails() {
         log.info("inside: ReceptionistServiceImpl::getDoctorDetails");
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
+        return doctorRepository.getDoctorDetails();
 
     }
 
     /**
      * This function of service is for getting all the appointments of the doctor
+     *
      * @param doctorId
      * @param pageNo
      * @return ResponseEntity<GenericMessage> with status code 200 and list of appointments for the particular doctor
      */
     @Override
-    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo,int pageSize) {
+    public PageRecords getDoctorAppointments(Long doctorId, int pageNo, int pageSize) {
         log.info("inside: ReceptionistServiceImpl::getDoctorAppointments");
 
         Pageable paging = PageRequest.of(pageNo, pageSize);
@@ -80,7 +77,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
             log.info("exit: ReceptionistServiceImpl::getDoctorAppointments");
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, pageRecords), HttpStatus.OK);
+            return pageRecords;
         }
         log.info("ReceptionistServiceImpl::getDoctorAppointments"+Constants.APPOINTMENT_NOT_FOUND);
 
@@ -90,11 +87,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
 
     /**
      * This function of service is for getting all the today's appointments present for vitals update.
+     *
      * @param pageNo
      * @return ResponseEntity<GenericMessage> with status code 200 and list of today appointments
      */
     @Override
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo,int pageSize) {
+    public PageRecords todayAllAppointmentForClinicStaff(int pageNo, int pageSize) {
         log.info("inside: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
 
         List<Appointment> appointments = new ArrayList<>();
@@ -109,18 +107,19 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         var pageRecords=new PageRecords(patientViewDto,pageNo,pageSize,appointmentList1.getTotalElements()+appointmentList2.getTotalElements(),appointmentList1.getTotalPages()+appointmentList2.getTotalPages(), appointmentList1.isLast() && appointmentList2.isLast());
         log.info("exit: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
 
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , pageRecords),HttpStatus.OK);
+        return  pageRecords;
     }
 
 
     /**
      * This function of service is for adding vitals of patients.
+     *
      * @param attributesDto which contains fields bloodGroup,bodyTemp,notes and glucose level...
      * @param appointmentId
      * @return ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
-    public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto attributesDto, Long appointmentId) {
+    public String addAppointmentVitals(AttributesDto attributesDto, Long appointmentId) {
         log.info("inside: ReceptionistServiceImpl::addAppointmentVitals");
 
         if(appointmentRepository.existsById(appointmentId)){
@@ -129,7 +128,7 @@ public class ReceptionistServiceImpl implements ReceptionistService {
                 attributeRepository.save(mapper.map(attributesDto,Attributes.class));
                 log.info("exit: ReceptionistServiceImpl::addAppointmentVitals");
 
-                return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
+                return "successful";
             }
             else {
                 log.info("ReceptionistServiceImpl::addAppointmentVitals"+Constants.APPOINTMENT_NOT_FOUND);

@@ -41,11 +41,14 @@ public interface DoctorRepository extends PagingAndSortingRepository<DoctorDetai
     @Query(value = "select id from doctor_details d where deleted = false and d.login_id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
 
+    @Query(value = "UPDATE doctor_details SET deleted = true WHERE id=:id", nativeQuery = true)
+    Void deleteDoctorById(Long id);
+
     @Query(value = "select distinct(speciality) from doctor_details d where deleted = false and d.speciality=:speciality", nativeQuery = true)
     String isSpecialityAvailable(String speciality);
 
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on deleted = false and dd.id=ld.id and dd.id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on ld.deleted = false and dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
     @Query(value = "insert into doctor_details (id,age,created_at,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,now(),:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)

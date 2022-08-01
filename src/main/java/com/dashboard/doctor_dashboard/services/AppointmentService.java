@@ -1,39 +1,37 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.dtos.AppointmentDto;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
+import com.dashboard.doctor_dashboard.dtos.*;
 import org.codehaus.jettison.json.JSONException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 /**
  * interface for appointment service layer.
  */
 @Service
 public interface AppointmentService {
-    ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
-    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId,int pageNo,int pageSize);
-    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo,int pageSize );
-    ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
+    Map<String, String> addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
+    Map<String, PageRecords> getAllAppointmentByPatientId(Long patientId, int pageNo, int pageSize);
+    Map<String, PageRecords> getAllAppointmentByDoctorId(Long doctorId, int pageNo, int pageSize );
+    FollowUpDto getFollowDetails(Long appointId);
 
 
-    ResponseEntity<GenericMessage> getAppointmentById(Long appointId);
-    ResponseEntity<GenericMessage> recentAppointment(Long doctorId);
+    PatientProfileDto getAppointmentById(Long appointId);
+    List<DoctorAppointmentListDto> recentAppointment(Long doctorId);
 
-    ResponseEntity<GenericMessage> weeklyDoctorCountChart(Long doctorId);
-    ResponseEntity<GenericMessage> weeklyPatientCountChart(Long doctorId);
+    ArrayList<String> weeklyDoctorCountChart(Long doctorId);
+    ArrayList<String> weeklyPatientCountChart(Long doctorId);
 
 
-    ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
-    ResponseEntity<GenericMessage> todayAppointments(Long doctorId);
-    ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);
-    ResponseEntity<GenericMessage> patientCategoryGraph(Long patientId);
+    int totalNoOfAppointment(Long doctorId);
+    int todayAppointments(Long doctorId);
+    int totalNoOfAppointmentAddedThisWeek(Long doctorId);
+    ArrayList<String> patientCategoryGraph(Long patientId);
 
 
 
