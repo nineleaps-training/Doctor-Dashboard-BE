@@ -1,21 +1,27 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.entities.*;
 import com.dashboard.doctor_dashboard.services.PrescriptionService;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/prescription")
-@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class PrescriptionController {
 
@@ -35,10 +41,10 @@ public class PrescriptionController {
      * This endpoint is used for uploading prescription for patient.
      */
     @PostMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> addPrescription(@Valid @RequestBody UpdatePrescriptionDto updatePrescriptionDto, @PathVariable("appointId") Long appointId ) throws MessagingException, JSONException, IOException {
+    public ResponseEntity<String> addPrescription(@Valid @RequestBody UpdatePrescriptionDto updatePrescriptionDto, @PathVariable("appointId") Long appointId ) throws MessagingException, JSONException, IOException {
         log.info("PrescriptionController:: addPrescription");
 
-        return prescriptionService.addPrescription(appointId,updatePrescriptionDto);
+        return new ResponseEntity<>(prescriptionService.addPrescription(appointId,updatePrescriptionDto), HttpStatus.CREATED);
     }
 
     /**
@@ -47,10 +53,10 @@ public class PrescriptionController {
      * This endpoint is used for getting all prescriptions of the patient.
      */
     @GetMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> allPrescriptions(@PathVariable("appointId") Long appointId) {
+    public ResponseEntity<List<Prescription>> allPrescriptions(@PathVariable("appointId") Long appointId) {
         log.info("PrescriptionController:: allPrescriptions");
 
-        return prescriptionService.getAllPrescriptionByAppointment(appointId);
+        return new ResponseEntity<>(prescriptionService.getAllPrescriptionByAppointment(appointId),HttpStatus.OK);
     }
 
     /**
@@ -59,9 +65,9 @@ public class PrescriptionController {
      * This endpoint is used for deleting the appointment.
      */
     @DeleteMapping("/private/{id}")
-    public ResponseEntity<GenericMessage> deleteAppointment(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable("id") Long id) {
         log.info("PrescriptionController:: deleteAppointment");
-        return prescriptionService.deleteAppointmentById(id);
+        return new ResponseEntity<>(prescriptionService.deleteAppointmentById(id),HttpStatus.NO_CONTENT);
 
     }
 

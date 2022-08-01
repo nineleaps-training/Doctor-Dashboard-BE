@@ -1,18 +1,23 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.services.PatientService;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.validation.Valid;
+import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/patient")
 @Slf4j
 public class PatientController {
@@ -33,10 +38,10 @@ public class PatientController {
      * This endpoint is used for patient on-boarding.
      */
     @PostMapping("/on-boarding/{loginId}")
-    public ResponseEntity<GenericMessage> onBoarding(@Valid @RequestBody PatientEntityDto patient, @PathVariable("loginId") Long loginId) {
+    public ResponseEntity<PatientEntityDto> onBoarding(@Valid @RequestBody PatientEntityDto patient, @PathVariable("loginId") Long loginId) {
         log.info("PatientController:: patientOnBoarding");
 
-        return patientService.addPatient(patient,loginId);
+        return new ResponseEntity<>(patientService.addPatient(patient,loginId), HttpStatus.CREATED);
     }
 
 
@@ -47,10 +52,10 @@ public class PatientController {
      * This endpoint is used for viewing the appointment for patient
      */
     @GetMapping("/{patientId}/appointment/{appointmentId}")
-    public ResponseEntity<GenericMessage> appointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
+    public ResponseEntity<AppointmentViewDto> appointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId) {
         log.info("PatientController:: appointmentViewByAppointmentId");
 
-        return patientService.viewAppointment(appointmentId,patientId);
+        return new ResponseEntity<>(patientService.viewAppointment(appointmentId,patientId),HttpStatus.OK);
     }
 
     /**
@@ -59,10 +64,10 @@ public class PatientController {
      * This endpoint for viewing the patient profile.
      */
     @GetMapping("/patient-profile/{loginId}")
-    public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId) {
+    public ResponseEntity<PatientEntityDto> patientProfile(@PathVariable("loginId") Long loginId) {
         log.info("PatientController:: patientProfile");
 
-        return patientService.getPatientDetailsById(loginId);
+        return new ResponseEntity<>(patientService.getPatientDetailsById(loginId),HttpStatus.OK);
     }
 
     /**
@@ -72,10 +77,10 @@ public class PatientController {
      * This endpoint is used for updating patient profile.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage> editPatientDetails(@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<String> editPatientDetails(@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto, @PathVariable("id") Long id) {
         log.info("PatientController:: editPatientDetails");
 
-        return patientService.updatePatientDetails(id, userDetailsUpdateDto);
+        return new ResponseEntity<>(patientService.updatePatientDetails(id, userDetailsUpdateDto),HttpStatus.OK);
     }
     /**
      * @param id is used as a path variable
@@ -83,10 +88,10 @@ public class PatientController {
      * This endpoint is used for deleting patient details.
      */
     @DeleteMapping("/private/{id}")
-    public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deletePatientById(@PathVariable("id") Long id) {
         log.info("PatientController:: deletePatientById");
 
-        return patientService.deletePatientById(id);
+        return new ResponseEntity<>( patientService.deletePatientById(id),HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -95,9 +100,9 @@ public class PatientController {
      * This endpoint is used for getting patient notifications.
      */
     @GetMapping("/{patientId}/notifications")
-    public ResponseEntity<GenericMessage> notifications(@PathVariable("patientId") Long patientId) {
+    public ResponseEntity<List<NotificationDto>> notifications(@PathVariable("patientId") Long patientId) {
         log.info("PatientController:: notifications");
-        return patientService.getNotifications(patientId);
+        return new ResponseEntity<>(patientService.getNotifications(patientId),HttpStatus.OK);
     }
 
 }

@@ -1,18 +1,25 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.*;
 import com.dashboard.doctor_dashboard.services.TodoService;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import javax.validation.Valid;
+import java.util.*;
 
 @RestController
 @RequestMapping("api/v1/todolist")
-@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class TodoController {
 
@@ -28,9 +35,9 @@ public class TodoController {
      * This endpoint is used for adding new todos.
      */
     @PostMapping()
-    public ResponseEntity<GenericMessage> addTodo(@Valid @RequestBody TodoListDto todolist  ) {
+    public ResponseEntity<Todolist> addTodo(@Valid @RequestBody TodoListDto todolist  ) {
         log.info("TodoController:: addTodo");
-        return todoService.addTodo(todolist);
+        return new ResponseEntity<>(todoService.addTodo(todolist), HttpStatus.CREATED);
     }
 
     /**
@@ -39,9 +46,9 @@ public class TodoController {
      * This endpoint is used for getting all todos of the doctor.
      */
     @GetMapping("doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> allTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<List<Todolist>> allTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
         log.info("TodoController:: allTodoByDoctorId");
-        return todoService.getAllTodoByDoctorId(doctorId);
+        return new ResponseEntity<>(todoService.getAllTodoByDoctorId(doctorId),HttpStatus.OK);
     }
 
 
@@ -51,9 +58,9 @@ public class TodoController {
      * This endpoint is used for deleting the todos of doctor.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<GenericMessage> deleteTodo(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id) {
         log.info("TodoController:: deleteTodo");
-        return todoService.deleteTodoById(id);
+        return new ResponseEntity<>(todoService.deleteTodoById(id),HttpStatus.NO_CONTENT);
 
     }
 

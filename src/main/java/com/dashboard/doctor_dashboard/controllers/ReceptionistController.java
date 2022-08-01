@@ -1,18 +1,23 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/receptionist")
 @Slf4j
 public class ReceptionistController {
@@ -29,10 +34,10 @@ public class ReceptionistController {
      * This endpoint is used for getting all doctor names.
      */
     @GetMapping("/doctor-names/")
-    public ResponseEntity<GenericMessage> doctorNames(){
+    public ResponseEntity<List<DoctorDropdownDto>> doctorNames(){
         log.info("ReceptionistController:: doctorNames");
 
-        return receptionistService.getDoctorDetails();
+        return new ResponseEntity<>(receptionistService.getDoctorDetails(), HttpStatus.OK);
     }
 
     /**
@@ -42,10 +47,10 @@ public class ReceptionistController {
      * This endpoint is used for getting the today's appointments of the doctor.
      */
     @GetMapping("/appointment-list/{doctorId}")
-    public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
+    public ResponseEntity<PageRecords> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
         log.info("ReceptionistController:: appointmentList");
 
-        return receptionistService.getDoctorAppointments(doctorId,pageNo,pageSize);
+        return new ResponseEntity<>( receptionistService.getDoctorAppointments(doctorId,pageNo,pageSize),HttpStatus.OK);
     }
 
     /**
@@ -56,10 +61,10 @@ public class ReceptionistController {
      */
 
     @PostMapping("/vitals/{appointmentId}")
-    public ResponseEntity<GenericMessage> addVitals(@Valid @RequestBody AttributesDto attributesDto, @PathVariable("appointmentId") Long appointmentId){
+    public ResponseEntity<String> addVitals(@Valid @RequestBody AttributesDto attributesDto, @PathVariable("appointmentId") Long appointmentId){
         log.info("ReceptionistController:: addVitals");
 
-        return receptionistService.addAppointmentVitals(attributesDto,appointmentId);
+        return new ResponseEntity<>(receptionistService.addAppointmentVitals(attributesDto,appointmentId),HttpStatus.CREATED);
     }
 
 
@@ -69,10 +74,10 @@ public class ReceptionistController {
      * This endpoint is used for getting today's appointments of all the doctors.
      */
     @GetMapping("/all-appointments")
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
+    public ResponseEntity<PageRecords> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
         log.info("ReceptionistController:: todayAllAppointmentForClinicStaff");
 
-        return receptionistService.todayAllAppointmentForClinicStaff(pageNo,pageSize);
+        return new ResponseEntity<>(receptionistService.todayAllAppointmentForClinicStaff(pageNo,pageSize),HttpStatus.NO_CONTENT);
     }
 
 }

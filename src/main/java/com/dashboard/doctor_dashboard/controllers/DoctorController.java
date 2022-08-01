@@ -1,20 +1,25 @@
 package com.dashboard.doctor_dashboard.controllers;
-import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
-import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.*;
 
 @SuppressWarnings("squid:S1612")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/v1/doctor")
 @Slf4j
 public class DoctorController {
@@ -31,13 +36,12 @@ public class DoctorController {
     /**
      * This endpoint returns DoctorBasicDetailsDto which contains details  of the doctor.
      * @param loginId this variable contains loginId.
-     * @return It returns a DoctorBasicDetailsDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns a DoctorBasicDetailsDto wrapped under ResponseEntity<DoctorBasicDetailsDto> with HTTP status code 200.
      */
     @GetMapping("/id/{loginId}")
-    public ResponseEntity<GenericMessage> doctorById(@PathVariable("loginId") long loginId) {
+    public ResponseEntity<DoctorBasicDetailsDto> doctorById(@PathVariable("loginId") long loginId) {
         log.info("DoctorController:: doctorById");
-
-        return doctorService.getDoctorById(loginId);
+        return new ResponseEntity<>(doctorService.getDoctorById(loginId), HttpStatus.OK);
     }
 
     /**
@@ -45,13 +49,13 @@ public class DoctorController {
      * @param doctorDetails this variable contains doctor details.
      * @param id this variable contains loginId.
      * @param request this object contains information related to user HTTP request.
-     * @return It returns a DoctorFormDto wrapped under ResponseEntity<GenericMessage> with HTTP status code 201.
+     * @return It returns a DoctorFormDto wrapped under ResponseEntity<DoctorFormDto> with HTTP status code 201.
      */
     @PostMapping("/add-doctor-details/{id}")
-    public ResponseEntity<GenericMessage>  addDoctorDetails(@Valid @RequestBody DoctorFormDto doctorDetails, @PathVariable("id") long id, HttpServletRequest request) {
+    public ResponseEntity<DoctorFormDto>  addDoctorDetails(@Valid @RequestBody DoctorFormDto doctorDetails, @PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: addDoctorDetails");
 
-        return doctorService.addDoctorDetails(doctorDetails,id,request);
+        return new ResponseEntity<>(doctorService.addDoctorDetails(doctorDetails,id,request),HttpStatus.CREATED);
 
     }
 
@@ -60,72 +64,72 @@ public class DoctorController {
      * @param details this variable contains doctor to updated details.
      * @param id this variable contains loginId.
      * @param request this object contains information related to user HTTP request.
-     * @return It returns updated doctor fields wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns updated doctor fields wrapped under  ResponseEntity<DoctorFormDto> with HTTP status code 200.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage>  editDoctorDetails(@Valid @RequestBody UserDetailsUpdateDto details, @PathVariable("id") long id, HttpServletRequest request) {
+    public ResponseEntity<DoctorFormDto>  editDoctorDetails(@Valid @RequestBody UserDetailsUpdateDto details, @PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: updateDoctorDetails");
 
-        return doctorService.updateDoctor(details,id,request);
+        return new ResponseEntity<>(doctorService.updateDoctor(details,id,request),HttpStatus.OK);
     }
 
     /**
      * This endpoint is used for deleting doctor.
      * @param id this variable contains loginId.
-     * @return A success message wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return A success message wrapped under ResponseEntity<String> with HTTP status code 200.
      */
     @DeleteMapping("/private/{id}")
-    public ResponseEntity<GenericMessage> deleteDoctor(@PathVariable("id") int id) {
+    public ResponseEntity<String> deleteDoctor(@PathVariable("id") int id) {
         log.info("DoctorController:: deleteDoctor");
 
-        return doctorService.deleteDoctor(id);
+        return new ResponseEntity<>(doctorService.deleteDoctor(id),HttpStatus.NO_CONTENT);
     }
 
     /**
      * This endpoint returns a List<DoctorListDto> based on the speciality selected. It contains basic doctor details .
      * @param speciality this variable contains speciality.
-     * @return It returns List<DoctorListDto> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns List<DoctorListDto> wrapped under ResponseEntity<PageRecords> with HTTP status code 200.
      */
     @GetMapping("/all-doctors/{speciality}")
-    public ResponseEntity<GenericMessage> allDoctorsBySpeciality(@PathVariable("speciality") String speciality,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+    public ResponseEntity<PageRecords> allDoctorsBySpeciality(@PathVariable("speciality") String speciality,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
         log.info("DoctorController:: allDoctorsBySpeciality");
 
-        return doctorService.getAllDoctorsBySpeciality(speciality,pageNo,pageSize);
+        return new ResponseEntity<>( doctorService.getAllDoctorsBySpeciality(speciality,pageNo,pageSize),HttpStatus.OK);
     }
 
     /**
      * This endpoint returns a Map<String,Integer> for a doctor, which contains gender data of the patients retrieved by doctor loginId.
      * @param doctorId this variable contains doctorId.
-     * @return It returns Map<String,Integer> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns Map<String,Integer> wrapped under ResponseEntity<Map<String, Integer>> with HTTP status code 200.
      */
     @GetMapping("/{doctorId}/gender")
-    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<Map<String, Integer>> gender(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController:: gender");
 
-        return doctorService.genderChart(doctorId);
+        return new ResponseEntity<>(doctorService.genderChart(doctorId),HttpStatus.OK);
     }
 
     /**
      * This endpoint returns a Map<String,Integer> for a doctor, which contains blood group data of the patients retrieved by doctor loginId.
      * @param doctorId this variable contains doctorId.
-     * @return It returns Map<String,Integer> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns Map<String,Integer> wrapped under ResponseEntity<Map<String, Integer>> with HTTP status code 200.
      */
     @GetMapping("/{doctorId}/blood-group")
-    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<Map<String, Integer>> bloodGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController:: bloodGroup");
 
-        return doctorService.bloodGroupChart(doctorId);
+        return new ResponseEntity<>( doctorService.bloodGroupChart(doctorId),HttpStatus.OK);
     }
 
     /**
      * This endpoint returns a Map<String,Integer> for a doctor, which contains age group's data of the patients retrieved by doctor loginId.
      * @param doctorId this variable contains doctorId.
-     * @return It returns Map<String,Integer> wrapped under ResponseEntity<GenericMessage> with HTTP status code 200.
+     * @return It returns Map<String,Integer> wrapped under ResponseEntity<Map<String, Integer>> with HTTP status code 200.
      */
     @GetMapping("/{doctorId}/age-group")
-    public ResponseEntity<GenericMessage> ageGroup(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<Map<String, Integer>> ageGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController:: ageGroup");
 
-        return doctorService.ageGroupChart(doctorId);
+        return new ResponseEntity<>(doctorService.ageGroupChart(doctorId),HttpStatus.OK);
     }
 }
