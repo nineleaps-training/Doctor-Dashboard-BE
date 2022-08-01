@@ -2,7 +2,9 @@ package com.dashboard.doctor_dashboard.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,6 +21,8 @@ import java.util.List;
 @SuppressWarnings({"squid:S5843","squid:S5869"})
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(
         name = "patient_details",indexes = @Index(name = "index_loginId",columnList = "login_id")
 )
@@ -79,60 +83,6 @@ public class    Patient {
     private LoginDetails loginDetails;
 
 
-    public Long getPID() {
-        return pID;
-    }
-
-    public void setPID(Long pID) {
-        this.pID = pID;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getMobileNo() {
-        return mobileNo;
-    }
-
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
-    }
-
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAlternateMobileNo() {
-        return alternateMobileNo;
-    }
-
-    public void setAlternateMobileNo(String alternateMobileNo) {
-        this.alternateMobileNo = alternateMobileNo;
-    }
+   
 
 }

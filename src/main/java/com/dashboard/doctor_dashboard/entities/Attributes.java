@@ -1,7 +1,9 @@
 package com.dashboard.doctor_dashboard.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +12,8 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(
         name = "patient_attributes",indexes = @Index(name = "index_appointment",columnList = "appointment_id")
 )
@@ -39,46 +43,7 @@ public class Attributes {
     private Appointment appointment;
 
 
-    public Long getAID() {
-        return aID;
-    }
 
-    public void setAID(Long aID) {
-        this.aID = aID;
-    }
-
-    public String  getBloodPressure() {
-        return bloodPressure;
-    }
-
-    public void setBloodPressure(String  bloodPressure) {
-        this.bloodPressure = bloodPressure;
-    }
-
-
-    public Long getGlucoseLevel() {
-        return glucoseLevel;
-    }
-
-    public void setGlucoseLevel(Long glucoseLevel) {
-        this.glucoseLevel = glucoseLevel;
-    }
-
-    public Double getBodyTemp() {
-        return bodyTemp;
-    }
-
-    public void setBodyTemp(Double bodyTemp) {
-        this.bodyTemp = bodyTemp;
-    }
-
-    public String getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(String prescription) {
-        this.prescription = prescription;
-    }
 
 
 }

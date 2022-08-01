@@ -2,7 +2,9 @@ package com.dashboard.doctor_dashboard.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,6 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(
         name = "doctors_todolist",indexes = @Index(name = "index_doctorId",columnList = "doctor_id")
 )
@@ -39,26 +43,7 @@ public class Todolist {
     @JoinColumn(name = "doctor_id", nullable = false)
     private DoctorDetails doctorDetails;
 
-    public Long getId() {
-        return id;
-    }
 
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
 
 
 }

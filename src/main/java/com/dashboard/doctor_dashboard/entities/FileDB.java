@@ -1,9 +1,14 @@
 package com.dashboard.doctor_dashboard.entities;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "patient_files")
 public class FileDB {
     @Id
@@ -29,43 +34,5 @@ public class FileDB {
     }
 
 
-    public Long getAppointmentId() {
-        return appointmentId;
-    }
 
-    public void setAppointmentId(Long appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public byte[] getDataReport() {
-        return dataReport;
-    }
-
-    public void setDataReport(byte[] dataReport) {
-        this.dataReport = dataReport;
-    }
 }

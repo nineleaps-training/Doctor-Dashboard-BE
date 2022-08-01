@@ -3,7 +3,9 @@ package com.dashboard.doctor_dashboard.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(
         name = "doctor_details",indexes = @Index(name = "index_speciality",columnList = "speciality")
 )
@@ -77,17 +81,6 @@ public class DoctorDetails {
     private Long loginId;
 
 
-    public void setLoginId(Long loginId) {
-        this.loginId = loginId;
-    }
-
-    public Long getLoginId() {
-        return loginId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public DoctorDetails(Short age, String speciality, String phoneNo, String gender, short exp, String degree, Long loginId) {
         this.age = age;
@@ -99,38 +92,5 @@ public class DoctorDetails {
         this.loginId = loginId;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public Short getAge() {
-        return age;
-    }
-
-    public String getSpeciality() {
-        return speciality;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-
-    @Override
-    public String toString() {
-        return "DoctorDetails{" +
-                "id=" + id +
-                ", age=" + age +
-                ", speciality='" + speciality + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", gender='" + gender + '\'' +
-                ", exp=" + exp +
-                ", degree='" + degree + '\'' +
-                ", loginId=" + loginId +
-                '}';
-    }
 }
