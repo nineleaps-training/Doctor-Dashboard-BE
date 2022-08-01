@@ -60,6 +60,7 @@
 			<artifactId>jettison</artifactId>
 			<version>1.4.1</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.meanbean/meanbean -->
 		<dependency>
 			<groupId>com.github.meanbeanlib</groupId>
