@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotEmpty;
@@ -10,9 +11,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 
-@Getter
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class DoctorFormDto {
 
     @NotNull

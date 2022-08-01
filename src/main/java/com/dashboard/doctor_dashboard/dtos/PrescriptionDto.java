@@ -1,14 +1,12 @@
 package com.dashboard.doctor_dashboard.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PrescriptionDto {
     private String prescription;
 
-    public String getPrescription() {
-        return prescription;
-    }
 
-    public void setPrescription(String prescription) {
-        this.prescription = prescription;
-    }
 }
