@@ -5,7 +5,10 @@ import com.dashboard.doctor_dashboard.dtos.NotificationDto;
 import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.services.patient.PatientService;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +35,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 class PatientControllerTest {
 
 
@@ -64,13 +66,13 @@ class PatientControllerTest {
     @Test
     void addPatientTest() throws Exception {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045", Gender.Male,21, BloodGroup.Apositive,"Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         Mockito.when(patientService.addPatient(Mockito.any(PatientEntityDto.class),Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patient), HttpStatus.CREATED));
@@ -85,7 +87,7 @@ class PatientControllerTest {
     @Test
     void getAppointmentViewByAppointmentIdTest() throws Exception {
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral",LocalDate.now(),LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar", Category.General,LocalDate.now(),LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
 
         Mockito.when(patientService.viewAppointment(Mockito.any(Long.class),Mockito.any(Long.class)))
@@ -101,7 +103,7 @@ class PatientControllerTest {
     @Test
     void patientProfileTest() throws Exception {
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045",Gender.Male,21,BloodGroup.Apositive,"Address1","9728330045");
 
         Mockito.when(patientService.getPatientDetailsById(Mockito.any(Long.class)))
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));

@@ -6,6 +6,9 @@ import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
 import com.dashboard.doctor_dashboard.services.impl.PatientServiceImpl;
@@ -76,13 +79,13 @@ class PatientServiceImplTest {
     @Test
     void addPatientTest_Success() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045", Gender.Male,21, BloodGroup.Apositive,"Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(id);
@@ -98,7 +101,7 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInDatabaseForAddDoctor() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045",Gender.Male,21,BloodGroup.Apositive,"Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
@@ -115,11 +118,11 @@ class PatientServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045",Gender.Male,21,BloodGroup.Apositive,"Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(loginId);
         Mockito.when(patientRepository.getPatientByLoginId(loginId)).thenReturn(patient);
@@ -273,10 +276,10 @@ class PatientServiceImplTest {
         Long loginId = 1L;
         Long doctorId = 1L;
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L, Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(loginId);
         Mockito.when(appointmentRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(appointment));
@@ -298,10 +301,10 @@ class PatientServiceImplTest {
         Long patientId = 1L;
         Long loginId = 1L;
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(loginId);
         Mockito.when(appointmentRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(appointment));
@@ -320,7 +323,7 @@ class PatientServiceImplTest {
         Long patientId = 1L;
         Long loginId = 1L;
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(loginId);
         Mockito.when(appointmentRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
@@ -337,10 +340,10 @@ class PatientServiceImplTest {
         Long patientId = 1L;
         Long loginId = 1L;
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(loginId);
         Mockito.when(appointmentRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.of(appointment));
@@ -358,10 +361,10 @@ class PatientServiceImplTest {
         Long patientId = 1L;
         Long loginId = 1L;
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(loginId);
         Mockito.when(appointmentRepository.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
@@ -378,10 +381,10 @@ class PatientServiceImplTest {
         Long appointmentId = 1L;
         Long patientId = 1L;
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar",Category.General, LocalDate.now(), LocalTime.now(),"completed",BloodGroup.Bpositive, (short) 21,Gender.Male);
 
         Mockito.when(patientRepository.getId(patientId)).thenReturn(null);
 

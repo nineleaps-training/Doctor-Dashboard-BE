@@ -4,7 +4,7 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.services.prescription.PrescriptionService;
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +30,6 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 class PrescriptionControllerTest {
 
     @Mock

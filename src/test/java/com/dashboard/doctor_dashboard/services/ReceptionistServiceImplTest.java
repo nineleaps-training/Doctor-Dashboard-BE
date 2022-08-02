@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.dtos.PageRecords;
 import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -71,8 +72,8 @@ class ReceptionistServiceImplTest {
 
     @Test
     void getDoctorDetails_SUCCESS() {
-        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
-        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com","dentist");
+        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com", Category.Orthologist);
+        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com",Category.Dentist);
         List<DoctorDropdownDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
         Mockito.when(doctorRepository.getDoctorDetails()).thenReturn(list);
@@ -96,7 +97,7 @@ class ReceptionistServiceImplTest {
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
 
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<Appointment> appointmentList = new ArrayList<>(Arrays.asList(appointment));
@@ -138,7 +139,7 @@ class ReceptionistServiceImplTest {
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));
@@ -161,7 +162,7 @@ class ReceptionistServiceImplTest {
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));
@@ -182,7 +183,7 @@ class ReceptionistServiceImplTest {
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));
@@ -205,7 +206,7 @@ class ReceptionistServiceImplTest {
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));

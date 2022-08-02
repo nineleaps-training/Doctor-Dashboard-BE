@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -26,6 +27,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -74,6 +77,7 @@ class PrescriptionServiceImplTest {
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        ReflectionTestUtils.setField(prescriptionService, "fromEmail", "xyz@gmail.com");
         System.out.println("setting up");
     }
 
@@ -90,11 +94,12 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist,LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
         Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
+//        Context context = Mockito.mock(Context.class);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -103,7 +108,7 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
-        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         ResponseEntity<GenericMessage> newMessage = prescriptionService.addPrescription(appointId,details);
@@ -119,7 +124,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist,LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -132,13 +137,12 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
-        Mockito.doThrow(new MailErrorException("Mail Error")).when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doThrow(new MailErrorException("Mail Error")).when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
 
 
         MailErrorException mailErrorException = assertThrows(MailErrorException.class,()->{
             prescriptionService.addPrescription(appointId,details);
         });
-        System.out.println(mailErrorException);
     }
 
 
@@ -149,7 +153,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(2L, Category.Dentist,LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -175,7 +179,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(2L,Category.Dentist,LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);

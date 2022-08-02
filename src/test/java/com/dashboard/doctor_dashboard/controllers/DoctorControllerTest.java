@@ -4,8 +4,10 @@ import com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.exceptions.CommonExceptionHandler;
-import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +37,6 @@ import java.util.*;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
 class DoctorControllerTest {
 
 
@@ -69,8 +70,8 @@ class DoctorControllerTest {
 //    void  getAllDoctors() throws Exception {
 //        final Long id = 1L;
 //        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
+//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
 //        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 //
 //        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
@@ -87,8 +88,8 @@ class DoctorControllerTest {
 //    void throwErrorIfIdNotPresentDbForAllDoctor() throws Exception {
 //        final Long id = 1L;
 //        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
-//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
+//        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+//        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
 //        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 //
 //        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
@@ -103,7 +104,7 @@ class DoctorControllerTest {
     void getDoctorsByIdIfIdPresent() throws Exception {
         final Long id = 1L;
         DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","xyzssn23@gmail.com",
-                "orthology",null,"male", (short) 21,"MBBS",(short)8);
+                Category.Orthologist,null, Gender.Male, (short) 21,"MBBS",(short)8);
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorDetails);
 
@@ -119,7 +120,7 @@ class DoctorControllerTest {
 //    void throwErrorIfIdNotPresentDb() throws Exception {
 //        final Long id = 1L;
 //        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","xyzssn23@gmail.com",
-//                "orthology",null,"male", (short) 21,"MBBS",(short)8);
+//                Category.Orthologist,null,"male", (short) 21,"MBBS",(short)8);
 //
 //        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
 //
@@ -135,7 +136,7 @@ class DoctorControllerTest {
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
                 "9728330045",(short)6,"MBBS");
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
 
@@ -159,8 +160,8 @@ class DoctorControllerTest {
 
 //        ObjectError error = new ObjectError("age","age should be between 24-100");
 //        result.addError(error);
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
+                "972833005",(short)6,"MBBS");
 
 
         String content = objectMapper.writeValueAsString(doctorFormDto);
@@ -265,8 +266,8 @@ class DoctorControllerTest {
     @Test
     void getAllDoctorsBySpecialityTest() throws Exception {
         final String speciality = "orthology";
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"xyz","xyz@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"def","def@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<DoctorListDto>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);

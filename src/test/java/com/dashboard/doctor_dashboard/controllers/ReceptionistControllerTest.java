@@ -4,7 +4,8 @@ import com.dashboard.doctor_dashboard.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,8 +59,8 @@ class ReceptionistControllerTest {
     @Test
     void getDoctorNamesTest() throws Exception {
 
-        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
-        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com","dentist");
+        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com", Category.Orthologist);
+        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com",Category.Dentist);
         List<DoctorDropdownDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
         Mockito.when(receptionistService.getDoctorDetails()).thenReturn(
