@@ -36,12 +36,14 @@ public class DoctorDetails {
     private Short age;
 
     @Column(name = "speciality",columnDefinition = "varchar(20)",nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category speciality;
 
     @Column(name = "phone_no",columnDefinition = "varchar(10)",nullable = false)
     private String phoneNo;
 
     @Column(name = "gender",columnDefinition = "varchar(10)",nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Column(name = "experience",nullable = false)
