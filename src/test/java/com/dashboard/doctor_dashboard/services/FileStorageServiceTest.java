@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
-import com.dashboard.doctor_dashboard.services.file.FileStorageServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.FileStorageServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;

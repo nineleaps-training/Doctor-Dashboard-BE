@@ -6,7 +6,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.services.doctor.DoctorServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.DoctorServiceImpl;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import org.junit.jupiter.api.AfterEach;
