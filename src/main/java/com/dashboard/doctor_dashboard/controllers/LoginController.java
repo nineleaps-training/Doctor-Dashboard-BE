@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.controllers;
 
 
 import com.dashboard.doctor_dashboard.dtos.JwtToken;
-import com.dashboard.doctor_dashboard.services.login.LoginService;
+import com.dashboard.doctor_dashboard.services.LoginService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -23,7 +23,7 @@ import java.security.GeneralSecurityException;
 @Slf4j
 public class LoginController {
 
-    private  LoginService loginService;
+    private final LoginService loginService;
     @Autowired
 
     public LoginController(LoginService loginService) {
@@ -44,6 +44,13 @@ public class LoginController {
         return loginService.tokenVerification(idToken.getIdtoken());
     }
 
+    /**
+     * @param request
+     * @return
+     * @throws GeneralSecurityException
+     * @throws IOException
+     * @throws JSONException
+     */
     @GetMapping(value = "/user/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GenericMessage> refreshTokenAuthentication(HttpServletRequest request) throws GeneralSecurityException, IOException, JSONException {
         //authToken

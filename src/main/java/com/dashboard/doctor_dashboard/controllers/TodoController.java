@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.services.todo.TodoService;
+import com.dashboard.doctor_dashboard.services.TodoService;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import javax.validation.Valid;
 @Slf4j
 public class TodoController {
 
-    private  TodoService todoService;
+    private final TodoService todoService;
     @Autowired
     public TodoController(TodoService todoService){
         this.todoService = todoService;

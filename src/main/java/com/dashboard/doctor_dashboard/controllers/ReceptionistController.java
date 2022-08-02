@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 public class ReceptionistController {
 
-    private  ReceptionistService receptionistService;
+    private final ReceptionistService receptionistService;
 
 
     @Autowired

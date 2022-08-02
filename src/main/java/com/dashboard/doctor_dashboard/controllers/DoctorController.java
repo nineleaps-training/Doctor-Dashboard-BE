@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.services.doctor.DoctorService;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 public class DoctorController {
 
 
-    private  DoctorService doctorService;
+    private final DoctorService doctorService;
     @Autowired
     public DoctorController(DoctorService doctorService){
         this.doctorService = doctorService;
