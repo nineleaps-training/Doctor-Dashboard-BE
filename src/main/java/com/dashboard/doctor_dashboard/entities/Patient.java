@@ -1,5 +1,7 @@
 package com.dashboard.doctor_dashboard.entities;
 
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
@@ -32,11 +34,8 @@ public class    Patient {
     private Long pID;
 
     @NotEmpty
-    @Pattern(regexp = "^(Male|Female|Others)",
-            flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Enter Correct Gender!!")
     @Column(columnDefinition = "varchar(10)")
-    private String gender;
+    private Gender gender;
 
 
     @Positive(message = "Age can't be null or less than equal to 0")
@@ -49,9 +48,8 @@ public class    Patient {
 
 
     @NotEmpty
-    @Pattern(regexp = "^(O-|O[+]|A-|B-|A[+]|AB-|B[+]|AB[+])", flags = Pattern.Flag.CASE_INSENSITIVE)
-    @Column(columnDefinition = "varchar(3)")
-    private String bloodGroup;
+    @Column(columnDefinition = "varchar(11)")
+    private BloodGroup bloodGroup;
 
     private String address;
 
@@ -87,11 +85,11 @@ public class    Patient {
         this.pID = pID;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Gender gender) {
         this.gender = gender;
     }
 
@@ -111,11 +109,11 @@ public class    Patient {
         this.mobileNo = mobileNo;
     }
 
-    public String getBloodGroup() {
+    public BloodGroup getBloodGroup() {
         return bloodGroup;
     }
 
-    public void setBloodGroup(String bloodGroup) {
+    public void setBloodGroup(BloodGroup bloodGroup) {
         this.bloodGroup = bloodGroup;
     }
 

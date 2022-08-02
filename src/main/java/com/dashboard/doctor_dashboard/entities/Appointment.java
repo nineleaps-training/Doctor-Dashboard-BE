@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.entities;
 
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -28,9 +29,8 @@ public class Appointment {
     private Long appointId;
     @NotNull
     @NotEmpty
-    @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
     @Column(columnDefinition = "varchar(20) ")
-    private String category;
+    private Category category;
 
     @NotNull
     @Future(message = "Only future dates can be entered ")
@@ -114,11 +114,11 @@ public class Appointment {
         this.appointId = appointId;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
