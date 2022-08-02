@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.dtos.*;
 import com.dashboard.doctor_dashboard.entities.Appointment;
@@ -11,18 +11,21 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
+import com.dashboard.doctor_dashboard.services.AppointmentService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -641,28 +644,25 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @throws MessagingException
      * @throws UnsupportedEncodingException
      */
+    @Value("${spring.mail.username}")
+    private String fromEmail;
     public void sendEmailToUser(Appointment appointment) throws JSONException, MessagingException, UnsupportedEncodingException {
         log.info("inside: appointment service::sendEmailToUser");
         String doctorEmail = loginRepo.email(appointment.getDoctorDetails().getId());
         String toEmail = appointment.getPatientEmail();
-        var fromEmail = "mecareapplication@gmail.com";
         var senderName = "meCare Team";
         var subject = "Appointment Confirmed";
 
-        String content = Constants.MAIL_APPOINTMENT;
+        var context =  new Context();              // here we are making an object of context and setting up all the values required for mail
+        context.setVariable("name", appointment.getPatientName());
+        context.setVariable("doctorName", appointment.getDoctorName());
+        context.setVariable("doctorEmail", doctorEmail);
+        context.setVariable("speciality", appointment.getCategory());
+        context.setVariable("dateOfAppointment",pdFGeneratorService.formatDate(appointment.getDateOfAppointment().toString()));
+        context.setVariable("appointmentTime", appointment.getAppointmentTime().toString());
 
-        content = content.replace("[[name]]", appointment.getPatientName());
-        content = content.replace("[[doctorName]]", appointment.getDoctorName());
-
-        content = content.replace("[[doctorEmail]]", doctorEmail);
-        content = content.replace("[[speciality]]", appointment.getCategory());
-
-        content = content.replace("[[dateOfAppointment]]",pdFGeneratorService.formatDate(appointment.getDateOfAppointment().toString()));
-
-        content = content.replace("[[appointmentTime]]", appointment.getAppointmentTime().toString());
-
-        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
         log.info("exit: appointment service::sendEmailToUser");
+        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,"BookAppointment",context);
     }
     /**
      * @param dateList this variable contains Date details.

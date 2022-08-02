@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.doctor;
+package com.dashboard.doctor_dashboard.services.impl;
 
 
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
@@ -10,6 +10,7 @@ import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -122,7 +123,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if(doctorRepository.isIdAvailable(details.getLoginId())==null) {
                 if (details.getLoginId() == id && details.getLoginId().equals(doctorLoginId)) {
-                    doctorRepository.insertARowIntoTheTable(details.getLoginId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
+                    doctorRepository.insertARowIntoTheTable(details.getLoginId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getLoginId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor on boarding completed.");

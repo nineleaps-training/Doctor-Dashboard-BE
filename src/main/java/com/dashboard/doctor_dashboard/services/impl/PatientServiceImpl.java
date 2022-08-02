@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.patient;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
 import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
@@ -6,6 +6,7 @@ import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +71,7 @@ public class PatientServiceImpl implements PatientService {
         if(temp != null){
             patientRepository.
                     insertIntoPatient(patient.getAge(),patient.getMobileNo(),patient.getAlternateMobileNo(),
-                            patient.getGender(), patient.getAddress(), patient.getBloodGroup(),loginId);
+                            patient.getGender().toString(), patient.getAddress(), patient.getBloodGroup().toString(),loginId);
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);

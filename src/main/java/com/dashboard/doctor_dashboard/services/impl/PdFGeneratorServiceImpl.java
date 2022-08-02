@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment;
+package com.dashboard.doctor_dashboard.services.impl;
 
 
 import com.dashboard.doctor_dashboard.dtos.PatientDto;
@@ -83,9 +83,9 @@ public class PdFGeneratorServiceImpl {
 
             details.addCell(getBillRowCell(patientDto.getPatientName()));
             details.addCell(getBillRowCell(String.valueOf(patientDto.getAge())));
-            details.addCell(getBillRowCell(patientDto.getGender()));
+            details.addCell(getBillRowCell(patientDto.getGender().toString()));
             details.addCell(getBillRowCell(patientDto.getDoctorName()));
-            details.addCell(getBillRowCell(patientDto.getCategory()));
+            details.addCell(getBillRowCell(patientDto.getCategory().toString()));
 
 
 

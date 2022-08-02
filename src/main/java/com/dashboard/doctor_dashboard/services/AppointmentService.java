@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.services.appointment;
+package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;

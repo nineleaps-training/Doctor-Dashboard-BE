@@ -1,10 +1,11 @@
-package com.dashboard.doctor_dashboard.services.login;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.services.LoginService;
 import com.dashboard.doctor_dashboard.util.Constants;
 import com.dashboard.doctor_dashboard.util.wrappers.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
