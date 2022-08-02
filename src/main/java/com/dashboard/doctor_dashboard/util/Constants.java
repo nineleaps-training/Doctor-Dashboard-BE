@@ -25,7 +25,7 @@ public class Constants {
 
         //PATIENT
         public static final String PATIENT_NOT_FOUND = "Patient not found with the id provided.";
-
+        public static final String  UNAUTHORIZED="Authentication failed,token is not valid";
 
         //APPOINTMENT
         public static final String APPOINTMENT_NOT_FOUND = "appointment not found with the id provided.";

@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] DOCTOR_URL={
 
             "/api/v1/todolist/**",
+            "/api/v1/doctor/**",
             "api/v1/appointment/getAllAppointments/doctor/*",
             "api/v1/attribute/changeNotes/*",
             "api/v1/appointment/*/activePatient",
@@ -96,7 +97,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
     @Bean
     public Filter jwtAuthenticationFilter() {

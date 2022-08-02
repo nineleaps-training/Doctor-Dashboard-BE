@@ -93,8 +93,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     public ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
         log.info("inside: appointment service::addAppointment");
         Map<String,String> response = new HashMap<>();
-        Long loginId=jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(loginId) != null) { //checking if the patient exists database.
             Long patientId=patientRepository.getId(appointment.getPatient().getPID());
             if ( patientId!= null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) { //checking if the doctor and patient details exists in database.
                 checkSanityOfAppointment(mapper.map(appointment,Appointment.class)); //cross-checking the values inside the object with the database.
@@ -128,9 +126,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 log.info("appointment service::addAppointment"+Constants.DOCTOR_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
             }
-        }
-        log.info("appointment service::addAppointment"+Constants.LOGIN_DETAILS_NOT_FOUND);
-        throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
+
     }
 
     /**

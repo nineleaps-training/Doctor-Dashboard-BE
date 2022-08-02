@@ -118,12 +118,11 @@ public class DoctorServiceImpl implements DoctorService {
 
 
         var genericMessage = new GenericMessage();
-        Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(doctorLoginId) != null) {
+        if (loginRepo.isIdAvailable(id) != null) {
 
             if(doctorRepository.isIdAvailable(details.getLoginId())==null) {
-                if (details.getLoginId() == id && details.getLoginId().equals(doctorLoginId)) {
-                    doctorRepository.insertARowIntoTheTable(details.getLoginId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),doctorLoginId,details.getExp(),details.getDegree());
+                if (details.getLoginId() == id && details.getLoginId().equals(id)) {
+                    doctorRepository.insertARowIntoTheTable(details.getLoginId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),id,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getLoginId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor on boarding completed.");
@@ -160,9 +159,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         var genericMessage = new GenericMessage();
 
-        Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
-            if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
+        if (loginRepo.isIdAvailable(id) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
+            if (details.getId().equals(id) && details.getId().equals(id)) {
                 doctorRepository.updateDoctorDb(details.getMobileNo());
                 genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                 genericMessage.setStatus(Constants.SUCCESS);
