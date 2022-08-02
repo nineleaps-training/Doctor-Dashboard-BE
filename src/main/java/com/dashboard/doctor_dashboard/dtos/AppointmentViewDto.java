@@ -2,6 +2,9 @@ package com.dashboard.doctor_dashboard.dtos;
 
 import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,18 +19,18 @@ import java.util.List;
 public class AppointmentViewDto {
     private String name;
     private String email;
-    private String gender;
-    private String speciality;
+    private Gender gender;
+    private Category speciality;
 
     private short age;
-    private String bloodGroup;
+    private BloodGroup bloodGroup;
     private LocalDate dateOfAppointment;
     private LocalTime timeOfAppointment;
     private Attributes attributes;
     private String status;
     private List<Prescription> prescription;
     @SuppressWarnings("squid:S107")
-    public AppointmentViewDto(String name, String speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status,String bloodGroup,short age,String gender) {
+    public AppointmentViewDto(String name, Category speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status,BloodGroup bloodGroup,short age,Gender gender) {
         this.name = name;
         this.speciality = speciality;
         this.dateOfAppointment = dateOfAppointment;

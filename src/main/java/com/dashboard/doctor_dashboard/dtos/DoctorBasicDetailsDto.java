@@ -1,5 +1,7 @@
 package com.dashboard.doctor_dashboard.dtos;
 
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,9 +11,9 @@ import lombok.Getter;
 public class DoctorBasicDetailsDto {
     private String firstName;
     private String email;
-    private String speciality;
+    private Category speciality;
     private String phoneNo;
-    private String gender;
+    private Gender gender;
     private Short age;
     private String degree;
     private short exp;
