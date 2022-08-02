@@ -149,3 +149,26 @@ JPA buddy
 
 # ER Diagram
 ![miCare ER updated](https://user-images.githubusercontent.com/99714712/180491880-fcd3707a-13f2-458a-bb53-96437e3ed0f0.png)
+
+# Steps To Run Project
+### Cloning into git repository:
+
+1. Goto https://github.com/nineleaps-training/Doctor-Dashboard-BE/tree/pranay_phase2
+2. Above the list of files, click Code.
+3. To clone the repository using HTTPS, under "Clone with HTTPS", copy link. To clone the
+repository using an SSH key, including a certificate issued by your organization's SSH
+certificate authority, click Use SSH, then copy the link. To clone a repository using GitHub
+CLI, click Use GitHub CLI, then copy the link.
+4. Open Terminal.
+5. Change the current working directory to the location where you want the clone to be performed.
+6. Type git clone, and then paste the URL you copied earlier.
+```
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+```
+7. Press Enter.
+
+### Opening project in Intellij:
+
+1. From the main menu, select File then click on Open navigate to the project file.
+2. Navigate to DashboardApplication.java under src/main/java/com/dashboard then click on
+Run at the top.
